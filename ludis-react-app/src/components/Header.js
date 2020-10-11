@@ -4,8 +4,12 @@ import '../css/Header.css';
 function Header() {
   return (
     <div id="header">
-      <img src="../ludis.png" id="header-logo"/>
-      <h2> Ludis </h2>
+      <table>
+        <tr>
+          <td><img src="../ludis.png" id="header-logo"/></td>
+          <td><div className="title"> Ludis </div></td>
+        </tr>
+      </table>
     </div>
   );
 }

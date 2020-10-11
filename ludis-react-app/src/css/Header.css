@@ -1,12 +1,12 @@
-#header {
-  text-align: center;
+.title {
+  font-weight: 600;
+  font-size: 200%;
 }
 
 #header-logo {
-  height: 50px;
-  display: inline-block;
+  height: 65px;
 }
 
-h2 {
-  display: inline-block;
+#header table {
+  margin: auto;
 }
