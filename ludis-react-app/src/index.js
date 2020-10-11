@@ -1,18 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './App.js';
 import './index.css';
-import Navbar from './Navbar';
-import Header from './Header';
-import Footer from './Footer';
+// import Navbar from './Navbar';
+// import Header from './Header';
+// import Footer from './Footer';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Header />
-    <p>Sports Communication</p>
+    <App />
+    {/* <p>Sports Communication</p>
 
     <Navbar />
-    <Footer />
+    <Footer /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
