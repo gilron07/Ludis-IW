@@ -4,7 +4,7 @@ from .utils.enums import Modifier
 
 class Workout(models.Model):
     title = models.CharField(max_length=64)
-    description = models.TextField()
+    description = models.TextField(null=True)
 
 
 class Section(models.Model):
@@ -12,6 +12,9 @@ class Section(models.Model):
     #creator_id
     workout = models.ForeignKey(Workout, related_name='sections', on_delete=models.CASCADE)
     order = models.IntegerField(default=1)
+
+    class Meta:
+        ordering = ['order']
 
 
 class Drill(models.Model):
@@ -21,8 +24,11 @@ class Drill(models.Model):
     #creator_id = ForeignKey
     section = models.ForeignKey(Section, related_name='drills', on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['order']
 
-class DrillModifiers(models.Model):
+
+class DrillModifier(models.Model):
     drill = models.ForeignKey(Drill, related_name='modifiers', on_delete=models.CASCADE)
     modifier = models.IntegerField(choices=Modifier.choices())
     unit = models.CharField(max_length=24, default=None, null=True) # consider switching to enum
