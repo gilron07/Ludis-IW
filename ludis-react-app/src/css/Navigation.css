@@ -10,3 +10,9 @@
     color: white;
     text-decoration: none;
 }
+
+#menu-icon {
+    display: inline-block;
+    height: 30px;
+    transition: 0.5s;
+}
