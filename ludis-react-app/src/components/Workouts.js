@@ -6,6 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 const Workouts = () => {
     return (
        <div>
+
          <h1>Workouts</h1>
          <p>Here are your workouts.</p>
          <InputLabel id="label">Age</InputLabel>
@@ -18,6 +19,7 @@ const Workouts = () => {
             <MenuItem value="10">Ten</MenuItem>
             <MenuItem value="20">Twenty</MenuItem>
          </Select>
+
        </div>
     );
 }
