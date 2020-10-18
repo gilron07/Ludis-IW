@@ -4,8 +4,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import "./App.css";
 import Header from './components/Header.js';
 import Home from './components/Home';
-import About from './components/About';
-import Contact from './components/Contact';
+import Settings from './components/Settings';
+import Workouts from './components/Workouts';
+import Leaderboards from './components/Leaderboards';
 import Error from './components/Error';
 import Navigation from './components/Navigation';
  
@@ -17,9 +18,10 @@ class App extends Component {
           <Header />
           <Navigation />
             <Switch>
-             <Route path="/" component={Home} exact/>
-             <Route path="/about" component={About}/>
-             <Route path="/contact" component={Contact}/>
+             <Route path="/home" component={Home} exact/>
+             <Route path="/workouts" component={Workouts}/>
+             <Route path="/leaderboards" component={Leaderboards}/>
+             <Route path="/settings" component={Settings}/>
             <Route component={Error}/>
            </Switch>
         </div> 
