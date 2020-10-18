@@ -1,12 +1,63 @@
 .title {
-  font-weight: 600;
-  font-size: 200%;
+  font-size: 180%;
+}
+
+table tr{
+  height: 50px;
+  vertical-align: middle;
+  float: left;
+  width: 80vw;
+  /* background-color: red; */
+}
+
+td {
+  padding: 0;
+  margin: 0;
 }
 
 #header-logo {
-  height: 65px;
+  height: 40px;
+  padding-top: 5px;
+  /* background-color: blue; */
 }
 
-#header table {
-  margin: auto;
+#header {
+  background-color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 80%;
+  height: 50px;
+  padding: 0 10vw;
+}
+
+#hamburger-column {
+  width: 5vw;
+  padding-top: 5px;
+}
+
+#user-column {
+  width: 42vw;
+  text-align: right;
+}
+
+#logo-column {
+  width: 5vw;
+  text-align: right;
+}
+
+#title-column {
+  width: 20vw;
+}
+
+#avatar-column {
+  width: 8vw;
+  text-align: center;
+  /* background-color: pink; */
+  padding-top: 5px;
+}
+
+#profile-avatar {
+  height: 35px;
+  border-radius: 50%;
 }
