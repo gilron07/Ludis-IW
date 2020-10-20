@@ -29,6 +29,7 @@ td {
   width: 80%;
   height: 50px;
   padding: 0 10vw;
+  box-shadow: 0 0 10px #00000011;
 }
 
 #hamburger-column {

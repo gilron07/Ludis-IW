@@ -16,3 +16,32 @@
     height: 30px;
     transition: 0.5s;
 }
+
+.nav-link {
+    text-decoration: none;
+    color: black;
+}
+
+#nav-profile-avatar {
+    height: 120px;
+    background-color: pink;
+    text-align: center;
+    border-radius: 50%;
+    margin-top: 30px;
+    margin-bottom: 5px;
+}
+
+#profile-wrapper {
+    padding-left: 10%;
+}
+
+#user-name {
+    font-size: 22px;
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+#user-team {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
