@@ -17,8 +17,9 @@ from django.contrib import admin
 from django.urls import path, include
 
 from ludis_api.urls import url_patterns
-
+from ludis_api.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("api/", include(url_patterns))
+    path("api/", include(url_patterns)),
+    path("", index)
 ]

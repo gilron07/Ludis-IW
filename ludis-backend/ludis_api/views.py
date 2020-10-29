@@ -6,12 +6,14 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from ludis_api.models import Workout, User
 from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer
+from django.shortcuts import render
+
+
+def index(request):
+    return render(request, "build/index.html")
 
 
 class WorkoutViewSet(ModelViewSet):
-    """
-    A simple ViewSet for viewing and editing accounts.
-    """
     queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
 
