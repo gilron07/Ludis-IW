@@ -1,0 +1,39 @@
+.week-button {
+    background-color: #eee;
+    border: 2px solid #eee;
+    border-radius: 50%;
+    display: inline-block;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    box-shadow: 0 2px 3px 1px #00000033;
+    margin-right: 5%;
+}
+
+.week-button-select {
+    border: 2px solid orange;
+}
+
+.week-button-text {
+    margin-top: 3px;
+    -webkit-user-select: none; /* Safari */        
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none; /* Standard */
+}
+
+.week-button-label {
+    text-transform: lowercase;
+    margin-right: 5%;
+}
+
+.week-selector-container {
+    text-align: center;
+    color: #777;
+}
+
+#month-bar {
+    box-shadow: 0 2px 3px 1px #00000033;
+    margin: auto;
+    width: calc(100% - 50px);
+}

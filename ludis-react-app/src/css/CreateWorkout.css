@@ -1,0 +1,40 @@
+.main-input-title {
+    color: orange;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#tags-container *{
+    margin: 5px;
+}
+
+#tags-container {
+    display: inline-block;
+    margin-left: 2vw;
+}
+
+.drill-header{
+    color: white;
+    background-color: orange;
+    border-radius: 20px;
+    text-shadow: 1px 1px #00000022;
+}
+
+.modifier-input {
+    height: 100%;
+    max-width: 100px;
+    margin-left: 20px;
+}
+
+.drill-section-title {
+    /* background-color: green; */
+    padding: 0;
+    margin-top: 20px;
+    font-weight: 800;
+    height: 10px;
+}
+
+.repetition-input {
+    margin-left: 20px;
+}
