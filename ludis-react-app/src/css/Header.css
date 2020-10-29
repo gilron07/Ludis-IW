@@ -22,7 +22,8 @@ td {
 }
 
 #header {
-  background-color: #FFFFFF;
+  z-index: 10;
+  background-color: white;
   position: fixed;
   top: 0;
   left: 0;
@@ -33,32 +34,36 @@ td {
 }
 
 #hamburger-column {
-  width: 5vw;
+  width: 30px;
   padding-top: 5px;
 }
 
-#user-column {
-  width: 42vw;
-  text-align: right;
-}
-
 #logo-column {
-  width: 5vw;
+  width: 70px;
   text-align: right;
 }
 
 #title-column {
-  width: 20vw;
+  width: 100px;
 }
 
-#avatar-column {
-  width: 8vw;
-  text-align: center;
-  /* background-color: pink; */
-  padding-top: 5px;
+#user-column {
+  width: calc(100vw - 200px);
+}
+
+#user-dropdown-select {
+  display:flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#header-username {
 }
 
 #profile-avatar {
   height: 35px;
   border-radius: 50%;
+  margin-left: 20px;
+  margin-top: 4px;
 }

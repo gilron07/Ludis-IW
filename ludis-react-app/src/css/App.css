@@ -4,9 +4,13 @@ body {
   /* margin: 0;
   padding: 0; */
 
-  min-height: 100vh;
-  padding-top: 50px; /* for header */
+  min-height: calc(100vh - 60px);
+  padding-top: 60px; /* for header */
   padding-left: 10vw;
   padding-right: 10vw; 
   font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+  font-weight: 100;
 }

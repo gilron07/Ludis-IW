@@ -16,6 +16,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const useStyles = makeStyles({
   list: {
@@ -70,6 +71,11 @@ export default function TemporaryDrawer() {
       title: 'Settings',
       link: 'settings',
       icon: <SettingsIcon/>
+    },
+    logout: {
+      title: 'Logout',
+      link: '',
+      icon: <ExitToAppIcon/>
     }
   };
   
@@ -90,7 +96,7 @@ export default function TemporaryDrawer() {
         </div>
       </div>
       <List>
-        {['home', 'workouts', 'leaderboards', 'settings'].map((text) => (
+        {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text) => (
           <NavLink to={pages[text].link} className="nav-link">
             <Divider />
           <ListItem button key={text} >
@@ -101,23 +107,19 @@ export default function TemporaryDrawer() {
         ))}
         <Divider />
       </List>
-
-
     </div>
   );
 
   return (
     <div>
-      {['left'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <div id="menu-icon" onClick={toggleDrawer(anchor, true)}>
+        <React.Fragment key={'left'}>
+          <div id="menu-icon" onClick={toggleDrawer('left', true)}>
             <MenuIcon style={{ fontSize: 30 }} />
           </div>
-          <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
-            {list(anchor)}
+          <Drawer anchor={'left'} open={state['left']} onClose={toggleDrawer('left', false)}>
+            {list('left')}
           </Drawer>
         </React.Fragment>
-      ))}
     </div>
   );
 
