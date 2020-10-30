@@ -108,8 +108,9 @@ class Drill(models.Model):
 
 class DrillModifier(models.Model):
     drill = models.ForeignKey(Drill, related_name='modifiers', on_delete=models.CASCADE)
-    modifier = models.IntegerField(choices=Modifier.choices())
+    modifier = models.CharField(max_length=30, choices=Modifier.choices())
     unit = models.CharField(max_length=24, default=None, null=True) # consider switching to enum
+
 
     class Meta:
         unique_together = ('drill', 'modifier')

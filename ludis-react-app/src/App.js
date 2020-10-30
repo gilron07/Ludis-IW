@@ -22,12 +22,13 @@ class App extends Component {
        <BrowserRouter>
         <div>
             <Switch>
-             <Route path="/" component={Landing} exact/>
+
              <Route path="/home" component={Home} exact/>
              <Route path="/workouts" component={Workouts} exact/>
              <Route path="/create-workout" component={CreateWorkout} exact/>
              <Route path="/leaderboards" component={Leaderboards} exact/>
              <Route path="/settings" component={Settings} exact/>
+             <Route path="/" component={Landing} exact/>
              <Route component={Error}/>
            </Switch>
         </div> 
