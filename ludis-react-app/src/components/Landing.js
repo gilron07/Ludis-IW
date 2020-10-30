@@ -40,7 +40,7 @@ export default function SignUp() {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-            <img src="./ludis-logo.png" id="landing-logo"/>
+            <img src="/static/assets/ludis-logo.png" id="landing-logo"/>
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>

@@ -4,6 +4,7 @@ import '../css/Workouts.css';
 import WorkoutComponent from './WorkoutComponent.js';
 import List from '@material-ui/core/List';
 import { NavLink } from 'react-router-dom';
+import axiosAPI from '../services/authAxios'
 
 
 // icons
@@ -12,6 +13,10 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 class Workouts extends React.Component {
     constructor(props) {
         super(props);
+    }
+    async componentDidMount() {
+       const data = await axiosAPI.get('/workouts');
+       console.log(data.data)
     }
 
     render() {

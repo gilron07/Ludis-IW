@@ -16,6 +16,7 @@ def index(request):
 class WorkoutViewSet(ModelViewSet):
     queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
+    permission_classes = (AllowAny,)
 
     def perform_create(self, serializer):
         serializer.save(owner=User.objects.get(pk=1))

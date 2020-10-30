@@ -14,12 +14,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
+from django.views.generic.base import TemplateView
 
 from ludis_api.urls import url_patterns
 from ludis_api.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(url_patterns)),
-    path("", index)
+    re_path('.*', index)
+    # path('', index),
+    # re_path(r'^.*/$', index)
 ]

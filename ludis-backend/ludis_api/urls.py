@@ -9,7 +9,7 @@ router.register("workouts", WorkoutViewSet)
 
 url_patterns = router.urls
 
-url_patterns = [
+url_patterns += [
     url(r'^signup', UserRegistrationView.as_view()),
     url(r'^signin', UserLoginView.as_view()),
 ]
