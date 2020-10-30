@@ -15,7 +15,7 @@ class Workouts extends React.Component {
         super(props);
     }
     async componentDidMount() {
-       const data = await axiosAPI.get('/workouts');
+       const data = await axiosAPI.get('/workouts/');
        console.log(data.data)
     }
 
