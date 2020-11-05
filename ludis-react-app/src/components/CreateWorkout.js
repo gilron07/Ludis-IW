@@ -1,40 +1,67 @@
-import React from 'react';
-import Header from './Header.js';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import InputLabel from '@material-ui/core/InputLabel';
+import Header from './Header.js';
+import EditSection from './EditSection';
+
+import TextField from "@material-ui/core/TextField"
+import Button from "@material-ui/core/Button"
 import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
-import NativeSelect from '@material-ui/core/NativeSelect';
 
-// list imports
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
+import '../css/CreateWorkout.css'; 
 
-import '../css/CreateWorkout.css';
- 
+
+const useStyles = makeStyles((theme) => ({
+  tagsInput: {
+  },
+  createTagButton: {
+    border: "1px solid #BBB",
+    marginLeft: "10px"
+  },
+  createWorkoutButton: {
+    border: "1px solid #BBB",
+  },
+  createWorkoutContainer: {
+    marginTop: "50px",
+    textAlign: "center"
+  }
+}));    
 
 const CreateWorkout = () => {
+  const classes = useStyles();
+  const [hashtag, setHashtag] = useState("")
+  const [numberOfHashtags, setNumberOfHashtags] = useState(0)
+  const [arrayOfHashtags, addHashtag] = useState([])
 
-   const [age, setAge] = React.useState('');
+  const handleDelete = (h) => () => {
+    addHashtag((arrayOfHashtags) =>
+      arrayOfHashtags.filter((hashtag) => hashtag !== h)
+    )
+    setNumberOfHashtags(numberOfHashtags - 1)
+  }
 
-   const [open, setOpen] = React.useState(true);
-   const handleClick = () => {
-      setOpen(!open);
-    };
-  
+  const handleHashtagChange = (event) => setHashtag(event.target.value)
 
-    return (
-       <div>
-          <Header />
+  const newHashtag = () => {
+    let newHashtag = hashtag.trim()
+    if (newHashtag == "") return;
+    if (arrayOfHashtags.includes(newHashtag)) return;
+    if (numberOfHashtags < 5) {
+      setNumberOfHashtags(numberOfHashtags + 1)
+      addHashtag((arrayOfHashtags) => arrayOfHashtags.concat(newHashtag))
+    } else {
+      console.log("Too many hashtags")
+    }
+  }
+  const Hashtags = arrayOfHashtags.map((h) => (
+    <Chip label={h} onDelete={handleDelete(h)}/>
+  ))
+  console.log(arrayOfHashtags)
+  return (
+    <div>
+        <Header />
          <h1>New Workout</h1>
-         <form>
             <div class="main-input-title">Workout Name<br></br>
             <Input placeholder="for example: Pre Meet" fullWidth />
             </div>
@@ -42,60 +69,31 @@ const CreateWorkout = () => {
             <Input placeholder="important things to remember" fullWidth />
             </div>
             <div class="main-input-title">Tags<br></br> 
-            <Input placeholder="for example: technical" inputProps={{ }} />
+            </div>
+            <TextField
+               className={classes.tagsInput}
+               size="small"
+               rows={1}
+               placeholder="for example: Technical"
+               variant="outlined"
+               value={hashtag}
+               onChange={handleHashtagChange}
+            />
+            <Button color="secondary" onClick={newHashtag} className={classes.createTagButton}> Add Tag </Button>
             <div id="tags-container">
-               <Chip label="Technical" onDelete/>
-               <Chip label="Low Intensity" onDelete/>
-               <Chip label="Full Team" onDelete/>
+               {numberOfHashtags > 0 ? Hashtags : ""}
             </div>
-            </div>
-         </form>
-         
 
-   <List>
-      <div className="drill-header">
-      <ListItem button onClick={handleClick} >
-        <ListItemText primary="Warm Up"/>
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
+
+         <EditSection></EditSection>
+         <EditSection></EditSection>
+         <EditSection></EditSection> 
+         
+      <div className = {classes.createWorkoutContainer}>
+        <Button color="secondary" onClick={newHashtag} className={classes.createWorkoutButton}> Create Workout </Button>
       </div>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-         <ListItem className="drill-section-title">
-            Modifiers
-         </ListItem>
-         <ListItem className="list-item">
-            <TextField type="number" label="Weight" className="modifier-input" />
-            <div className="modifier-input">
-            <InputLabel>Unit</InputLabel>
-            <NativeSelect>
-               <option value={10}>lb</option>
-               <option value={20}>kg</option>
-            </NativeSelect>
-            </div>
-         </ListItem>
-         <ListItem className="drill-section-title">
-            Repetition
-         </ListItem>
-         <ListItem className="list-item">
-         <TextField type="number" label="Reps" className="modifier-input"/>
-            <div className="repetition-input">
-            <TextField type="number" label="Sets" className="modifier-input" />
-         </div>
-         </ListItem>
-            
-         {/* <InputLabel id="label">Age</InputLabel>
-         <Select labelId="label" id="select">
-            <MenuItem value="10">Ten</MenuItem>
-            <MenuItem value="20">Twenty</MenuItem>
-         </Select> */}
-         
-        </List>
-      </Collapse>
-    </List>
-
-       </div>
-    );
+    </div>
+  )
 }
  
 export default CreateWorkout;

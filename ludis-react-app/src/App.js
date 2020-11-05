@@ -10,6 +10,7 @@ import Home from './components/Home';
 import Landing from './components/Landing';
 import Settings from './components/Settings';
 import Workouts from './components/Workouts';
+import Workout from './components/Workout';
 import CreateWorkout from './components/CreateWorkout';
 import Leaderboards from './components/Leaderboards';
 import Error from './components/Error';
@@ -25,6 +26,7 @@ class App extends Component {
 
              <Route path="/home" component={Home} exact/>
              <Route path="/workouts" component={Workouts} exact/>
+             <Route path="/workout" component={Workout} exact/>
              <Route path="/create-workout" component={CreateWorkout} exact/>
              <Route path="/leaderboards" component={Leaderboards} exact/>
              <Route path="/settings" component={Settings} exact/>

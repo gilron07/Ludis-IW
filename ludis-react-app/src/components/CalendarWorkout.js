@@ -12,7 +12,7 @@ class CalendarWorkout extends React.Component {
     render() {
         return(
             <div className="workout-item">
-                <ListItem button>
+                <ListItem button component="a" href="./workout"> 
                     <div class="workout-date">
                         <div class="workout-date-d">1</div>
                         <div class="workout-date-m">{this.props.month}</div>

@@ -1,0 +1,87 @@
+.workout-title {
+    /* background-color: yellow; */
+    text-align: center;
+}
+
+#inputs-container {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 30px;
+    max-width: 500px;
+}
+
+.input-container {
+    display: inline-block;
+    width: 33%;
+}
+
+#logistics-container {
+    text-align: center;
+    margin: auto;
+    margin-top: 60px;
+    max-width: 500px;
+}
+
+.logistic-container {
+    display: inline-block;
+    width: 33%;
+    vertical-align: top;
+}
+
+#time-container, #effort-container, #satisfaction-container {
+    max-width: 80px;
+    margin: auto;
+    text-align: center;
+}
+
+#time-input, #effort-input, #satisfaction-input {
+    font-size: 30px;
+    text-align: center;
+}
+
+#tags-container {
+    text-align: center;
+    width: 100%;
+    margin: 40px 0 30px 0;
+}
+
+#plan-title {
+    position: absolute;
+    top: -45px;
+    left: calc(20% - 10px);
+    background-color: white;
+    padding: 0 10px;
+    color: orange;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 22px;
+}
+
+#plan-container {
+    position: relative;
+    padding-left: 20%;
+    font-size: 20px;
+}
+
+.section-container {
+    /* background-color: red; */
+    padding: 20px 0 0 0;
+}
+
+.section-name {
+    font-weight: 800;
+}
+
+.drill-name {
+    color: #41C3A7;
+    padding-left: 10px;
+    font-size: 18px;
+    display: inline-block;
+}
+
+#workout-view-table tr {
+    height: 25px;
+}
+.drill-row {
+    /* background-color: red; */
+}

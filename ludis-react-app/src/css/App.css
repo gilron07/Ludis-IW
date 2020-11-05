@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
 
 body {
   /* margin: 0;
@@ -8,7 +10,7 @@ body {
   padding-top: 60px; /* for header */
   padding-left: 10vw;
   padding-right: 10vw; 
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Nunito', sans-serif;
 }
 
 h1 {
