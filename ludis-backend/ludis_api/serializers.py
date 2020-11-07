@@ -4,6 +4,7 @@ from django.contrib.auth.models import update_last_login
 from .models import Drill, DrillModifier, Workout, Section, Organization
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
+from rest_framework_simplejwt.tokens import RefreshToken
 
 JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
 JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
@@ -96,7 +97,8 @@ class UserLoginSerializer(serializers.Serializer):
     email = serializers.CharField(max_length=255)
     password = serializers.CharField(max_length=128, write_only=True)
     role = serializers.CharField(max_length=20, read_only=True)
-    token = serializers.CharField(max_length=255, read_only=True)
+    access_token = serializers.CharField(max_length=255, read_only=True)
+    refresh_token = serializers.CharField(max_length=255, read_only=True)
 
     def validate(self, data):
         email = data.get("email", None)
@@ -105,15 +107,17 @@ class UserLoginSerializer(serializers.Serializer):
         if user is None:
             raise serializers.ValidationError('A user with this email and password is not found.')
         try:
-            payload = JWT_PAYLOAD_HANDLER(user)
-            jwt_token = JWT_ENCODE_HANDLER(payload)
+            # payload = JWT_PAYLOAD_HANDLER(user)
+            # jwt_token = JWT_ENCODE_HANDLER(payload)
+            tokens = RefreshToken.for_user(user)
             update_last_login(None, user)
         except get_user_model().DoesNotExist:
             raise serializers.ValidationError('User with given email and password does not exist.')
 
         return {
             'email': user.email,
-            'token': jwt_token,
+            'access_token': str(tokens.access_token),
+            'refresh_token': str(tokens),
             'role': user.role
         }
 

@@ -116,3 +116,16 @@ class DrillModifier(models.Model):
         unique_together = ('drill', 'modifier')
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=64)
+    organization = models.ForeignKey(Organization, related_name='tags', on_delete=models.CASCADE)
+    created_at = models.DateField(auto_now=True)
+
+    class Meta:
+        unique_together = ('name', 'organization')
+
+    def save(self, *args, **kwargs):
+        self.name = self.name.lower()
+        return super(Tag, self).save(*args, **kwargs)
+
+
