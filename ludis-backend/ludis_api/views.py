@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
+from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
@@ -7,19 +8,21 @@ from rest_framework.views import APIView
 from ludis_api.models import Workout, User
 from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer
 from django.shortcuts import render
-
+from ludis_api.permissions import IsWorkoutView
 
 def index(request):
     return render(request, "build/index.html")
 
 
 class WorkoutViewSet(ModelViewSet):
-    queryset = Workout.objects.all()
     serializer_class = WorkoutSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = [permissions.IsAuthenticated, IsWorkoutView]
 
     def perform_create(self, serializer):
-        serializer.save(owner=User.objects.get(pk=1))
+        serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return Workout.objects.filter(owner__organization=self.request.user.organization)
 
 
 class UserRegistrationView(APIView):
@@ -52,7 +55,8 @@ class UserLoginView(APIView):
             'success': 'True',
             'status_code': status.HTTP_200_OK,
             'message': 'User logged in successfully',
-            'token': serializer.data['token'],
+            'access_token': serializer.data['access_token'],
+            'refresh_token': serializer.data['refresh_token'],
             'role': serializer.data['role']
         }
 
