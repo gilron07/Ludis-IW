@@ -96,8 +96,8 @@ export default function TemporaryDrawer() {
         </div>
       </div>
       <List>
-        {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text) => (
-          <NavLink to={pages[text].link} className="nav-link">
+        {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text, index) => (
+          <NavLink to={pages[text].link} className="nav-link" key={index}>
             <Divider />
           <ListItem button key={text} >
             <ListItemIcon>{pages[text].icon}</ListItemIcon>

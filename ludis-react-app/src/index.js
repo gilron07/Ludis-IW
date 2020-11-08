@@ -9,12 +9,7 @@ import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    
     <App />
-    {/* <p>Sports Communication</p>
-
-    <Navbar />
-    <Footer /> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -5,12 +5,6 @@ import LeaderboardComponent from './LeaderboardComponent.js';
 import '../css/Leaderboards.css';
 
 const Leaderboards = () => {
-
-   const [open, setOpenA] = React.useState(true);
-   const handleClick = () => {
-      setOpenA(!open);
-   };
-
    return (
       <div>
          <Header/>

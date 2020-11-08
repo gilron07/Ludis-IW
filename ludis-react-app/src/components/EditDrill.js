@@ -14,9 +14,15 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import TextField from "@material-ui/core/TextField"
 
 // icons
 import CloseIcon from '@material-ui/icons/Close';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
  
 const useStyles = makeStyles((theme) => ({
     drillHeader: {
@@ -29,25 +35,40 @@ const useStyles = makeStyles((theme) => ({
         width: "90%",
         margin: "auto",
     },
-    closeIcon: {
+    deleteDrill: {
+        zIndex: "3",
+    },
+    closeDrillIcon: {
+        pointerEvents: "none",
         fontSize: "20px",
         color: "#00000077",
+        textAlign: "right",
+        paddingTop: "3px",
+    },
+    editSectionIcon: {
+        pointerEvents: "none",
+        fontSize: "17px",
+        color: "#00000044",
         textAlign: "right"
     },
-    closeIconContainer: {
-        textAlign: "right"
-    }
+    button: {
+        boxShadow: "0 2px 4px #00000044",
+        marginTop: "5px"
+    },
 }));    
 
 function toCapitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-const EditDrill = () => {
+function EditDrill(props) {
 
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
+    const [editTitle, setEditTitle] = React.useState(false);
+    const [titleInput, setTitleInput] = React.useState(false);
+    const [drillTitle, setDrillTitle] = React.useState("Drill Section");
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [openModifiers, setOpenModifiers] = React.useState({
         "weight": true,
@@ -59,6 +80,21 @@ const EditDrill = () => {
     const handleClick = () => {
       setOpen(!open);
     };
+
+    const toggleEditTitle = () => {
+        setEditTitle(!editTitle);
+    }
+
+    const handleInputChange = (e) => {
+        console.log(titleInput);
+        setTitleInput(e.target.value);
+    }
+
+    function confirmInputChange() {
+        setDrillTitle(titleInput);
+        toggleEditTitle();
+        console.log(drillTitle);
+    }
 
     const handleButtonClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -106,18 +142,61 @@ const EditDrill = () => {
         return falseMods;
     }
 
+    const generateSectionHeader = () =>{
+        if (!editTitle) {
+            return (
+                <ListItem button onClick={handleClick} className={classes.drillHeader}>
+                    <ListItemText primary={drillTitle}/>
+                    <ListItemSecondaryAction className={classes.secondaryAction}>
+                        <IconButton size="small" onClick={toggleEditTitle} data-id={props.id}>
+                            <EditIcon className={classes.noPointerEvents} />
+                        </IconButton>
+                        <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                            <CloseIcon className={classes.noPointerEvents}/>
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            );
+        }
+        else return (
+            <ListItem button onClick={handleClick} className={classes.drillHeader}>
+                <ListItemSecondaryAction className={classes.secondaryAction}>
+                    <TextField
+                        InputProps={{className: classes.drillTitleInput}}
+                        onChange={handleInputChange}
+                        placeholder={drillTitle}
+                    >
+                    </TextField>
+                    <IconButton size="small" onClick={confirmInputChange} data-id={props.id}>
+                        <CheckCircleOutlineIcon className={classes.noPointerEvents} />
+                    </IconButton>
+                    <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                        <CloseIcon className={classes.noPointerEvents}/>
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem>
+        );
+    }
+
     return (
         <List className={classes.drill}>
-            <ListItem button onClick={handleClick} className={classes.drillHeader}>
-                <ListItemText primary="Drill Title"/>
-                {open ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            {generateSectionHeader()}
+            {/* <ListItem button onClick={handleClick} className={classes.drillHeader}>
+                <ListItemText primary={drillTitle}/>
+                <ListItemSecondaryAction className={classes.secondaryAction}>
+                    <IconButton size="small" onClick={props.editFunction} data-id={props.id}>
+                        <EditIcon className={classes.noPointerEvents} />
+                    </IconButton>
+                    <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                        <CloseIcon className={classes.noPointerEvents}/>
+                    </IconButton>
+                </ListItemSecondaryAction>
+            </ListItem> */}
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                 <ListItem className="drill-section-title">
                     Modifiers
                 </ListItem>
-
                 {/* Modifiers */}
                
                 {trueModifiers().map((key) => (
@@ -134,7 +213,7 @@ const EditDrill = () => {
                 
 
                 <ListItem>
-                    <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick}>
+                    <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick} className={classes.button}>
                         Add Modifier
                     </Button>
                     <Menu
@@ -145,8 +224,8 @@ const EditDrill = () => {
                         onClose={handleButtonClose}
                     >
                         {
-                            falseModifiers().map((key) => (
-                                <MenuItem onClick={addModifier} data-mod={key}>{toCapitalize(key)}</MenuItem>
+                            falseModifiers().map((modifierTitle) => (
+                                <MenuItem key={modifierTitle} onClick={addModifier} data-mod={modifierTitle}>{toCapitalize(modifierTitle)}</MenuItem>
                             ))
                         }
                     </Menu>

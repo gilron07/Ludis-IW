@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from './Header.js';
 
 // Material UI components
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
+
+// Timeline imports
+import Timeline from '@material-ui/lab/Timeline';
+import TimelineItem from '@material-ui/lab/TimelineItem';
+import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
+import TimelineConnector from '@material-ui/lab/TimelineConnector';
+import TimelineContent from '@material-ui/lab/TimelineContent';
+import TimelineDot from '@material-ui/lab/TimelineDot';
 
 // css
 import '../css/Workout.css';
@@ -13,13 +21,8 @@ import '../css/Workout.css';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 
 const useStyles = makeStyles((theme) => ({
-    bulletPoint: {
-        fontSize: 10,
-        color: "#41C3A7"
-    },
     logisticsIcon: {
         fontSize: 40,
         margin: "auto",
@@ -111,6 +114,8 @@ function getData() {
 
 function Workout() {
     const classes = useStyles();
+    const data = getData();
+
     return(
         <div id="calendar-workouts">
             <Header></Header>
@@ -118,40 +123,43 @@ function Workout() {
             {
                 // later, we can add functions to sort data by order
                 <div>
-                    <h1 class="workout-title">{getData().title}</h1>
-                    <div id="inputs-container">
-                        <div class="input-container">
-                            Duration<br></br>
-                            <div id="time-container">
-                                <TextField type="number" id="time-input"/>
+                    <h1 class="workout-title">{data.title}</h1>
+                    <p class="workout-description">{data.description}</p>
+                    <div id="coaches-only-container">
+                        <div id="inputs-container">
+                            <div class="input-container">
+                                Duration<br></br>
+                                <div id="time-container">
+                                    <TextField type="number" id="time-input"/>
+                                </div>
+                            </div>
+                            <div class="input-container">
+                                Effort
+                                <div id="effort-container">
+                                    <TextField type="number" id="effort-input"/>
+                                </div>
+                            </div>
+                            <div class="input-container">
+                                Satisfaction
+                                <div id="satisfaction-container">
+                                    <TextField type="number" id="satisfaction-input"/>
+                                </div>
                             </div>
                         </div>
-                        <div class="input-container">
-                            Effort
-                            <div id="effort-container">
-                                <TextField type="number" id="effort-input"/>
-                            </div>
-                        </div>
-                        <div class="input-container">
-                            Satisfaction
-                            <div id="satisfaction-container">
-                                <TextField type="number" id="satisfaction-input"/>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div id="logistics-container">
-                        <div class="logistic-container">
-                            <LocationOnIcon className={classes.logisticsIcon}></LocationOnIcon>
-                            Jadwin Gym
-                        </div>
-                        <div class="logistic-container">
-                            <ScheduleIcon className={classes.logisticsIcon}></ScheduleIcon>
-                            Wed, 11am <br></br> Sep 18th
-                        </div>
-                        <div class="logistic-container">
-                            <CheckCircleOutlineIcon className={classes.logisticsIcon}></CheckCircleOutlineIcon>
-                            Completed
+                        <div id="logistics-container">
+                            <div class="logistic-container">
+                                <LocationOnIcon className={classes.logisticsIcon}></LocationOnIcon>
+                                Jadwin Gym
+                            </div>
+                            <div class="logistic-container">
+                                <ScheduleIcon className={classes.logisticsIcon}></ScheduleIcon>
+                                Wed, 11am <br></br> Sep 18th
+                            </div>
+                            <div class="logistic-container">
+                                <CheckCircleOutlineIcon className={classes.logisticsIcon}></CheckCircleOutlineIcon>
+                                Completed
+                            </div>
                         </div>
                     </div>
     
@@ -159,30 +167,22 @@ function Workout() {
                         <Chip label="Technical" /> <Chip label="Conditioning" />
                     </div>
 
-                    {/* <p>{getData().description}</p> */}
-
                     <hr></hr>
                     <div id="plan-container">
                         <p id="plan-title">Plan</p>
                         {getData().sections.map((section) => (
-                        <div class="section-container">
-                        <div class="section-name">{section.name}</div>
-                        
-                        <table id="workout-view-table">
-                        {section.drills.map((drill) => (
-                            <tr class="drill-row">
-                                <td>
-                                    <DonutLargeIcon className={classes.bulletPoint}></DonutLargeIcon>
-                                </td>
-                                <td>
-                                <div class="drill-name">
-                                    {drill.drill_name}
-                                </div>
-                                </td>
-                            </tr>
-                        ))}
-                        </table>
-                        </div>
+                            <div class="section-container">
+                            <div class="section-name">{section.name}</div>
+                            
+                            <Timeline>    
+                            {(section.drills).map((drill, index) => (            
+                                <TimelineItem>
+                                    <TimelineSeparator><TimelineDot /><TimelineConnector /></TimelineSeparator>
+                                    <TimelineContent>{drill.drill_name}</TimelineContent>
+                                </TimelineItem>
+                            ))}
+                            </Timeline>
+                            </div>
                         ))}
                     </div>
                 </div>
