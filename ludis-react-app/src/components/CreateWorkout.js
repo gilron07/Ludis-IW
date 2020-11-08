@@ -25,15 +25,24 @@ const useStyles = makeStyles((theme) => ({
   createWorkoutContainer: {
     marginTop: "50px",
     textAlign: "center"
-  }
-}));    
+  },
+  button: {
+    boxShadow: "0 2px 4px #00000044",
+    marginTop: "5px"
+  },
+}));      
+
+let idGenerator = 0;
 
 const CreateWorkout = () => {
   const classes = useStyles();
-  const [hashtag, setHashtag] = useState("")
-  const [numberOfHashtags, setNumberOfHashtags] = useState(0)
-  const [arrayOfHashtags, addHashtag] = useState([])
+  const [hashtag, setHashtag] = useState("");
+  const [numberOfHashtags, setNumberOfHashtags] = useState(0);
+  const [arrayOfHashtags, addHashtag] = useState([]);
+  const [sectionIds, setSections] = useState([]);
 
+
+  // tag logic
   const handleDelete = (h) => () => {
     addHashtag((arrayOfHashtags) =>
       arrayOfHashtags.filter((hashtag) => hashtag !== h)
@@ -45,7 +54,7 @@ const CreateWorkout = () => {
 
   const newHashtag = () => {
     let newHashtag = hashtag.trim()
-    if (newHashtag == "") return;
+    if (newHashtag === "") return;
     if (arrayOfHashtags.includes(newHashtag)) return;
     if (numberOfHashtags < 5) {
       setNumberOfHashtags(numberOfHashtags + 1)
@@ -57,18 +66,40 @@ const CreateWorkout = () => {
   const Hashtags = arrayOfHashtags.map((h) => (
     <Chip label={h} onDelete={handleDelete(h)}/>
   ))
-  console.log(arrayOfHashtags)
+
+  //section logic 
+  const addSection = () => {
+    // clone array
+    const newSections = [...sectionIds];
+    newSections.push(idGenerator++);
+    setSections(newSections);
+};
+
+const deleteSection = (event) => {
+    let id = event.currentTarget.dataset.id;
+    console.log(id);
+    if (typeof id !== "string") return;
+    let sectionId = parseInt(id);
+
+    // clone array
+    let removalIndex = sectionIds.indexOf(sectionId);
+    setSections(sectionIds.splice(removalIndex, 1));
+    const newSections = [...sectionIds];
+    console.log(newSections);
+    setSections(newSections);
+}
+
   return (
     <div>
         <Header />
          <h1>New Workout</h1>
-            <div class="main-input-title">Workout Name<br></br>
+            <div className="main-input-title">Workout Name<br></br>
             <Input placeholder="for example: Pre Meet" fullWidth />
             </div>
-            <div class="main-input-title">Workout Description<br></br> 
+            <div className="main-input-title">Workout Description<br></br> 
             <Input placeholder="important things to remember" fullWidth />
             </div>
-            <div class="main-input-title">Tags<br></br> 
+            <div className="main-input-title">Tags<br></br> 
             </div>
             <TextField
                className={classes.tagsInput}
@@ -84,10 +115,11 @@ const CreateWorkout = () => {
                {numberOfHashtags > 0 ? Hashtags : ""}
             </div>
 
+            {sectionIds.map((id) => (
+              <EditSection deleteFunction={deleteSection} key={id} id={id}></EditSection>
+            ))}
 
-         <EditSection></EditSection>
-         <EditSection></EditSection>
-         <EditSection></EditSection> 
+      <Button className={classes.button} onClick={addSection}>New Section</Button>
          
       <div className = {classes.createWorkoutContainer}>
         <Button color="secondary" onClick={newHashtag} className={classes.createWorkoutButton}> Create Workout </Button>
