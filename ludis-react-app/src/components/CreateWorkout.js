@@ -36,11 +36,15 @@ let idGenerator = 0;
 
 const CreateWorkout = () => {
   const classes = useStyles();
+
+  // hooks
+  const [workoutTitle, setWorkoutTitle] = useState("");
+  const [workoutDescription, setWorkoutDescription] = useState("");
+
   const [hashtag, setHashtag] = useState("");
   const [numberOfHashtags, setNumberOfHashtags] = useState(0);
   const [arrayOfHashtags, addHashtag] = useState([]);
   const [sectionIds, setSections] = useState([]);
-
 
   // tag logic
   const handleDelete = (h) => () => {
@@ -89,15 +93,33 @@ const deleteSection = (event) => {
     setSections(newSections);
 }
 
+function generateWorkoutJSON() {
+  let d = new Date()
+  console.log("------------------------");
+  console.log("Generating Workout JSON");
+  console.log(`Created at time: ${d.getTime()}`);
+  console.log(`Title: ${workoutTitle}`);
+  console.log(`Description: ${workoutDescription}`);
+  console.log(`Tags: ${arrayOfHashtags}`);
+}
+
+const updateWorkoutTitle = (e) => {
+  setWorkoutTitle(e.target.value);
+}
+
+const updateWorkoutDescription = (e) => {
+  setWorkoutDescription(e.target.value);
+}
+
   return (
     <div>
         <Header />
          <h1>New Workout</h1>
             <div className="main-input-title">Workout Name<br></br>
-            <Input placeholder="for example: Pre Meet" fullWidth />
+              <Input placeholder="for example: Pre Meet" fullWidth onChange={updateWorkoutTitle}/>
             </div>
             <div className="main-input-title">Workout Description<br></br> 
-            <Input placeholder="important things to remember" fullWidth />
+              <Input placeholder="important things to remember" fullWidth onChange={updateWorkoutDescription}/>
             </div>
             <div className="main-input-title">Tags<br></br> 
             </div>
@@ -122,7 +144,8 @@ const deleteSection = (event) => {
       <Button className={classes.button} onClick={addSection}>New Section</Button>
          
       <div className = {classes.createWorkoutContainer}>
-        <Button color="secondary" onClick={newHashtag} className={classes.createWorkoutButton}> Create Workout </Button>
+        <Button color="secondary" onClick={generateWorkoutJSON} className={classes.createWorkoutButton}> Create Workout </Button>
+        <br></br><br></br>(console.log a JSON representation)
       </div>
     </div>
   )

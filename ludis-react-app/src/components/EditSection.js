@@ -49,9 +49,11 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionTitleInput: {
         color: "white",
+        width: "calc(80vw - 92px)",
     },
     secondaryAction: {
-        // width: "calc(100% - 30px)",
+        width: "calc(100% - 30px)",
+        textAlign: "right",
     }
 })); 
 
@@ -112,7 +114,7 @@ function EditSection(props) {
             return (
                 <ListItem button onClick={handleClick} className={classes.sectionHeader}>
                     <ListItemText primary={sectionTitle}/>
-                    <ListItemSecondaryAction className={classes.secondaryAction}>
+                    <ListItemSecondaryAction >
                         <IconButton size="small" onClick={toggleEditTitle} data-id={props.id}>
                             <EditIcon className={classes.noPointerEvents} />
                         </IconButton>
@@ -149,7 +151,7 @@ function EditSection(props) {
             {generateSectionHeader()}
             {/* MUI animations don't work if you alert margins/padding of Collpase menu, so we're using a spacer div */}
             <div className={classes.smoothSpacer}></div>
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse in={open} timeout="auto">
                 {drillIds.map((id) => (
                     <EditDrill deleteFunction={deleteDrill} key={id} id={id}></EditDrill>
                 ))}
