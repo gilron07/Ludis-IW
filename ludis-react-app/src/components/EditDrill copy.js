@@ -12,6 +12,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import TextField from "@material-ui/core/TextField"
 
@@ -186,7 +188,7 @@ function EditDrill(props) {
     return (
         <List className={classes.drill}>
             {generateSectionHeader()}
-            <Collapse in={open} timeout="auto">
+            <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                 <ListItem className="drill-section-title">
                     Modifiers
@@ -194,11 +196,12 @@ function EditDrill(props) {
                 {/* Modifiers */}
                
                 {trueModifiers().map((key) => (
-                    <ListItem key={key}>
+                    <ListItem>
                         <EditModifier type={key}></EditModifier>
                         <ListItemText className={classes.closeIconContainer}>
                             <MenuItem onClick={deleteModifier} data-mod={key}>
                                 &#x2715;
+                                {/* <CloseIcon className={classes.closeIcon}></CloseIcon> */}
                             </MenuItem>
                         </ListItemText>
                     </ListItem>
