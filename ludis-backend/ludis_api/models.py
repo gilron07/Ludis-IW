@@ -81,7 +81,9 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Workout(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(null=True)
+    created_at = models.DateField(auto_now_add=True)
     owner = models.ForeignKey(get_user_model(), related_name='created_workouts', on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.title
@@ -118,11 +120,12 @@ class DrillModifier(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=64)
-    organization = models.ForeignKey(Organization, related_name='tags', on_delete=models.CASCADE)
+    # organization = models.ForeignKey(Organization, related_name='tags', on_delete=models.CASCADE)
+    workout = models.ForeignKey(Workout, related_name='tags', on_delete=models.CASCADE)
     created_at = models.DateField(auto_now=True)
 
     class Meta:
-        unique_together = ('name', 'organization')
+        unique_together = ('name', 'workout')
 
     def save(self, *args, **kwargs):
         self.name = self.name.lower()

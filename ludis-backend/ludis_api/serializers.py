@@ -1,13 +1,11 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-from .models import Drill, DrillModifier, Workout, Section, Organization
+from .models import Drill, DrillModifier, Workout, Section, Organization, Tag
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 
-JWT_PAYLOAD_HANDLER = api_settings.JWT_PAYLOAD_HANDLER
-JWT_ENCODE_HANDLER = api_settings.JWT_ENCODE_HANDLER
 
 class ModifierSerializer(serializers.ModelSerializer):
     class Meta:
@@ -47,13 +45,25 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'order', 'drills']
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ['name']
+
 class WorkoutSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, required=False)
+    tags = TagSerializer(many=True, required=False)
     owner = serializers.ReadOnlyField(source='owner.full_name')
 
     def create(self, validated_data):
         sections_data = validated_data.pop('sections')
+        tags = validated_data.pop('tags')
         workout = Workout.objects.create(**validated_data)
+
+        for tag in tags:
+            tag["workout_id"] = workout.pk
+        self.get_fields()['tags'].create(tags)
+
         for section_data in sections_data:
             section_data["workout_id"] = workout.pk
         self.get_fields()["sections"].create(sections_data)
@@ -61,7 +71,7 @@ class WorkoutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Workout
-        fields = ['id', 'title', 'description', 'sections', 'owner']
+        fields = ['id', 'title', 'created_at', 'description','tags', 'sections', 'owner']
 
         # extra_kwargs = {
         #     'password':{'write_only': True},
