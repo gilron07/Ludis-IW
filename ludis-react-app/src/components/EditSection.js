@@ -135,6 +135,8 @@ function EditSection(props) {
                         renameDrill = {props.renameDrill}
                         deleteDrill = {props.deleteDrill}
 
+                        addModifier = {props.addModifier}
+                        deleteModifier = {props.deleteModifier}
                         updateModifierQuantity = {props.updateModifierQuantity}
                         updateModifierUnit = {props.updateModifierUnit}
 
