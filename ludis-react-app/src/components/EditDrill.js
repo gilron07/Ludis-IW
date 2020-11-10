@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
         margin: "auto",
     },
     deleteDrill: {
-        zIndex: "3",
+        zIndex: "4",
     },
     closeDrillIcon: {
         pointerEvents: "none",
@@ -70,16 +70,15 @@ function EditDrill(props) {
 
     const classes = useStyles();
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [editTitle, setEditTitle] = React.useState(false);
     const [titleInput, setTitleInput] = React.useState(false);
-    const [drillTitle, setDrillTitle] = React.useState("Drill Section");
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [openModifiers, setOpenModifiers] = React.useState({
-        "weight": true,
+        "distance": true,
+        "weight": false,
         "time": false,
-        "distance": false,
-        "intensity": true
+        "intensity": false
     });
 
     const handleClick = () => {
@@ -96,9 +95,8 @@ function EditDrill(props) {
     }
 
     function confirmInputChange() {
-        setDrillTitle(titleInput);
+        props.renameDrill(props.drillId, props.sectionId, titleInput)
         toggleEditTitle();
-        console.log(drillTitle);
     }
 
     const handleButtonClick = (event) => {
@@ -151,12 +149,12 @@ function EditDrill(props) {
         if (!editTitle) {
             return (
                 <ListItem button onClick={handleClick} className={classes.drillHeader}>
-                    <ListItemText primary={drillTitle}/>
+                    <ListItemText primary={props.name}/>
                     <ListItemSecondaryAction>
-                        <IconButton size="small" onClick={toggleEditTitle} data-id={props.id}>
+                        <IconButton size="small" onClick={toggleEditTitle} sectionId={props.sectionId} drillId={props.drillId}>
                             <EditIcon className={classes.noPointerEvents} />
                         </IconButton>
-                        <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                        <IconButton size="small" onClick={props.deleteDrill} sectionId={props.sectionId} drillId={props.drillId}>
                             <CloseIcon className={classes.noPointerEvents}/>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -169,13 +167,13 @@ function EditDrill(props) {
                     <TextField
                         InputProps={{className: classes.drillTitleInput}}
                         onChange={handleInputChange}
-                        placeholder={drillTitle}
+                        placeholder={props.name}
                     >
                     </TextField>
-                    <IconButton size="small" onClick={confirmInputChange} data-id={props.id}>
+                    <IconButton size="small" onClick={confirmInputChange} sectionId={props.sectionId} drillId={props.drillId}>
                         <CheckCircleOutlineIcon className={classes.noPointerEvents} />
                     </IconButton>
-                    <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                    <IconButton size="small" onClick={props.deleteDrill} sectionId={props.sectionId} drillId={props.drillId}>
                         <CloseIcon className={classes.noPointerEvents}/>
                     </IconButton>
                 </ListItemSecondaryAction>
@@ -193,11 +191,18 @@ function EditDrill(props) {
                 </ListItem>
                 {/* Modifiers */}
                
-                {trueModifiers().map((key) => (
-                    <ListItem key={key}>
-                        <EditModifier type={key}></EditModifier>
+                {props.modifiers.map((modifier) => (
+                    <ListItem key={modifier["modifier"]}>
+                        <EditModifier
+                            sectionId = {props.sectionId}
+                            drillId = {props.drillId}
+                            modifier = {modifier}
+
+                            updateModifierQuantity = {props.updateModifierQuantity}
+                            updateModifierUnit = {props.updateModifierUnit}
+                        ></EditModifier>
                         <ListItemText className={classes.closeIconContainer}>
-                            <MenuItem onClick={deleteModifier} data-mod={key}>
+                            <MenuItem onClick={deleteModifier} data-mod={modifier["modifier"]}>
                                 &#x2715;
                             </MenuItem>
                         </ListItemText>

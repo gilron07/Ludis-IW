@@ -11,7 +11,6 @@ import Chip from '@material-ui/core/Chip';
 
 import '../css/CreateWorkout.css'; 
 
-
 const useStyles = makeStyles((theme) => ({
   tagsInput: {
   },
@@ -32,19 +31,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));      
 
-let idGenerator = 0;
+let sectionIdGenerator = 0;
+let drillIdGenerator = 0;
 
 const CreateWorkout = () => {
   const classes = useStyles();
 
   // hooks
-  const [workoutTitle, setWorkoutTitle] = useState("");
-  const [workoutDescription, setWorkoutDescription] = useState("");
+  const [workoutJSON, setWorkoutJSON] = useState(
+    {
+      "title": "",
+      "created_at": "",
+      "description": "",
+      "tags": ["heo"],
+      "sections": [],
+      "owner": "Henry Herrington"
+    }
+  );
 
   const [hashtag, setHashtag] = useState("");
   const [numberOfHashtags, setNumberOfHashtags] = useState(0);
   const [arrayOfHashtags, addHashtag] = useState([]);
-  const [sectionIds, setSections] = useState([]);
 
   // tag logic
   const handleDelete = (h) => () => {
@@ -71,45 +78,190 @@ const CreateWorkout = () => {
     <Chip label={h} onDelete={handleDelete(h)}/>
   ))
 
-  //section logic 
+  const updateWorkoutTitle = (e) => {
+    const newTitle = e.target.value;
+    let newJSON = {...workoutJSON};
+    newJSON["title"] = newTitle;
+    setWorkoutJSON(newJSON);
+  }
+  
+  const updateWorkoutDescription = (e) => {
+    const newDescription = e.target.value;
+    let newJSON = {...workoutJSON};
+    newJSON["description"] = newDescription;
+    setWorkoutJSON(newJSON);
+  }
+
+  // section functions ---------------------------------------
+
   const addSection = () => {
-    // clone array
-    const newSections = [...sectionIds];
-    newSections.push(idGenerator++);
-    setSections(newSections);
+    let newSection = {
+      "id" : sectionIdGenerator++,
+      "name" : "Section Name",
+      "order" : 0,
+      "drills" : [{
+        "id": drillIdGenerator++,
+        "drill_name": "Drill Name",
+        "order": 1,
+        "modifiers": [
+            {
+                "modifier": "distance",
+                "quantity": 600,
+                "unit": "meters"
+            },
+            {
+                "modifier": "time",
+                "quantity": 4,
+                "unit": "minutes"
+            }
+        ]
+    }]
+    }
+
+    // clone workout object
+    let newJSON = {...workoutJSON};
+    newJSON["sections"].push(newSection);
+    setWorkoutJSON(newJSON);
 };
 
-const deleteSection = (event) => {
-    let id = event.currentTarget.dataset.id;
-    console.log(id);
-    if (typeof id !== "string") return;
-    let sectionId = parseInt(id);
+const deleteSection = (e) => {
+    let targetId = e.currentTarget.dataset.id;
+    if (typeof targetId !== "string") return;
+    targetId = parseInt(targetId);
+
+    // find index of section to be removed
+    const removalRequirement = (section) => section["id"] == targetId;
+    let removalIndex = (workoutJSON["sections"]).findIndex(removalRequirement);
 
     // clone array
-    let removalIndex = sectionIds.indexOf(sectionId);
-    setSections(sectionIds.splice(removalIndex, 1));
-    const newSections = [...sectionIds];
-    console.log(newSections);
-    setSections(newSections);
+    let newJSON = {...workoutJSON};
+    newJSON["sections"].splice(removalIndex, 1);
+    setWorkoutJSON(newJSON);
 }
 
-function generateWorkoutJSON() {
-  let d = new Date()
-  console.log("------------------------");
-  console.log("Generating Workout JSON");
-  console.log(`Created at time: ${d.getTime()}`);
-  console.log(`Title: ${workoutTitle}`);
-  console.log(`Description: ${workoutDescription}`);
-  console.log(`Tags: ${arrayOfHashtags}`);
+function renameSection(sectionId, newName) {
+  // find index of section to be renamed
+  const renameRequirement = (section) => section["id"] == sectionId;
+  let renameIndex = (workoutJSON["sections"]).findIndex(renameRequirement);
+
+  // clone array
+  let newJSON = {...workoutJSON};
+  newJSON["sections"][renameIndex]["name"] = newName;
+  setWorkoutJSON(newJSON);
 }
 
-const updateWorkoutTitle = (e) => {
-  setWorkoutTitle(e.target.value);
+  // drill functions ---------------------------------------
+
+  const addDrill = (e) => {
+    let sectionId = e.currentTarget.getAttribute("sectionId");
+
+    // find index of section to be added to
+    const addDrillRequirement = (section) => section["id"] == sectionId;
+    let sectionIndex = (workoutJSON["sections"]).findIndex(addDrillRequirement);
+
+    console.log(sectionId);
+    
+    let newDrill = {
+      "id": drillIdGenerator++,
+      "drill_name": "Drill Name",
+      "order": 1,
+      "modifiers": []
+    }
+
+    // clone workout object
+    let newJSON = {...workoutJSON};
+    newJSON["sections"][sectionIndex]["drills"].push(newDrill);
+    setWorkoutJSON(newJSON);
+  };
+
+  const deleteDrill = (e) => {
+    let drillId = e.currentTarget.getAttribute("drillId");
+    let sectionId = e.currentTarget.getAttribute("sectionId");
+
+    // find index of section
+    const relevantSection = (section) => section["id"] == sectionId;
+    let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
+
+    // find index of drill
+    const relevantDrill = (drill) => drill["id"] == drillId;
+    let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+
+    // clone array
+    let newJSON = {...workoutJSON};
+    newJSON["sections"][sectionIndex]["drills"].splice(drillIndex, 1);
+    
+    setWorkoutJSON(newJSON);
 }
 
-const updateWorkoutDescription = (e) => {
-  setWorkoutDescription(e.target.value);
-}
+  function renameDrill(drillId, sectionId, newName) {
+    // find index of section
+    const relevantSection = (section) => section["id"] == sectionId;
+    let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
+
+    // find index of drill
+    const relevantDrill = (drill) => drill["id"] == drillId;
+    let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+
+    // clone array
+    let newJSON = {...workoutJSON};
+    newJSON["sections"][sectionIndex]["drills"][drillIndex]["drill_name"] = newName;
+    setWorkoutJSON(newJSON);
+  }
+
+    // modifier functions ---------------------------------------
+
+    function updateModifierQuantity(modifierName, drillId, sectionId, newQuantity) {
+      // find index of section
+      const relevantSection = (section) => section["id"] == sectionId;
+      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
+
+      // find index of drill
+      const relevantDrill = (drill) => drill["id"] == drillId;
+      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+
+      // find index of modifier
+      const relevantModifier = (mod) => mod["modifier"] == modifierName;
+      let modifierIndex = (workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
+
+      // clone array
+      let newJSON = {...workoutJSON};
+      newJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"][modifierIndex]["quantity"] = newQuantity;
+      setWorkoutJSON(newJSON);
+    }
+
+    function updateModifierUnit(modifierName, drillId, sectionId, newUnit) {
+      // find index of section
+      const relevantSection = (section) => section["id"] == sectionId;
+      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
+
+      // find index of drill
+      const relevantDrill = (drill) => drill["id"] == drillId;
+      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+
+      // find index of modifier
+      const relevantModifier = (mod) => mod["modifier"] == modifierName;
+      let modifierIndex = (workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
+
+      // clone array
+      let newJSON = {...workoutJSON};
+      newJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"][modifierIndex]["unit"] = newUnit;
+      setWorkoutJSON(newJSON);
+    }
+
+    // -------------------------------------------------- STILL HAVE TO FINISH THIS
+    
+    function formatJSON() {
+      // include tag array, remove ids
+      // let newJSON = {...workoutJSON};
+      // console.log(newJSON["tags"]);
+      // console.log(arrayOfHashtags);
+      // newJSON["tags"] = ["hi"];
+      // console.log(JSON.stringify(newJSON, null, 4));
+      // setWorkoutJSON(newJSON);
+
+      console.log(JSON.stringify(workoutJSON, null, 4));
+    }
+
 
   return (
     <div>
@@ -137,15 +289,30 @@ const updateWorkoutDescription = (e) => {
                {numberOfHashtags > 0 ? Hashtags : ""}
             </div>
 
-            {sectionIds.map((id) => (
-              <EditSection deleteFunction={deleteSection} key={id} id={id}></EditSection>
+            {workoutJSON["sections"].map((section) => (
+              <EditSection
+                sectionId = {section["id"]}
+                name = {section["name"]}
+                drills = {section["drills"]}
+
+                deleteSection = {deleteSection}
+                renameSection = {renameSection}
+                addDrill = {addDrill}
+                renameDrill = {renameDrill}
+                deleteDrill = {deleteDrill}
+
+                updateModifierQuantity = {updateModifierQuantity}
+                updateModifierUnit = {updateModifierUnit}
+
+                key = {`section${section["id"]}`}
+              ></EditSection>
             ))}
 
       <Button className={classes.button} onClick={addSection}>New Section</Button>
          
       <div className = {classes.createWorkoutContainer}>
-        <Button color="secondary" onClick={generateWorkoutJSON} className={classes.createWorkoutButton}> Create Workout </Button>
-        <br></br><br></br>(console.log a JSON representation)
+        <Button color="secondary" className={classes.createWorkoutButton} onClick={formatJSON}> Create Workout </Button>
+        <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre>
       </div>
     </div>
   )
