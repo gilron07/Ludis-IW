@@ -14,6 +14,7 @@ import Workout from './components/Workout';
 import CreateWorkout from './components/CreateWorkout';
 import Leaderboards from './components/Leaderboards';
 import Error from './components/Error';
+import Login from "./components/Login";
 
  
 class App extends Component {
@@ -30,6 +31,7 @@ class App extends Component {
              <Route path="/create-workout" component={CreateWorkout} exact/>
              <Route path="/leaderboards" component={Leaderboards} exact/>
              <Route path="/settings" component={Settings} exact/>
+             <Route path="/login" component={Login} exact/>
              <Route path="/" component={Landing} exact/>
              <Route component={Error}/>
            </Switch>
