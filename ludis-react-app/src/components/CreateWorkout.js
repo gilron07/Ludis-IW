@@ -40,21 +40,21 @@ const CreateWorkout = () => {
   // hooks
   const [workoutJSON, setWorkoutJSON] = useState(
     {
-      "title": "",
+      "title": "My Workout",
       "created_at": "",
       "description": "",
       "tags": [],
       "sections": [
         {
-          "id": sectionIdGenerator++,
+          "id": sectionIdGenerator,
           "name": "Section Title",
-          "order": 0,
+          "order": sectionIdGenerator++,
           "drills": [
               {
-                  "id": drillIdGenerator++,
+                  "id": drillIdGenerator,
                   "drill_name": "Drill Title",
                   "created_at": "2020-10-31T15:59:20.246136Z",
-                  "order": 0,
+                  "order": drillIdGenerator++,
                   "modifiers": []
               }
           ]
@@ -119,13 +119,13 @@ const CreateWorkout = () => {
 
   const addSection = () => {
     let newSection = {
-      "id" : sectionIdGenerator++,
+      "id" : sectionIdGenerator,
       "name" : "Section Name",
-      "order" : 0,
+      "order" : sectionIdGenerator++,
       "drills" : [{
-        "id": drillIdGenerator++,
+        "id": drillIdGenerator,
         "drill_name": "Drill Name",
-        "order": 0,
+        "order": drillIdGenerator++,
         "modifiers": [
             {
                 "modifier": "distance",
@@ -156,6 +156,8 @@ const deleteSection = (e) => {
 }
 
 function renameSection(sectionId, newName) {
+  if (!newName) return;
+  if (newName.trim() === "") return;
   let sectionIndex = findSectionIndex(sectionId);
 
   // clone array
@@ -174,9 +176,9 @@ function renameSection(sectionId, newName) {
     console.log(sectionId);
     
     let newDrill = {
-      "id": drillIdGenerator++,
+      "id": drillIdGenerator,
       "drill_name": "Drill Name",
-      "order": 1,
+      "order": drillIdGenerator++,
       "modifiers": []
     }
 
@@ -201,6 +203,9 @@ function renameSection(sectionId, newName) {
 }
 
   function renameDrill(drillId, sectionId, newName) {
+    if (!newName) return;
+    if (newName.trim() === "") return;
+
     let sectionIndex = findSectionIndex(sectionId);
     let drillIndex = findDrillIndex(drillId, sectionIndex);
 
@@ -216,10 +221,17 @@ function renameSection(sectionId, newName) {
       let sectionIndex = findSectionIndex(sectionId);
       let drillIndex = findDrillIndex(drillId, sectionIndex);
 
+      const units = {
+        "weight": ["lb", "kg"],
+        "time": ["hours", "minutes", "seconds"],
+        "distance": ["miles", "kilometers", "meters", "laps"],
+        "intensity": [null]
+    }
+
       let newModifier = {
         "modifier": modifierName,
         "quantity": null,
-        "unit": null
+        "unit": units[modifierName][0]
       }
   
       // clone workout object
@@ -282,9 +294,27 @@ function renameSection(sectionId, newName) {
       return(workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
     }
     
-    function formatJSON() {
+    // in the works
+    function deleteEmptyModifiers(newJSON) {    
+      // for (let i = 0; i < newJSON["sections"].length; i++) {
+      //   for (let j = 0; j < newJSON["sections"][i]["drills"].length; j++) {
+      //     for (let k = newJSON["sections"][i]["drills"][j]["modifiers"].length - 1; k > -1 ; k++) {
+      //       let currentModifier = newJSON["sections"][i]["drills"][j]["modifiers"][k];
+            
+      //       // delete modifier if empty
+      //       if (currentModifier === null || currentModifier === "") {
+      //         newJSON["sections"][i]["drills"][j]["modifiers"].splice(k, 1);
+      //       }
+      //     }
+      //   }
+      // }
+      
+      // return newJSON;
+    }
 
+    function formatJSON() {
       let outputJSON = JSON.parse(JSON.stringify(workoutJSON));
+      // outputJSON = deleteEmptyModifiers(outputJSON);
 
       // delete all ids
       outputJSON["sections"].map((section) => (
@@ -293,6 +323,15 @@ function renameSection(sectionId, newName) {
           delete drill["id"]
         ))
       ));
+
+      // add date (date code taken from online)
+      var dateObj = new Date();
+      var month = dateObj.getUTCMonth() + 1; //months from 1-12
+      var day = dateObj.getUTCDate();
+      var year = dateObj.getUTCFullYear();
+
+      let newDate = year + "-" + month + "-" + day;
+      outputJSON["created_at"] = newDate
 
       console.log(JSON.stringify(outputJSON, null, 4));
     }
@@ -303,10 +342,20 @@ function renameSection(sectionId, newName) {
         <Header />
          <h1>New Workout</h1>
             <div className="main-input-title">Workout Name<br></br>
-              <Input placeholder="for example: Pre Meet" fullWidth onChange={updateWorkoutTitle}/>
+              <TextField
+                fullWidth
+                onChange={updateWorkoutTitle}
+                error = {workoutJSON["title"].trim() === ""}
+                helperText = {(workoutJSON["title"].trim() === "") ? "Workout Name cannot be blank" : null}
+                value = {workoutJSON["title"]}
+              />
             </div>
             <div className="main-input-title">Workout Description<br></br> 
-              <Input placeholder="important things to remember" fullWidth onChange={updateWorkoutDescription}/>
+              <TextField
+                fullWidth
+                onChange={updateWorkoutDescription}
+                inputProps={{maxLength: 1000}}
+              />
             </div>
             <div className="main-input-title">Tags<br></br> 
             </div>
@@ -348,7 +397,19 @@ function renameSection(sectionId, newName) {
       <Button className={classes.button} onClick={addSection}>New Section</Button>
          
       <div className = {classes.createWorkoutContainer}>
-        <Button color="secondary" className={classes.createWorkoutButton} onClick={formatJSON}> Create Workout </Button>
+        <Button
+          color="secondary"
+          className={classes.createWorkoutButton}
+          onClick={formatJSON}
+          disabled = {workoutJSON["title"].trim() === ""}
+        >
+          Create Workout
+        </Button>
+        <br></br>
+        {workoutJSON["title"].trim() === ""
+          ? <p style={{color: "red"}}>Workout Name cannot be blank</p>
+          : null
+        }
         {/* <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre> */}
       </div>
     </div>
