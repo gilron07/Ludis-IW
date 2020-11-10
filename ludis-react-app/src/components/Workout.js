@@ -12,6 +12,7 @@ import TimelineItem from '@material-ui/lab/TimelineItem';
 import TimelineSeparator from '@material-ui/lab/TimelineSeparator';
 import TimelineConnector from '@material-ui/lab/TimelineConnector';
 import TimelineContent from '@material-ui/lab/TimelineContent';
+import TimelineOppositeContent from '@material-ui/lab/TimelineOppositeContent';
 import TimelineDot from '@material-ui/lab/TimelineDot';
 
 // css
@@ -28,7 +29,16 @@ const useStyles = makeStyles((theme) => ({
         margin: "auto",
         display: "block",
         marginBottom: 10
-    }
+    },
+    timeline: {
+        // backgroundColor: "red",
+        marginLeft: "-30px"
+    },
+    oppositeContent: {
+        backgroundColor: "yellow",
+        display: "none",
+        flex: 0,
+    },
 }));
 
 function getData() {
@@ -50,13 +60,27 @@ function getData() {
                         "modifiers": [
                             {
                                 "id": 1,
-                                "modifier": "Reps",
+                                "modifier": "Sets",
+                                "quantity": 15,
                                 "unit": null
                             },
                             {
-                                "id": 2,
+                                "id": 1,
+                                "modifier": "Intensity",
+                                "quantity": 15,
+                                "unit": null
+                            },
+                            {
+                                "id": 1,
                                 "modifier": "Time",
-                                "unit": "minutes"
+                                "quantity": 5,
+                                "unit": "hours"
+                            },
+                            {
+                                "id": 2,
+                                "modifier": "Distance",
+                                "quantity": 50,
+                                "unit": "miles"
                             }
                         ]
                     }
@@ -76,11 +100,13 @@ function getData() {
                             {
                                 "id": 1,
                                 "modifier": "Reps",
+                                "quantity": 5,
                                 "unit": null
                             },
                             {
                                 "id": 2,
                                 "modifier": "Time",
+                                "quantity": 7,
                                 "unit": "minutes"
                             }
                         ]
@@ -94,11 +120,13 @@ function getData() {
                             {
                                 "id": 1,
                                 "modifier": "Reps",
+                                "quantity": 4,
                                 "unit": null
                             },
                             {
                                 "id": 2,
                                 "modifier": "Time",
+                                "quantity": 70,
                                 "unit": "minutes"
                             }
                         ]
@@ -174,11 +202,25 @@ function Workout() {
                             <div class="section-container">
                             <div class="section-name">{section.name}</div>
                             
-                            <Timeline>    
+                            <Timeline class={classes.timeline}>    
                             {(section.drills).map((drill, index) => (            
                                 <TimelineItem>
-                                    <TimelineSeparator><TimelineDot /><TimelineConnector /></TimelineSeparator>
-                                    <TimelineContent>{drill.drill_name}</TimelineContent>
+                                    <TimelineOppositeContent
+                                        className={classes.oppositeContent}
+                                    ></TimelineOppositeContent>
+                                    {(index === section.drills.length - 1)
+                                        ? <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/></TimelineSeparator>
+                                        : <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/><TimelineConnector /></TimelineSeparator>}
+                                    <TimelineContent>{
+                                        <div>
+                                        {drill["drill_name"]}
+                                        {drill["modifiers"].map((modifier) => (
+                                            <div>
+                                            {`${modifier["modifier"]}: ${modifier["quantity"]}`}
+                                            </div>
+                                        ))}
+                                        </div>
+                                    }</TimelineContent>
                                 </TimelineItem>
                             ))}
                             </Timeline>
