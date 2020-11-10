@@ -104,42 +104,27 @@ function EditDrill(props) {
     };
 
     const addModifier = (event) => {
-        let mod = event.target.dataset.mod;
-        // Cloning an object in JS, we can't alter the state directly
-        const newModifiers = JSON.parse(JSON.stringify(openModifiers));
-        newModifiers[mod] = true;
-        setOpenModifiers(newModifiers);
+        let modifierName = event.target.dataset.mod;
+        props.addModifier(modifierName, props.drillId, props.sectionId)
         handleButtonClose();
     }
 
     const deleteModifier = (event) => {
-        let mod = event.target.dataset.mod;
-        console.log(mod);
-        // Cloning an object in JS, we can't alter the state directly
-        const newModifiers = JSON.parse(JSON.stringify(openModifiers));
-        newModifiers[mod] = false;
-        setOpenModifiers(newModifiers);
+        let modifierName = event.target.dataset.mod;
+        props.deleteModifier(modifierName, props.drillId, props.sectionId);
     }
 
     const handleButtonClose = () => {
         setAnchorEl(null);
     };
 
-    function trueModifiers() {
-        let trueMods = [];
-        for (const key in openModifiers) {
-            if (openModifiers[key]) {
-                trueMods.push(key);
-            }
-        }
-        return trueMods;
-    }
-
     function falseModifiers() {
-        let falseMods = [];
-        for (const key in openModifiers) {
-            if (!openModifiers[key]) {
-                falseMods.push(key);
+        let falseMods = ["distance", "weight", "time", "intensity"];
+        for (let i = 0; i < props.modifiers.length; i++) {
+            let existingMod = props.modifiers[i]["modifier"];
+            if (falseMods.includes(existingMod)){
+                let removalIndex = falseMods.indexOf(existingMod);
+                falseMods.splice(removalIndex, 1);
             }
         }
         return falseMods;
@@ -223,7 +208,14 @@ function EditDrill(props) {
                     >
                         {
                             falseModifiers().map((modifierTitle) => (
-                                <MenuItem key={modifierTitle} onClick={addModifier} data-mod={modifierTitle}>{toCapitalize(modifierTitle)}</MenuItem>
+                                <MenuItem
+                                    key={modifierTitle}
+                                    onClick={addModifier}
+                                    data-mod={modifierTitle}
+                                    data-section-id = {props.sectionId}
+                                    data-drill-id = {props.drillId}
+                                >
+                                {toCapitalize(modifierTitle)}</MenuItem>
                             ))
                         }
                     </Menu>

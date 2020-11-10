@@ -83,7 +83,13 @@ function EditModifier(props) {
     else if (type == "intensity") {
         return (
             <ListItem>
-                <TextField type="number" label={toCapitalize(type)} className={classes.modifierInput} />
+                <TextField
+                    type="number"
+                    label={toCapitalize(type)}
+                    value = {props.modifier["quantity"]}
+                    onChange = {handleInputChange}
+                    className={classes.modifierInput}
+                />
                 %
             </ListItem>
         );
