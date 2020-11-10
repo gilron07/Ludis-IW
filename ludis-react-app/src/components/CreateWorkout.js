@@ -43,8 +43,23 @@ const CreateWorkout = () => {
       "title": "",
       "created_at": "",
       "description": "",
-      "tags": ["heo", "two", "three"],
-      "sections": [],
+      "tags": [],
+      "sections": [
+        {
+          "id": sectionIdGenerator++,
+          "name": "Section Title",
+          "order": 0,
+          "drills": [
+              {
+                  "id": drillIdGenerator++,
+                  "drill_name": "Drill Title",
+                  "created_at": "2020-10-31T15:59:20.246136Z",
+                  "order": 0,
+                  "modifiers": []
+              }
+          ]
+      }
+      ],
       "owner": "Henry Herrington"
     }
   );
@@ -110,17 +125,12 @@ const CreateWorkout = () => {
       "drills" : [{
         "id": drillIdGenerator++,
         "drill_name": "Drill Name",
-        "order": 1,
+        "order": 0,
         "modifiers": [
             {
                 "modifier": "distance",
-                "quantity": 600,
+                "quantity": null,
                 "unit": "meters"
-            },
-            {
-                "modifier": "time",
-                "quantity": 4,
-                "unit": "minutes"
             }
         ]
     }]
@@ -133,28 +143,24 @@ const CreateWorkout = () => {
 };
 
 const deleteSection = (e) => {
-    let targetId = e.currentTarget.dataset.id;
-    if (typeof targetId !== "string") return;
-    targetId = parseInt(targetId);
+  let sectionId = e.currentTarget.dataset.id;
+  if (typeof sectionId !== "string") return;
+  sectionId = parseInt(sectionId);
 
-    // find index of section to be removed
-    const removalRequirement = (section) => section["id"] == targetId;
-    let removalIndex = (workoutJSON["sections"]).findIndex(removalRequirement);
-
-    // clone array
-    let newJSON = {...workoutJSON};
-    newJSON["sections"].splice(removalIndex, 1);
-    setWorkoutJSON(newJSON);
-}
-
-function renameSection(sectionId, newName) {
-  // find index of section to be renamed
-  const renameRequirement = (section) => section["id"] == sectionId;
-  let renameIndex = (workoutJSON["sections"]).findIndex(renameRequirement);
+  let sectionIndex = findSectionIndex(sectionId);
 
   // clone array
   let newJSON = {...workoutJSON};
-  newJSON["sections"][renameIndex]["name"] = newName;
+  newJSON["sections"].splice(sectionIndex, 1);
+  setWorkoutJSON(newJSON);
+}
+
+function renameSection(sectionId, newName) {
+  let sectionIndex = findSectionIndex(sectionId);
+
+  // clone array
+  let newJSON = {...workoutJSON};
+  newJSON["sections"][sectionIndex]["name"] = newName;
   setWorkoutJSON(newJSON);
 }
 
@@ -163,9 +169,7 @@ function renameSection(sectionId, newName) {
   const addDrill = (e) => {
     let sectionId = e.currentTarget.getAttribute("sectionId");
 
-    // find index of section to be added to
-    const addDrillRequirement = (section) => section["id"] == sectionId;
-    let sectionIndex = (workoutJSON["sections"]).findIndex(addDrillRequirement);
+    let sectionIndex = findSectionIndex(sectionId);
 
     console.log(sectionId);
     
@@ -186,13 +190,8 @@ function renameSection(sectionId, newName) {
     let drillId = e.currentTarget.getAttribute("drillId");
     let sectionId = e.currentTarget.getAttribute("sectionId");
 
-    // find index of section
-    const relevantSection = (section) => section["id"] == sectionId;
-    let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
-
-    // find index of drill
-    const relevantDrill = (drill) => drill["id"] == drillId;
-    let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+    let sectionIndex = findSectionIndex(sectionId);
+    let drillIndex = findDrillIndex(drillId, sectionIndex);
 
     // clone array
     let newJSON = {...workoutJSON};
@@ -202,13 +201,8 @@ function renameSection(sectionId, newName) {
 }
 
   function renameDrill(drillId, sectionId, newName) {
-    // find index of section
-    const relevantSection = (section) => section["id"] == sectionId;
-    let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
-
-    // find index of drill
-    const relevantDrill = (drill) => drill["id"] == drillId;
-    let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+    let sectionIndex = findSectionIndex(sectionId);
+    let drillIndex = findDrillIndex(drillId, sectionIndex);
 
     // clone array
     let newJSON = {...workoutJSON};
@@ -219,13 +213,8 @@ function renameSection(sectionId, newName) {
     // modifier functions ---------------------------------------
 
     function addModifier(modifierName, drillId, sectionId) {
-      // find index of section to be added to
-      const relevantSection = (section) => section["id"] == sectionId;
-      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
-
-      // find index of drill
-      const relevantDrill = (drill) => drill["id"] == drillId;
-      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+      let sectionIndex = findSectionIndex(sectionId);
+      let drillIndex = findDrillIndex(drillId, sectionIndex);
 
       let newModifier = {
         "modifier": modifierName,
@@ -240,18 +229,10 @@ function renameSection(sectionId, newName) {
     };
 
     function deleteModifier(modifierName, drillId, sectionId) {
-      // find index of section to be added to
-      const relevantSection = (section) => section["id"] == sectionId;
-      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
+      let sectionIndex = findSectionIndex(sectionId);
+      let drillIndex = findDrillIndex(drillId, sectionIndex);
+      let modifierIndex = findModfierIndex(modifierName, drillIndex, sectionIndex)
 
-      // find index of drill
-      const relevantDrill = (drill) => drill["id"] == drillId;
-      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
-
-      // find index of modifier
-      const relevantModifier = (mod) => mod["modifier"] == modifierName;
-      let modifierIndex = (workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
-  
       // clone workout object
       let newJSON = JSON.parse(JSON.stringify(workoutJSON));
       newJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"].splice(modifierIndex, 1);
@@ -260,18 +241,10 @@ function renameSection(sectionId, newName) {
     };
 
     function updateModifierQuantity(modifierName, drillId, sectionId, newQuantity) {
-      // find index of section
-      const relevantSection = (section) => section["id"] == sectionId;
-      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
-
-      // find index of drill
-      const relevantDrill = (drill) => drill["id"] == drillId;
-      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
-
-      // find index of modifier
-      const relevantModifier = (mod) => mod["modifier"] == modifierName;
-      let modifierIndex = (workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
-
+      let sectionIndex = findSectionIndex(sectionId);
+      let drillIndex = findDrillIndex(drillId, sectionIndex);
+      let modifierIndex = findModfierIndex(modifierName, drillIndex, sectionIndex)
+      
       // clone array
       let newJSON = {...workoutJSON};
       newJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"][modifierIndex]["quantity"] = newQuantity;
@@ -279,17 +252,9 @@ function renameSection(sectionId, newName) {
     }
 
     function updateModifierUnit(modifierName, drillId, sectionId, newUnit) {
-      // find index of section
-      const relevantSection = (section) => section["id"] == sectionId;
-      let sectionIndex = (workoutJSON["sections"]).findIndex(relevantSection);
-
-      // find index of drill
-      const relevantDrill = (drill) => drill["id"] == drillId;
-      let drillIndex = (workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
-
-      // find index of modifier
-      const relevantModifier = (mod) => mod["modifier"] == modifierName;
-      let modifierIndex = (workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
+      let sectionIndex = findSectionIndex(sectionId);
+      let drillIndex = findDrillIndex(drillId, sectionIndex);
+      let modifierIndex = findModfierIndex(modifierName, drillIndex, sectionIndex)
 
       // clone array
       let newJSON = {...workoutJSON};
@@ -298,6 +263,24 @@ function renameSection(sectionId, newName) {
     }
 
     // --------------------------------------------------
+
+    // find index of section within the workout
+    function findSectionIndex(sectionId) {
+      const relevantSection = (section) => section["id"] == sectionId;
+      return(workoutJSON["sections"]).findIndex(relevantSection);
+    }
+
+    // find index of section within a section
+    function findDrillIndex(drillId, sectionIndex) {
+      const relevantDrill = (drill) => drill["id"] == drillId;
+      return(workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
+    }
+
+    // find index of modifier within a drill
+    function findModfierIndex(modifierName, drillIndex, sectionIndex) {
+      const relevantModifier = (mod) => mod["modifier"] == modifierName;
+      return(workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
+    }
     
     function formatJSON() {
 
@@ -366,7 +349,7 @@ function renameSection(sectionId, newName) {
          
       <div className = {classes.createWorkoutContainer}>
         <Button color="secondary" className={classes.createWorkoutButton} onClick={formatJSON}> Create Workout </Button>
-        <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre>
+        {/* <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre> */}
       </div>
     </div>
   )

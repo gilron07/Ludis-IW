@@ -196,9 +196,12 @@ function EditDrill(props) {
                 
 
                 <ListItem>
-                    <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick} className={classes.button}>
+                    {(props.modifiers.length < 4)
+                    ? <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick} className={classes.button}>
                         Add Modifier
                     </Button>
+                    : null
+                    }
                     <Menu
                         id="simple-menu"
                         anchorEl={anchorEl}
