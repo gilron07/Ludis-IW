@@ -15,13 +15,14 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 function Workouts() {
     const [data, setData] = useState([]);
 
-    useEffect(() =>{
-        const fetchData = async () =>{
-          const result = await axiosAPI.get('/workouts/');
-          setData(result.data)
-        };
-        fetchData();
-    }, []);
+    // useEffect(() =>{
+    //     const fetchData = async () =>{
+    //       const result = await axiosAPI.get('/workouts/');
+    //       setData(result.data)
+    //     };
+    //     fetchData();
+    // }, []);
+
     return(
         <div id="calendar-workouts">
             <Header></Header>
@@ -29,9 +30,13 @@ function Workouts() {
             {/* {componentDidMount()} */}
             <List>
                 {/* getData returns the workout as an object */}
-                {data.map((workout) => (
+                {/* {data.map((workout) => (
                     <WorkoutComponent title={workout.title} creator={workout.owner} created_at={workout.created_at} key={workout.id} tags={workout.tags}></WorkoutComponent>
-                ))}
+                ))} */}
+                {/* Offline Data */}
+                <WorkoutComponent title={"Workout 1"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"1"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>
+                <WorkoutComponent title={"Workout 2"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"2"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>
+                <WorkoutComponent title={"Workout 3"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"3"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>
             </List>
             <div id="create-workout-button" onClick="newWorkout">
                 <NavLink to={"create-workout"}>

@@ -57,17 +57,13 @@ const useStyles = makeStyles((theme) => ({
     }
 })); 
 
-let idGenerator = 0;
-
 function EditSection(props) {
 
     const classes = useStyles();
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [editTitle, setEditTitle] = React.useState(false);
     const [titleInput, setTitleInput] = React.useState(false);
-    const [sectionTitle, setSectionTitle] = React.useState("Workout Section");
-    const [drillIds, setDrills] = React.useState([]);
 
     const handleClick = () => {
       setOpen(!open);
@@ -77,48 +73,25 @@ function EditSection(props) {
         setEditTitle(!editTitle);
     }
 
-    const addDrill = () => {
-        // clone array
-        const newDrills = [...drillIds];
-        newDrills.push(idGenerator++);
-        setDrills(newDrills);
-    };
-
-    const deleteDrill = (event) => {
-        let id = event.currentTarget.dataset.id;
-        console.log(id);
-        if (typeof id !== "string") return;
-        let drillId = parseInt(id);
-
-        // clone array
-        let removalIndex = drillIds.indexOf(drillId);
-        setDrills(drillIds.splice(removalIndex, 1));
-        const newDrills = [...drillIds];
-        console.log(newDrills);
-        setDrills(newDrills);
-    }
-
     const handleInputChange = (e) => {
-        console.log(titleInput);
         setTitleInput(e.target.value);
     }
 
     function confirmInputChange() {
-        setSectionTitle(titleInput);
+        props.renameSection(props.sectionId, titleInput);
         toggleEditTitle();
-        console.log(sectionTitle);
     }
 
     const generateSectionHeader = () =>{
         if (!editTitle) {
             return (
                 <ListItem button onClick={handleClick} className={classes.sectionHeader}>
-                    <ListItemText primary={sectionTitle}/>
+                    <ListItemText primary={props.name}/>
                     <ListItemSecondaryAction >
-                        <IconButton size="small" onClick={toggleEditTitle} data-id={props.id}>
+                        <IconButton size="small" onClick={toggleEditTitle} data-id={props.sectionId}>
                             <EditIcon className={classes.noPointerEvents} />
                         </IconButton>
-                        <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                        <IconButton size="small" onClick={props.deleteSection} data-id={props.sectionId}>
                             <CloseIcon className={classes.noPointerEvents}/>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -131,13 +104,13 @@ function EditSection(props) {
                     <TextField
                         InputProps={{className: classes.sectionTitleInput}}
                         onChange={handleInputChange}
-                        placeholder={sectionTitle}
+                        placeholder={props.name}
                     >
                     </TextField>
-                    <IconButton size="small" onClick={confirmInputChange} data-id={props.id}>
+                    <IconButton size="small" onClick={confirmInputChange} data-id={props.sectionId}>
                         <CheckCircleOutlineIcon className={classes.noPointerEvents} />
                     </IconButton>
-                    <IconButton size="small" onClick={props.deleteFunction} data-id={props.id}>
+                    <IconButton size="small" onClick={props.deleteSection} data-id={props.sectionId}>
                         <CloseIcon className={classes.noPointerEvents}/>
                     </IconButton>
                 </ListItemSecondaryAction>
@@ -152,11 +125,24 @@ function EditSection(props) {
             {/* MUI animations don't work if you alert margins/padding of Collpase menu, so we're using a spacer div */}
             <div className={classes.smoothSpacer}></div>
             <Collapse in={open} timeout="auto">
-                {drillIds.map((id) => (
-                    <EditDrill deleteFunction={deleteDrill} key={id} id={id}></EditDrill>
+                {props.drills.map((drill) => (
+                    <EditDrill
+                        sectionId = {props.sectionId}
+                        drillId = {drill["id"]}
+                        name = {drill["drill_name"]}
+                        modifiers = {drill["modifiers"]}
+
+                        renameDrill = {props.renameDrill}
+                        deleteDrill = {props.deleteDrill}
+
+                        updateModifierQuantity = {props.updateModifierQuantity}
+                        updateModifierUnit = {props.updateModifierUnit}
+
+                        key = {`drill${drill["id"]}`}
+                    ></EditDrill>
                 ))}
                 <div className={classes.addDrillButtonContainer}>
-                    <Button className={classes.button} onClick={addDrill}>New Drill </Button>
+                    <Button className={classes.button} onClick={props.addDrill} sectionId={props.sectionId}>New Drill</Button>
                 </div>
             </Collapse>
         </List>
