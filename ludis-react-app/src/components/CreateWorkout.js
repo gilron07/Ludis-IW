@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router';
 
 import Header from './Header.js';
 import EditSection from './EditSection';
@@ -9,6 +10,7 @@ import Button from "@material-ui/core/Button"
 import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
 
+import axiosAPI from '../services/authAxios'
 import '../css/CreateWorkout.css'; 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,8 +61,7 @@ const CreateWorkout = () => {
               }
           ]
       }
-      ],
-      "owner": "Henry Herrington"
+      ]
     }
   );
 
@@ -84,7 +85,8 @@ const CreateWorkout = () => {
   const newHashtag = () => {
     let newHashtag = hashtag.trim()
     if (newHashtag === "") return;
-    if (workoutJSON["tags"].includes(newHashtag)) return;
+    if (workoutJSON["tags"].some(e => e.name === newHashtag)) return;
+    newHashtag = {name: newHashtag}
     if (workoutJSON["tags"].length < 5) {
       // clone workout object
       let newJSON = {...workoutJSON};
@@ -96,7 +98,7 @@ const CreateWorkout = () => {
   }
 
   const Hashtags = workoutJSON["tags"].map((tag) => (
-    <Chip label={tag} onDelete={handleDelete(tag)}/>
+    <Chip label={tag.name} onDelete={handleDelete(tag)}/>
   ))
 
   // general functions ---------------------------------------
@@ -312,6 +314,18 @@ function renameSection(sectionId, newName) {
       // return newJSON;
     }
 
+    function createWorkout() {
+      // window.location.href='/home';
+      const data = formatJSON();
+      axiosAPI.post('/workouts/', data)
+          .then((res)=>{
+            console.log(res)
+          })
+          .catch((err)=>{
+              console.log(err)
+          });
+    }
+
     function formatJSON() {
       let outputJSON = JSON.parse(JSON.stringify(workoutJSON));
       // outputJSON = deleteEmptyModifiers(outputJSON);
@@ -332,8 +346,8 @@ function renameSection(sectionId, newName) {
 
       let newDate = year + "-" + month + "-" + day;
       outputJSON["created_at"] = newDate
-
       console.log(JSON.stringify(outputJSON, null, 4));
+      return outputJSON
     }
 
 
@@ -400,7 +414,7 @@ function renameSection(sectionId, newName) {
         <Button
           color="secondary"
           className={classes.createWorkoutButton}
-          onClick={formatJSON}
+          onClick={createWorkout}
           disabled = {workoutJSON["title"].trim() === ""}
         >
           Create Workout

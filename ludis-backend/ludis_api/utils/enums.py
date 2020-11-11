@@ -2,14 +2,14 @@ from enum import Enum, auto
 
 
 class Modifier(Enum):
-    Sets = 'Sets'
-    Reps = 'Reps'
-    Weight = 'Weight'
-    Time = 'Time'
-    Rest_Between_Sets = 'Rest_Between_Sets'
-    Rest_Between_Reps = 'Rest_Between_Reps'
-    Distance = 'Distance'
-    Intensity = 'Intensity'
+    sets = 'sets'
+    reps = 'reps'
+    weight = 'weight'
+    time = 'time'
+    rest_between_sets = 'rest_between_sets'
+    rest_between_reps = 'rest_between_reps'
+    distance = 'distance'
+    intensity = 'intensity'
 
     @classmethod
     def choices(cls):
