@@ -10,7 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class ModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = DrillModifier
-        fields =['id', 'modifier', 'unit', 'qty']
+        fields =['id', 'modifier', 'unit', 'quantity']
 
 
 class DrillSerializer(serializers.ModelSerializer):
