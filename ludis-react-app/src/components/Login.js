@@ -67,13 +67,18 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         color: "#00000066",
     },
+    loginPage : {
+        position: "absolute",
+        top: 0,
+        left: 0,
+    }
 }));  
   
 
 function Login() {
     const classes = useStyles();
     return (
-        <div>
+        <div className={classes.loginPage}>
             <div className={classes.ambientBackground} style={{ minHeight: 350 }}>
                 <img
                     src="./assets/court.jpg"
