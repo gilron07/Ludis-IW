@@ -2,145 +2,114 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {Grid} from "@material-ui/core";
 
 import '../css/Login.css';
 
 const useStyles = makeStyles((theme) => ({
     backgroundImage: {
-        position : "fixed",
-        top : "0",
-        left : "0",
-        width : "50vw",
+        width: "60vw",
+        transform: "rotate(180deg)"
     },
+    ambientBackground : {
+        transition: "0.1s",
+        height: "100vh",
+        width: "calc(60vw - 50px)",
+        float: "left",
+        overflow: "hidden",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        [theme.breakpoints.down('sm')]: {
+            // transition: "1s",
+            width: "0vw",
+        },
+    },
+    loginBackground : {
+        transition: "0.1s",
+        height: "100vh",
+        width: "calc(40vw + 50px)",
+        float: "right",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        [theme.breakpoints.down('sm')]: {
+            // transition: "1s",
+            width: "100vw",
+        },
+        [theme.breakpoints.up('md')]: {
+    
+        },
+    },
+    loginContainer : {
+        width: "70%",
+        margin: "auto",
+        textAlign: "center",
+        padding: "30px 20px 10px 20px",
+        boxShadow: "0 0 2px #00000088",
+    },
+    ludisLogo : {
+        width: "60px",
+        display: "inline-block",
+    },
+    ludisTitle : {
+        display: "inline-block",
+    },
+    titleLogoContainer : {
+        fontSize: "35px",
+        height: "50px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        marginBottom: "5px",
+    },
+    loginLink : {
+        fontSize: "12px",
+        width: "100%",
+        color: "#00000066",
+    },
+    loginPage : {
+        position: "absolute",
+        top: 0,
+        left: 0,
+    }
 }));  
   
 
 function Login() {
     const classes = useStyles();
-
     return (
-            <div>
-                hi hi hi
-                <img src="./assets/court.jpg" className={classes.backgroundImage}/>
-                {/* <Grid container style={{minHeight:'100vh', backgroundColor:'red'}}>
-                    <Grid item xs={12} sm={6} style={{backgroundColor:'green'}}>
-                        <img
-                            src="./assets/court.jpg"
-                            style={{width:'100%',height:'100%', objectFit:'cover', overflow:'hidden'}}
-                        />
-                    </Grid>
-                    <Grid
-                        container
-                        item
-                        xs={12}
-                        sm={6}
-                        alignItems="center"
-                        direction="column"
-                        justify="space-between"
-                        style={{padding:10}}
-                    >
-                        <div/>
-                        <div style={{display:'flex', flexDirection:"column", maxWidth:400, minWidth:300}}>
-                            <Grid container justify="center">
-                                <img
-                                    src="./assets/ludis-logo.png"
-                                    width={200}
-                                    alt="logo"
-                                />
-                            </Grid>
-                            <TextField label="email" margin="normal"/>
-                            <TextField label="password" margin="normal"/>
-                            <div style={{height:20}}>
-                                <Button
-                                    color="primary"
-                                    variant="contained"
-                                    style ={{width:'100%'}}
-                                >
-                                    Log in
-                                </Button>
-                            </div>
-                        </div>
-                        <div/>
-                    </Grid>
-                </Grid> */}
+        <div className={classes.loginPage}>
+            <div className={classes.ambientBackground} style={{ minHeight: 350 }}>
+                <img
+                    src="./assets/court.jpg"
+                    className={classes.backgroundImage}
+                    style={{minWidth:"max(60vw, calc(64vh + 0px))"}}></img>
             </div>
+            <div className={classes.loginBackground} style={{ minHeight: 350 }}>
+                <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
+                    <div className={classes.titleLogoContainer}>
+                        <div className={classes.ludisTitle}>Ludis</div>
+                        <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                    </div>
+                    <TextField variant="outlined" label="Email" margin="dense" fullWidth size="small"/>
+                    <TextField variant="outlined" label="Password" margin="dense" fullWidth size="small"/>
+                    <div className={classes.loginLink} style={{textAlign: "right"}}>
+                        Forgot Password
+                    </div>
+                    <Button
+                        color="primary"
+                        variant="contained"
+                        style ={{width:'100%', margin: '15px 0'}}
+                    >
+                        Log in
+                    </Button>
+                    <div className={classes.loginLink}>
+                        Create Account
+                    </div>
+                </div>
+            </div> 
+        </div>
     );
 }
 
 export default Login;
-
-                {/*<Grid containter style={{minHeight: '100vh'}}>*/}
-                {/*    <Grid item xs={12} sm={6}>*/}
-                {/*        <h1>Okkkk</h1>*/}
-                {/*        /!*<img src="./assets/court.jpg" style={{width: '100%', height: '100%', objectFit:'cover'}} alt=""/>*!/*/}
-                {/*    </Grid>*/}
-                {/*    <Grid*/}
-                {/*        container*/}
-                {/*        item xs={12}*/}
-                {/*        sm={6}*/}
-                {/*        allignItems="cetner"*/}
-                {/*        direction="column"*/}
-                {/*        justify="space-between"*/}
-                {/*        style ={{padding: 10}}*/}
-                {/*    >*/}
-
-                {/*        <div>*/}
-                {/*            <Grid container justify="center">*/}
-                {/*                <img src="./assets/ludis-logo.png" style={{width:200}}/>*/}
-                {/*            </Grid>*/}
-                {/*            <TextField label="email" margin="normal"/>*/}
-                {/*            <TextField label="password" margin="normal"/>*/}
-                {/*        </div>*/}
-                {/*    </Grid>*/}
-
-                {/*</Grid>*/}
-
-
-
-
-
-
-            //     <div>
-            //     <Grid container style={{minHeight:'100vh', backgroundColor:'red'}}>
-            //         <Grid item xs={0} sm={6} style={{backgroundColor:'green'}}>
-            //             {/* <img
-            //                 src="./assets/court.jpg"
-            //                 style={{width:'100%',height:'100%', objectFit:'cover', overflow:'hidden'}}
-            //             /> */}
-            //         </Grid>
-            //         <Grid
-            //             container
-            //             item
-            //             xs={12}
-            //             sm={6}
-            //             alignItems="center"
-            //             direction="column"
-            //             justify="space-between"
-            //             style={{padding:10}}
-            //         >
-            //             <div/>
-            //             <div style={{display:'flex', flexDirection:"column", maxWidth:400, minWidth:300}}>
-            //                 <Grid container justify="center">
-            //                     <img
-            //                         src="./assets/ludis-logo.png"
-            //                         width={200}
-            //                         alt="logo"
-            //                     />
-            //                 </Grid>
-            //                 <TextField label="email" margin="normal"/>
-            //                 <TextField label="password" margin="normal"/>
-            //                 <div style={{height:20}}>
-            //                     <Button
-            //                         color="primary"
-            //                         variant="contained"
-            //                         style ={{width:'100%'}}
-            //                     >
-            //                         Log in
-            //                     </Button>
-            //                 </div>
-            //             </div>
-            //             <div/>
-            //         </Grid>
-            //     </Grid>
-            // </div>
