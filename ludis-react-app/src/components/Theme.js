@@ -8,5 +8,11 @@ const theme = createMuiTheme({
         main: '#7ed9b1'
     } 
   },
+  breakpoints: {
+    values: {
+      sm: 300,
+      md: 550,
+    },
+  },
 })
 export default theme
