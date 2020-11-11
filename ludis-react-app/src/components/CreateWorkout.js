@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Redirect } from 'react-router';
 
 import Header from './Header.js';
 import EditSection from './EditSection';
@@ -9,6 +8,7 @@ import TextField from "@material-ui/core/TextField"
 import Button from "@material-ui/core/Button"
 import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
+
 
 import axiosAPI from '../services/authAxios'
 import '../css/CreateWorkout.css'; 
@@ -316,14 +316,14 @@ function renameSection(sectionId, newName) {
 
     function createWorkout() {
       // window.location.href='/home';
-      const data = formatJSON();
-      axiosAPI.post('/workouts/', data)
-          .then((res)=>{
-            console.log(res)
-          })
-          .catch((err)=>{
-              console.log(err)
-          });
+      // const data = formatJSON();
+      // axiosAPI.post('/workouts/', data)
+      //     .then((res)=>{
+      //       console.log(res)
+      //     })
+      //     .catch((err)=>{
+      //         console.log(err)
+      //     });
     }
 
     function formatJSON() {
@@ -426,6 +426,7 @@ function renameSection(sectionId, newName) {
         }
         {/* <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre> */}
       </div>
+
     </div>
   )
 }

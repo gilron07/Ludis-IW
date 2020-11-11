@@ -7,33 +7,34 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 
-class CalendarWorkout extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+function CalendarWorkout(props){
 
-    render() {
-        return(
-            <div className="workout-item">
-                <ListItem button>
-                    <ListItemText primary={this.props.title} secondary={"Created by " + this.props.creator + " at " + this.props.created_at} />
-                    <ListItem>
-                        {
-                            this.props.tags.map((tag) =>(
-                                <Chip label= {tag.name}/>
-                            ))
-                        }
-                    </ListItem>
-                    {/* <FileCopyIcon></FileCopyIcon> */}
-                    <div class="workout-delete"><DeleteIcon></DeleteIcon></div>
-                    <div class="workout-chevron"><ChevronRightIcon></ChevronRightIcon></div>
+    return(
+        <div className="workout-item">
+            <ListItem button>
+                <ListItemText primary={props.title} secondary={"Created by " + props.creator + " at " + props.created_at} />
+                <ListItem>
+                    {
+                        props.tags.map((tag) =>(
+                            <Chip label= {tag.name}/>
+                        ))
+                    }
                 </ListItem>
+                {/* <FileCopyIcon></FileCopyIcon> */}
+                <div class="workout-delete">
+                    <IconButton onClick={props.workoutDelete} data-id={props.key}>
+                        <DeleteIcon/>
+                    </IconButton>
+                </div>
+                <div class="workout-chevron"><ChevronRightIcon></ChevronRightIcon></div>
+            </ListItem>
 
-            </div>
-        )
-    }
+        </div>
+    )
+
 }
 
 export default CalendarWorkout;
