@@ -1,7 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {Button, TextField, InputAdornment} from '@material-ui/core';
+import EmailIcon from '@material-ui/icons/Email';
+import LockIcon from '@material-ui/icons/Lock';
 
 import '../css/Login.css';
 
@@ -81,7 +82,7 @@ function Login() {
         <div className={classes.loginPage}>
             <div className={classes.ambientBackground} style={{ minHeight: 350 }}>
                 <img
-                    src="./assets/court.jpg"
+                    src="/static/assets/court.jpg"
                     className={classes.backgroundImage}
                     style={{minWidth:"max(60vw, calc(64vh + 0px))"}}></img>
             </div>
@@ -89,10 +90,26 @@ function Login() {
                 <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
                     <div className={classes.titleLogoContainer}>
                         <div className={classes.ludisTitle}>Ludis</div>
-                        <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                        <img src="/static/assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
                     </div>
-                    <TextField variant="outlined" label="Email" margin="dense" fullWidth size="small"/>
-                    <TextField variant="outlined" label="Password" margin="dense" fullWidth size="small"/>
+                    <TextField
+                        variant="outlined"
+                        label="Email"
+                        margin="dense"
+                        fullWidth size="small"
+                        InputProps={
+                            {startAdornment: <InputAdornment position="start"><EmailIcon/></InputAdornment>}
+                        }
+                    />
+                    <TextField
+                        variant="outlined"
+                        label="Password"
+                        margin="dense"
+                        fullWidth size="small"
+                        InputProps={
+                            {startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}
+                        }
+                    />
                     <div className={classes.loginLink} style={{textAlign: "right"}}>
                         Forgot Password
                     </div>
@@ -107,7 +124,7 @@ function Login() {
                         Create Account
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
     );
 }
