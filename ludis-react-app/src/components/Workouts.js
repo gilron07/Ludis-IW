@@ -10,9 +10,6 @@ import Button from '@material-ui/core/Button';
 
 import axiosAPI from '../services/authAxios'
 
-
-
-
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 
@@ -36,24 +33,24 @@ function Workouts() {
     }
 
     const workoutDelete = (e) => {
-        const id = e.currentTarget.getAttribute("data-id")
-        console.log(e)
-        axiosAPI.delete(`/workouts/${id}/`)
-            .then(res =>{
-                setData(data.filter(item => item.id != id));
-            })
-            .catch(err =>{
-                console.log(err)
-            });
+        const id = e.currentTarget.getAttribute("workoutid");
+        console.log(id)
+        // axiosAPI.delete(`/workouts/${id}/`)
+        //     .then(res =>{
+        //         setData(data.filter(item => item.id != id));
+        //     })
+        //     .catch(err =>{
+        //         console.log(err)
+        //     });
     };
 
-    useEffect(() =>{
-        const fetchData = async () =>{
-          const result = await axiosAPI.get('/workouts/');
-          setData(result.data)
-        };
-        fetchData();
-    }, []);
+    // useEffect(() =>{
+    //     const fetchData = async () =>{
+    //       const result = await axiosAPI.get('/workouts/');
+    //       setData(result.data)
+    //     };
+    //     fetchData();
+    // }, []);
 
     return(
         <div id="calendar-workouts">
@@ -62,7 +59,7 @@ function Workouts() {
             {/* {componentDidMount()} */}
             <List>
                 {/* getData returns the workout as an object */}
-                {data.map((workout) => (
+                {/* {data.map((workout) => (
                     <WorkoutComponent
                         title={workout.title}
                         creator={workout.owner}
@@ -71,11 +68,26 @@ function Workouts() {
                         tags={workout.tags}
                         workoutDelete={workoutDelete}
                     ></WorkoutComponent>
-                ))};
+                ))} */}
                 {/* Offline Data */}
-                {/*<WorkoutComponent title={"Workout 1"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"1"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>*/}
-                {/*<WorkoutComponent title={"Workout 2"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"2"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>*/}
-                {/*<WorkoutComponent title={"Workout 3"} creator={"Henry Herrington"} created_at={"11/9/2020"} key={"3"} tags={[{"name":"cars"},{"name":"technical"}]}></WorkoutComponent>*/}
+                <WorkoutComponent 
+                    title={"Workout 1"} 
+                    creator={"Henry Herrington"}
+                    created_at={"11/9/2020"}
+                    key={"1"}
+                    id={"1"}
+                    tags={[{"name":"cars"},{"name":"technical"}]}
+                    workoutDelete={workoutDelete}
+                ></WorkoutComponent>
+                <WorkoutComponent 
+                    title={"Workout 2"} 
+                    creator={"Henry Herrington"}
+                    created_at={"11/9/2020"}
+                    key={"2"}
+                    id={"2"}
+                    tags={[{"name":"cars too"},{"name":"non-technical"}]}
+                    workoutDelete={workoutDelete}
+                ></WorkoutComponent>
             </List>
             <div id="create-workout-button" onClick="newWorkout">
                 <NavLink to="create-workout">
