@@ -2,6 +2,8 @@ import React from 'react';
 import '../css/CalendarWorkout.css';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+
 
 // icons
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -19,17 +21,17 @@ function CalendarWorkout(props){
                 <ListItem>
                     {
                         props.tags.map((tag) =>(
-                            <Chip label= {tag.name}/>
+                            <Chip label= {tag.name} style={{margin: "0 5px"}}/>
                         ))
                     }
                 </ListItem>
                 {/* <FileCopyIcon></FileCopyIcon> */}
-                <div class="workout-delete">
-                    <IconButton onClick={props.workoutDelete} data-id={props.key}>
+                <ListItemSecondaryAction>
+                    <IconButton onClick={props.workoutDelete} workoutid={props.id}>
                         <DeleteIcon/>
                     </IconButton>
-                </div>
-                <div class="workout-chevron"><ChevronRightIcon></ChevronRightIcon></div>
+                </ListItemSecondaryAction>
+                {/* <div class="workout-chevron"><ChevronRightIcon></ChevronRightIcon></div> */}
             </ListItem>
 
         </div>

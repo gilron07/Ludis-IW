@@ -191,6 +191,7 @@ function renameSection(sectionId, newName) {
   };
 
   const deleteDrill = (e) => {
+    console.log(e.currentTarget)
     let drillId = e.currentTarget.getAttribute("drillId");
     let sectionId = e.currentTarget.getAttribute("sectionId");
 
