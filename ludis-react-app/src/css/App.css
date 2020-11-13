@@ -4,12 +4,13 @@
 
 html {
   margin: 0;
-  /* min-height: calc(100vh - 60px); */
   padding-top: 60px; 
   padding-left: 10vw;
   padding-right: 10vw; 
   font-family: 'Nunito', sans-serif;
 }
+  /* min-height: calc(100vh - 60px); */
+
 
 h1 {
   font-weight: 100;
