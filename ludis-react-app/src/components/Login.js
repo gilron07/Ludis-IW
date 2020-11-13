@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import {Button, TextField, InputAdornment} from '@material-ui/core';
+import EmailIcon from '@material-ui/icons/Email';
+import LockIcon from '@material-ui/icons/Lock';
 
 import '../css/Login.css';
 
@@ -77,6 +78,9 @@ function Login(props) {
                 InputLabelProps={{
                     shrink: true,
                 }}
+                InputProps={
+                   {startAdornment: <InputAdornment position="start"><EmailIcon/></InputAdornment>}
+                }
             />
             <TextField
                 value={password}
@@ -90,6 +94,9 @@ function Login(props) {
                 InputLabelProps={{
                     shrink: true,
                 }}
+                InputProps={
+                   {startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}
+                }
             />
             <div className={classes.loginLink} style={{textAlign: "right"}}>
                 Forgot Password

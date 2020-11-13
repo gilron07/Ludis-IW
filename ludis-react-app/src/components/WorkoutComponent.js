@@ -31,7 +31,12 @@ function CalendarWorkout(props){
                         <DeleteIcon/>
                     </IconButton>
                 </ListItemSecondaryAction>
-                {/* <div class="workout-chevron"><ChevronRightIcon></ChevronRightIcon></div> */}
+                {/*<ListItemSecondaryAction>*/}
+                {/*    <IconButton>*/}
+                {/*        <ChevronRightIcon/>*/}
+                {/*    </IconButton>*/}
+                {/*</ListItemSecondaryAction>*/}
+                 {/*<div class="workout-chevron"></ChevronRightIcon></div>*/}
             </ListItem>
 
         </div>
