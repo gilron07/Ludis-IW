@@ -7,7 +7,6 @@ table tr{
   vertical-align: middle;
   float: left;
   width: 80vw;
-  /* background-color: red; */
 }
 
 td {
@@ -18,7 +17,6 @@ td {
 #header-logo {
   height: 40px;
   padding-top: 5px;
-  /* background-color: blue; */
 }
 
 #header {

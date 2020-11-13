@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Button, TextField, InputAdornment} from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
@@ -7,40 +7,6 @@ import LockIcon from '@material-ui/icons/Lock';
 import '../css/Login.css';
 
 const useStyles = makeStyles((theme) => ({
-    backgroundImage: {
-        width: "60vw",
-        transform: "rotate(180deg)"
-    },
-    ambientBackground : {
-        transition: "0.1s",
-        height: "100vh",
-        width: "calc(60vw - 50px)",
-        float: "left",
-        overflow: "hidden",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        [theme.breakpoints.down('sm')]: {
-            // transition: "1s",
-            width: "0vw",
-        },
-    },
-    loginBackground : {
-        transition: "0.1s",
-        height: "100vh",
-        width: "calc(40vw + 50px)",
-        float: "right",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        [theme.breakpoints.down('sm')]: {
-            // transition: "1s",
-            width: "100vw",
-        },
-        [theme.breakpoints.up('md')]: {
-    
-        },
-    },
     loginContainer : {
         width: "70%",
         margin: "auto",
@@ -53,10 +19,10 @@ const useStyles = makeStyles((theme) => ({
         display: "inline-block",
     },
     ludisTitle : {
+        fontSize: "40px",
         display: "inline-block",
     },
     titleLogoContainer : {
-        fontSize: "35px",
         height: "50px",
         display: "flex",
         justifyContent: "center",
@@ -68,62 +34,83 @@ const useStyles = makeStyles((theme) => ({
         width: "100%",
         color: "#00000066",
     },
-    loginPage : {
-        position: "absolute",
-        top: 0,
-        left: 0,
+    actionTitle : {
+        fontSize: "15px",
+        color: "#00000066",
     }
 }));  
   
 
-function Login() {
+function Login(props) {
     const classes = useStyles();
+
+    // hooks
+    const [email, setEmail] = useState(null);
+    const [password, setPassword] = useState(null);
+
+    const updateEmail = (e) => {
+        setEmail(e.target.value);
+    }
+
+    const updatePassword = (e) => {
+        setPassword(e.target.value);
+    }
+
+    function submitInfo() {
+        props.submitFunction(email, password);
+    }
+
     return (
-        <div className={classes.loginPage}>
-            <div className={classes.ambientBackground} style={{ minHeight: 350 }}>
-                <img
-                    src="/static/assets/court.jpg"
-                    className={classes.backgroundImage}
-                    style={{minWidth:"max(60vw, calc(64vh + 0px))"}}></img>
+        <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
+            <div className={classes.titleLogoContainer}>
+                <div className={classes.ludisTitle}>Ludis</div>
+                <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
             </div>
-            <div className={classes.loginBackground} style={{ minHeight: 350 }}>
-                <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
-                    <div className={classes.titleLogoContainer}>
-                        <div className={classes.ludisTitle}>Ludis</div>
-                        <img src="/static/assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
-                    </div>
-                    <TextField
-                        variant="outlined"
-                        label="Email"
-                        margin="dense"
-                        fullWidth size="small"
-                        InputProps={
-                            {startAdornment: <InputAdornment position="start"><EmailIcon/></InputAdornment>}
-                        }
-                    />
-                    <TextField
-                        variant="outlined"
-                        label="Password"
-                        margin="dense"
-                        fullWidth size="small"
-                        InputProps={
-                            {startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}
-                        }
-                    />
-                    <div className={classes.loginLink} style={{textAlign: "right"}}>
-                        Forgot Password
-                    </div>
-                    <Button
-                        color="primary"
-                        variant="contained"
-                        style ={{width:'100%', margin: '15px 0'}}
-                    >
-                        Log in
-                    </Button>
-                    <div className={classes.loginLink}>
-                        Create Account
-                    </div>
-                </div>
+            <div className={classes.actionTitle}>Log In</div>
+            <TextField
+                value={email}
+                onChange={updateEmail}
+                variant="outlined"
+                label="Email"
+                margin="dense"
+                fullWidth
+                size="small"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                InputProps={
+                   {startAdornment: <InputAdornment position="start"><EmailIcon/></InputAdornment>}
+                }
+            />
+            <TextField
+                value={password}
+                onChange={updatePassword}
+                type="password"
+                variant="outlined"
+                label="Password"
+                margin="dense"
+                fullWidth
+                size="small"
+                InputLabelProps={{
+                    shrink: true,
+                }}
+                InputProps={
+                   {startAdornment: <InputAdornment position="start"><LockIcon/></InputAdornment>}
+                }
+            />
+            <div className={classes.loginLink} style={{textAlign: "right"}}>
+                Forgot Password
+            </div>
+            <Button
+                color="primary"
+                variant="contained"
+                style ={{width:'100%', margin: '15px 0'}}
+                onClick={submitInfo}
+            >
+                Log in
+            </Button>
+            <div className={classes.loginLink} onClick={props.toggleFunction}>
+                Create Account
             </div>
         </div>
     );
