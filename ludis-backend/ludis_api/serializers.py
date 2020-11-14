@@ -5,6 +5,7 @@ from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, S
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db import transaction
 
 
 class ModifierSerializer(serializers.ModelSerializer):
@@ -16,6 +17,7 @@ class ModifierSerializer(serializers.ModelSerializer):
 class DrillSerializer(serializers.ModelSerializer):
     modifiers = ModifierSerializer(many=True, required=False)
 
+    @transaction.atomic
     def create(self, validated_data):
         modifiers_data = validated_data.pop('modifiers')
         drill = Drill.objects.create(**validated_data)
@@ -32,6 +34,7 @@ class DrillSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
     drills = DrillSerializer(many=True, required=False)
 
+    @transaction.atomic
     def create(self, validated_data):
         drills_data = validated_data.pop('drills')
         section = Section.objects.create(**validated_data)
@@ -56,6 +59,7 @@ class WorkoutSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, required=False)
     owner = serializers.ReadOnlyField(source='owner.full_name')
 
+    @transaction.atomic
     def create(self, validated_data):
         sections_data = validated_data.pop('sections')
         tags = validated_data.pop('tags')
@@ -167,6 +171,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Schedule
         fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'athletes_ids', 'location','dates','athletes']
 
+    @transaction.atomic
     def create(self, validated_data):
         athletes = validated_data.pop('athletes_ids')
         dates = validated_data.pop('dates')
