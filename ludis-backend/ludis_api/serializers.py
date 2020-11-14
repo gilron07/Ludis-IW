@@ -153,21 +153,22 @@ class UserScheduleSerializer(serializers.ModelSerializer):
 
 class ScheduleSerializer(serializers.ModelSerializer):
     workout = WorkoutShortSerializer(read_only=True)
-    workout_id = serializers.PrimaryKeyRelatedField(queryset=Workout.objects.all(), write_only=True)
     owner = serializers.ReadOnlyField(source='owner.full_name')
     # group =  serializers.ReadOnlyField(source='group.name')
-    users = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
+    athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
     date = serializers.DateTimeField(source='schedule.date', read_only=True)
+
+    # For creating schedule
     dates = serializers.ListField(child=serializers.DateTimeField(), write_only=True)
-    athletes = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), many=True, write_only=True)
+    workout_id = serializers.PrimaryKeyRelatedField(queryset=Workout.objects.all(), write_only=True)
+    athletes_ids = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), many=True, write_only=True)
 
     class Meta:
         model = Schedule
-        fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'users', 'location','dates','athletes']
-
+        fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'athletes_ids', 'location','dates','athletes']
 
     def create(self, validated_data):
-        athletes = validated_data.pop('athletes')
+        athletes = validated_data.pop('athletes_ids')
         dates = validated_data.pop('dates')
         workout = validated_data.pop('workout_id')
         if workout.owner.organization != self.context['request'].user.organization:
