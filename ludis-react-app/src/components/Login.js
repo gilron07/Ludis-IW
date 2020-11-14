@@ -65,7 +65,7 @@ function Login(props) {
                 <div className={classes.ludisTitle}>Ludis</div>
                 <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
             </div>
-            <div className={classes.actionTitle}>Log In</div>
+            {/* <div className={classes.actionTitle}>Log In</div> */}
             <TextField
                 value={email}
                 onChange={updateEmail}
