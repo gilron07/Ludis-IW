@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-from .models import Drill, DrillModifier, Workout, Section, Organization, Tag
+from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -49,6 +49,7 @@ class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['name']
+
 
 class WorkoutSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, required=False)
@@ -132,5 +133,30 @@ class UserLoginSerializer(serializers.Serializer):
         }
 
 
+class WorkoutShortSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+
+    class Meta:
+        model = Workout
+        fields = ['id', 'title', 'owner', 'tags']
 
 
+class UserScheduleSerializer(serializers.ModelSerializer):
+    athlete = serializers.ReadOnlyField(source='user.full_name')
+    athlete_id = serializers.ReadOnlyField(source='user.id')
+
+    class Meta:
+        model = UserSchedule
+        fields = ['athlete', 'athlete_id']
+
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    workout = WorkoutShortSerializer(read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+    # group =  serializers.ReadOnlyField(source='group.name')
+    athletes = UserScheduleSerializer(source='userschedule_set', many=True)
+
+    class Meta:
+        model = Schedule
+        fields = ['id', 'date', 'notes', 'workout', 'owner', 'athletes']

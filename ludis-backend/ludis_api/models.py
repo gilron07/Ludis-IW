@@ -132,3 +132,26 @@ class Tag(models.Model):
         return super(Tag, self).save(*args, **kwargs)
 
 
+class Schedule(models.Model):
+    location = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(null=True, blank=True)
+    date = models.DateTimeField()
+    owner = models.ForeignKey(get_user_model(), related_name='coach_schedule', on_delete=models.CASCADE)
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
+
+    # Assigned users
+    users = models.ManyToManyField(get_user_model(), through='UserSchedule', related_name='user_schedule')
+
+
+class UserSchedule(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+
+    # group =  ForeignKey to Group to indicate if that workout was assigned to a team
+    @property
+    def is_group_workout(self):
+        # return group_id != None
+        return True
+    class Meta:
+        unique_together = ('user', 'schedule')

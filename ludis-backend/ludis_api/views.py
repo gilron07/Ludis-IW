@@ -5,10 +5,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
-from ludis_api.models import Workout, User
-from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer
+from ludis_api.models import Workout, User, Schedule
+from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer, ScheduleSerializer
 from django.shortcuts import render
 from ludis_api.permissions import IsWorkoutView
+from ludis_api.utils.enums import Role
 
 def index(request):
     return render(request, "build/index.html")
@@ -23,6 +24,16 @@ class WorkoutViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Workout.objects.filter(owner__organization=self.request.user.organization)
+
+class ScheduleViewSet(ModelViewSet):
+    serializer_class = ScheduleSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        if self.request.user.role == Role.COACH.value:
+            return Schedule.objects.filter(owner__organization=self.request.user.organization)
+        return self.request.user.user_schedule.all()
+
 
 
 class UserRegistrationView(APIView):
