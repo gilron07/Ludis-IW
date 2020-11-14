@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import Header from './Header.js';
 import CalendarComponent from './CalendarComponent.js';
+import CalendarModal from './CalendarModal.js';
+import Button from '@material-ui/core/Button';
+import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
+
 import '../css/Home.css';
 
 // tab imports
@@ -32,8 +36,29 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
     },
 }));
+  
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
 
-function ScrollableTabsButtonAuto() {
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+export default function Home() {
+  
   const classes = useStyles();
   const [value, setValue] = useState(0);
   const [currentWeek, setWeek] = useState(1);
@@ -52,6 +77,8 @@ function ScrollableTabsButtonAuto() {
 
   return (
     <div className={classes.root}>
+      <Header />
+          <h1 >Calendar</h1>
       <AppBar position="static" color="primary" id="month-bar">
         <Tabs
           value={value}
@@ -92,41 +119,7 @@ function ScrollableTabsButtonAuto() {
           </div>
         </TabPanel>
       ))}
-    </div>
+      <CalendarModal></CalendarModal>
+    </div>    
   );
 }
-  
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`scrollable-auto-tabpanel-${index}`}
-      aria-labelledby={`scrollable-auto-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-export default class Home extends React.Component {
-  render() {  
-  return (
-        <div>
-          <Header />
-          <h1 >Calendar</h1>
-          <ScrollableTabsButtonAuto></ScrollableTabsButtonAuto>
-        </div>
-    );
-  }
-}
-
-
-// export default Home;

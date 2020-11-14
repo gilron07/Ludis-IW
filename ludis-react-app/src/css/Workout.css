@@ -1,5 +1,4 @@
 .workout-title {
-    /* background-color: yellow; */
     text-align: center;
 }
 
@@ -68,7 +67,6 @@
 }
 
 .section-container {
-    /* background-color: red; */
     padding: 20px 0 0 0;
 }
 
@@ -77,5 +75,5 @@
 }
 
 #coaches-only-container {
-    display: none;
+    /* display: none; */
 }
