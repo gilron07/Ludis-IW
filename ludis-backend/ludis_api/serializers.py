@@ -153,10 +153,31 @@ class UserScheduleSerializer(serializers.ModelSerializer):
 
 class ScheduleSerializer(serializers.ModelSerializer):
     workout = WorkoutShortSerializer(read_only=True)
+    workout_id = serializers.PrimaryKeyRelatedField(queryset=Workout.objects.all(), write_only=True)
     owner = serializers.ReadOnlyField(source='owner.full_name')
     # group =  serializers.ReadOnlyField(source='group.name')
-    athletes = UserScheduleSerializer(source='userschedule_set', many=True)
+    users = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
+    date = serializers.DateTimeField(source='schedule.date', read_only=True)
+    dates = serializers.ListField(child=serializers.DateTimeField(), write_only=True)
+    athletes = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), many=True, write_only=True)
 
     class Meta:
         model = Schedule
-        fields = ['id', 'date', 'notes', 'workout', 'owner', 'athletes']
+        fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'users', 'location','dates','athletes']
+
+
+    def create(self, validated_data):
+        athletes = validated_data.pop('athletes')
+        dates = validated_data.pop('dates')
+        workout = validated_data.pop('workout_id')
+        if workout.owner.organization != self.context['request'].user.organization:
+            raise serializers.ValidationError('Not allowed Workout')
+        for date in dates:
+            schedule = Schedule.objects.create(**validated_data, date=date, workout=workout)
+            for athlete in athletes:
+                if athlete.organization != self.context['request'].user.organization:
+                    raise serializers.ValidationError('Not allowed User')
+                schedule.users.add(athlete)
+        return schedule
+
+

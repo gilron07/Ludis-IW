@@ -25,6 +25,7 @@ class WorkoutViewSet(ModelViewSet):
     def get_queryset(self):
         return Workout.objects.filter(owner__organization=self.request.user.organization)
 
+
 class ScheduleViewSet(ModelViewSet):
     serializer_class = ScheduleSerializer
     permission_classes = (AllowAny,)
@@ -34,6 +35,8 @@ class ScheduleViewSet(ModelViewSet):
             return Schedule.objects.filter(owner__organization=self.request.user.organization)
         return self.request.user.user_schedule.all()
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class UserRegistrationView(APIView):

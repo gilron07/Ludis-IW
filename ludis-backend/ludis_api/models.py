@@ -133,7 +133,7 @@ class Tag(models.Model):
 
 
 class Schedule(models.Model):
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(null=True, blank=True)
     date = models.DateTimeField()
