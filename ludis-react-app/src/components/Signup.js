@@ -106,7 +106,7 @@ function Signup(props) {
             return(
                 <div>
                     <TextField value={email} onChange={updateEmail} variant="outlined" label="Email" margin="dense" fullWidth size="small"/>
-                    <TextField value={password} onChange={updatePassword}variant="outlined" label="Password" margin="dense" fullWidth size="small"/>
+                    <TextField value={password} onChange={updatePassword} variant="outlined" label="Password" margin="dense" fullWidth size="small"/>
                     <TextField
                         value={teamCode}
                         onChange={updateTeamCode}
