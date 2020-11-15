@@ -169,6 +169,3 @@ class Report(models.Model):
 
     class Meta:
         unique_together =('athlete', 'schedule')
-
-    def get_average_effort(self):
-        return self.reports

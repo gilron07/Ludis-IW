@@ -37,7 +37,9 @@ class ScheduleViewSet(ModelViewSet):
         queryset = None
 
         if self.request.user.role == Role.COACH.value:
-            queryset = Schedule.objects.annotate(average_effort=Avg('reports__effort'))\
+            queryset = Schedule.objects.annotate(average_effort=Avg('reports__effort'),
+                                                 average_duration =Avg('reports__duration'),
+                                                 average_satisfaction=Avg('reports__satisfaction'))\
                 .filter(owner__organization=self.request.user.organization)
         else:
             queryset = self.request.user.user_schedule.all()

@@ -8,6 +8,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import transaction
 from django.db.models import Avg
 
+from .utils.enums import Role
+
+
 class ModifierSerializer(serializers.ModelSerializer):
     class Meta:
         model = DrillModifier
@@ -171,10 +174,13 @@ class ScheduleSerializer(serializers.ModelSerializer):
     # group =  serializers.ReadOnlyField(source='group.name')
     athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
     date = serializers.DateTimeField(source='schedule.date', read_only=True)
-    reports = ReportSerializer(many=True, read_only=True)
+    # reports = ReportSerializer(many=True, read_only=True)
+    reports = serializers.SerializerMethodField(read_only=True)
 
     # Schedule Averages
     average_effort = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_duration = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_satisfaction = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
 
     # For creating schedule
     dates = serializers.ListField(child=serializers.DateTimeField(), write_only=True)
@@ -183,11 +189,35 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schedule
-        fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'athletes_ids', 'location','dates','athletes','reports', 'average_effort']
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'workout',
+            'workout_id',
+            'owner',
+            'athletes_ids',
+            'location',
+            'dates',
+            'athletes',
+            'reports',
+            'average_effort',
+            'average_duration',
+            'average_satisfaction'
+        ]
 
     # def get_average_effort(self, obj):
     #     s = Schedule.objects.annotate(average_effort=Avg('reports__effort')).get(pk=obj.id)
     #     return s.average_effort
+
+
+    def get_reports(self, obj):
+        user = self.context['request'].user
+        if user.role == Role.COACH.value:
+            serializer = ReportSerializer(obj.reports.all(), many=True)
+        else:
+            serializer = ReportSerializer(obj.reports.filter(athlete=user), many=True)
+        return serializer.data
 
     @transaction.atomic
     def create(self, validated_data):
