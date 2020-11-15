@@ -1,11 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule
+from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule, Report
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.db import transaction
+from django.db.models import Avg
+
+from .utils.enums import Role
 
 
 class ModifierSerializer(serializers.ModelSerializer):
@@ -155,12 +158,29 @@ class UserScheduleSerializer(serializers.ModelSerializer):
         fields = ['athlete', 'athlete_id']
 
 
+class ReportSerializer(serializers.ModelSerializer):
+    schedule = serializers.PrimaryKeyRelatedField(queryset=Schedule.objects.all(), write_only=True)
+    athlete = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
+    athlete_name = serializers.ReadOnlyField(source='athlete.full_name')
+
+
+    class Meta:
+        model = Report
+        fields = ['id','duration', 'effort', 'satisfaction', 'schedule', 'athlete', 'athlete_name']
+
 class ScheduleSerializer(serializers.ModelSerializer):
     workout = WorkoutShortSerializer(read_only=True)
     owner = serializers.ReadOnlyField(source='owner.full_name')
     # group =  serializers.ReadOnlyField(source='group.name')
     athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
     date = serializers.DateTimeField(source='schedule.date', read_only=True)
+    # reports = ReportSerializer(many=True, read_only=True)
+    reports = serializers.SerializerMethodField(read_only=True)
+
+    # Schedule Averages
+    average_effort = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_duration = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_satisfaction = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
 
     # For creating schedule
     dates = serializers.ListField(child=serializers.DateTimeField(), write_only=True)
@@ -169,7 +189,35 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Schedule
-        fields = ['id', 'date', 'notes', 'workout', 'workout_id', 'owner', 'athletes_ids', 'location','dates','athletes']
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'workout',
+            'workout_id',
+            'owner',
+            'athletes_ids',
+            'location',
+            'dates',
+            'athletes',
+            'reports',
+            'average_effort',
+            'average_duration',
+            'average_satisfaction'
+        ]
+
+    # def get_average_effort(self, obj):
+    #     s = Schedule.objects.annotate(average_effort=Avg('reports__effort')).get(pk=obj.id)
+    #     return s.average_effort
+
+
+    def get_reports(self, obj):
+        user = self.context['request'].user
+        if user.role == Role.COACH.value:
+            serializer = ReportSerializer(obj.reports.all(), many=True)
+        else:
+            serializer = ReportSerializer(obj.reports.filter(athlete=user), many=True)
+        return serializer.data
 
     @transaction.atomic
     def create(self, validated_data):
@@ -185,5 +233,9 @@ class ScheduleSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError('Not allowed User')
                 schedule.users.add(athlete)
         return schedule
+
+
+
+
 
 
