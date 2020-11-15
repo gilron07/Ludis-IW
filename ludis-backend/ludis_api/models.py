@@ -4,6 +4,7 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from .utils.enums import Modifier, Role
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 DEFAULT_ORGANIZATION = 1
 
@@ -153,5 +154,21 @@ class UserSchedule(models.Model):
     def is_group_workout(self):
         # return group_id != None
         return True
+
     class Meta:
         unique_together = ('user', 'schedule')
+
+
+class Report(models.Model):
+    schedule = models.ForeignKey(Schedule, related_name="reports", on_delete=models.CASCADE)
+    athlete = models.ForeignKey(get_user_model(), related_name="reports", on_delete=models.CASCADE)
+    date_filled = models.DateTimeField(auto_now_add=True)
+    duration = models.DecimalField(decimal_places=2, max_digits=4, null=True, blank=True)
+    effort = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    satisfaction = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+
+    class Meta:
+        unique_together =('athlete', 'schedule')
+
+    def get_average_effort(self):
+        return self.reports

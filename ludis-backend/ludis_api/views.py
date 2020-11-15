@@ -1,12 +1,15 @@
+from django.db.models import Avg
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from ludis_api.models import Workout, User, Schedule
-from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer, ScheduleSerializer
+from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer, \
+    ScheduleSerializer, ReportSerializer
 from django.shortcuts import render
 from ludis_api.permissions import IsWorkoutView
 from ludis_api.utils.enums import Role
@@ -28,19 +31,39 @@ class WorkoutViewSet(ModelViewSet):
 
 class ScheduleViewSet(ModelViewSet):
     serializer_class = ScheduleSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        queryset = None
+
         if self.request.user.role == Role.COACH.value:
-            return Schedule.objects.filter(owner__organization=self.request.user.organization)
-        return self.request.user.user_schedule.all()
+            queryset = Schedule.objects.annotate(average_effort=Avg('reports__effort'))\
+                .filter(owner__organization=self.request.user.organization)
+        else:
+            queryset = self.request.user.user_schedule.all()
+        queryset.annotate(average_effort=Avg('reports__effort'))
+        return queryset
+
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    @action(detail=True, methods=['post'])
+    def set_report(self, request, pk=None):
+        user = self.request.user
+        request.data["schedule"] = pk
+        request.data["athlete"] = user.id
+        print(user.id)
+        serializer = ReportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if not Schedule.objects.get(pk=pk).users.filter(id=user.id).exists():
+            return Response({'status': "Invalid user"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        status_code = status.HTTP_200_OK
+        return Response({'status': 'Report successfully set'}, status=status_code)
+
 
 class UserRegistrationView(APIView):
-
     serializer_class = UserRegistrationSerializer
     permission_classes = (AllowAny,)
 
