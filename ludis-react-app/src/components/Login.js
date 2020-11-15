@@ -3,8 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import {Button, TextField, InputAdornment} from '@material-ui/core';
 import EmailIcon from '@material-ui/icons/Email';
 import LockIcon from '@material-ui/icons/Lock';
+import axiosAPI from '../services/authAxios'
+import { useHistory } from "react-router-dom";
 
 import '../css/Login.css';
+import LocalStorageService from "../services/LocalStorageService";
 
 const useStyles = makeStyles((theme) => ({
     loginContainer : {
@@ -48,6 +51,8 @@ function Login(props) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
+    const history = useHistory();
+
     const updateEmail = (e) => {
         setEmail(e.target.value);
     }
@@ -56,13 +61,27 @@ function Login(props) {
         setPassword(e.target.value);
     }
 
+    function loginUser() {
+        axiosAPI.post('/signin/',{email, password})
+            .then((user) =>{
+                const tokenobj = {
+                    'access_token': user.data.access_token,
+                    'refresh_token': user.data.refresh_token
+                }
+                LocalStorageService.setToken(tokenobj);
+                history.push('/home');
+            })
+            .catch(err => {
+               console.log(err)
+            });
+    }
     function submitInfo() {
         props.submitFunction(email, password);
     }
 
     return (
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
-            <div className={classes.titleLogoContainer}>
+            <div classNamuse e={classes.titleLogoContainer}>
                 <div className={classes.ludisTitle}>Ludis</div>
                 <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
             </div>
@@ -105,7 +124,7 @@ function Login(props) {
                 color="primary"
                 variant="contained"
                 style ={{width:'100%', margin: '15px 0'}}
-                onClick={submitInfo}
+                onClick={loginUser}
             >
                 Log in
             </Button>
