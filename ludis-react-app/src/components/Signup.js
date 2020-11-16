@@ -69,6 +69,7 @@ function Signup(props) {
     const [email, setEmail] = React.useState(null);
     const [password, setPassword] = React.useState(null);
     const [teamCode, setTeamCode] = React.useState(null);
+    const [fullName, setFullName] = React.useState(null);
     const [birthdate, setBirthdate] = React.useState(null);
     const [athleteOrCoach, setAthleteOrCoach] = React.useState(0);
 
@@ -80,9 +81,8 @@ function Signup(props) {
     const updateEmail = (e) => { setEmail(e.target.value); }
     const updatePassword = (e) => { setPassword(e.target.value); }
     const updateTeamCode = (e) => { setTeamCode(e.target.value); }
-    const updateBirthdate = (e) => {
-        setBirthdate(e.target.value);
-        console.log(birthdate);
+    const updateFullName = (e) => { setFullName(e.target.value); }
+    const updateBirthdate = (e) => { setBirthdate(e.target.value);
     }
 
     const toggleAthleteOrCoach = (e) => {
@@ -97,6 +97,7 @@ function Signup(props) {
         console.log(`email: ` + email);
         console.log(`password: ` + password);
         console.log(`team code: ` + teamCode);
+        console.log(`full name: ` + fullName);
         console.log(`birthdate: ` + birthdate);
         console.log(`role: ` + role);
     }
@@ -106,7 +107,15 @@ function Signup(props) {
             return(
                 <div>
                     <TextField value={email} onChange={updateEmail} variant="outlined" label="Email" margin="dense" fullWidth size="small"/>
-                    <TextField value={password} onChange={updatePassword} variant="outlined" label="Password" margin="dense" fullWidth size="small"/>
+                    <TextField
+                        value={password}
+                        onChange={updatePassword}
+                        variant="outlined"
+                        label="Password"
+                        margin="dense"
+                        fullWidth
+                        size="small"
+                    />
                     <TextField
                         value={teamCode}
                         onChange={updateTeamCode}
@@ -129,6 +138,7 @@ function Signup(props) {
         else if (signupPage === 1) {
             return (
                 <div>
+                <TextField value={fullName} onChange={updateFullName} variant="outlined" label="Full Name" margin="dense" fullWidth size="small"/>
                 <TextField
                     // value={birthdate}
                     onChange={updateBirthdate}
@@ -139,22 +149,21 @@ function Signup(props) {
                     fullWidth
                     size="small"
                     style = {{
-                        width: "85%",
-                        marginBottom: "25px"
+                        marginBottom: "10px"
                     }}
                     InputLabelProps={{
                         shrink: true,
                     }}
                 />
-                <div style={{marginBottom: "25px"}}>
+                <div>
                     <span className={classes.sectionLabel}>I am a</span>
                     {athleteOrCoach
-                        ? <Button variant="contained" style={{margin: "0 10px"}} onClick={toggleAthleteOrCoach} id={0}>Athlete</Button>
-                        : <Button color="primary" variant="contained" style={{margin: "0 10px"}} onClick={toggleAthleteOrCoach} id={0}>Athlete</Button>
+                        ? <Button variant="contained" style={{margin: "0 10px", height: 25}} onClick={toggleAthleteOrCoach} id={0}>Athlete</Button>
+                        : <Button color="primary" variant="contained" style={{margin: "0 10px", height: 25}} onClick={toggleAthleteOrCoach} id={0}>Athlete</Button>
                     }
                     {athleteOrCoach
-                        ? <Button color="primary" variant="contained" style={{margin: "0 10px"}} onClick={toggleAthleteOrCoach} id={1}>Coach</Button>
-                        : <Button variant="contained" style={{margin: "0 10px"}} onClick={toggleAthleteOrCoach} id={1}>Coach</Button>
+                        ? <Button color="primary" variant="contained" style={{margin: "0 10px", height: 25}} onClick={toggleAthleteOrCoach} id={1}>Coach</Button>
+                        : <Button variant="contained" style={{margin: "0 10px", height: 25}} onClick={toggleAthleteOrCoach} id={1}>Coach</Button>
                     }
                 </div>
             </div>

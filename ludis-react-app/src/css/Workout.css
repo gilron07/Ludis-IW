@@ -2,27 +2,10 @@
     text-align: center;
 }
 
-.workout-description {
-    width: 100%;
-    text-align: center;
-}
-
-#inputs-container {
-    text-align: center;
-    margin: auto;
-    margin-bottom: 30px;
-    max-width: 500px;
-}
-
-.input-container {
-    display: inline-block;
-    width: 33%;
-}
-
 #logistics-container {
     text-align: center;
     margin: auto;
-    margin-top: 60px;
+    margin-top: 30px;
     max-width: 500px;
 }
 
@@ -32,16 +15,6 @@
     vertical-align: top;
 }
 
-#time-container, #effort-container, #satisfaction-container {
-    max-width: 80px;
-    margin: auto;
-    text-align: center;
-}
-
-#time-input, #effort-input, #satisfaction-input {
-    font-size: 30px;
-    text-align: center;
-}
 
 #tags-container {
     text-align: center;
@@ -72,8 +45,4 @@
 
 .section-name {
     font-weight: 800;
-}
-
-#coaches-only-container {
-    /* display: none; */
 }
