@@ -1,9 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Login from './Login';
-import Signup from './Signup';
-
-import '../css/Login.css';
+import LoginBox from './LoginBox';
+import SignupBox from './SignupBox';
 
 const useStyles = makeStyles((theme) => ({
     backgroundImage: {
@@ -52,15 +50,14 @@ function loginSubmit(email, password) {
   console.log(`password: ` + password);
 }
   
-function Landing() {
+function Landing(props) {
     const classes = useStyles();
-    const [loginOrSignup, setLoginOrSignup] = React.useState("login");
+    const loginOrSignup= props.loginOrSignup;
 
     function toggleLoginOrSignup() {
       let newState;
       if (loginOrSignup === "login") newState = "signup";
       else newState = "login";
-      setLoginOrSignup(newState);
     }
     return (
         <div className={classes.loginPage}>
@@ -72,13 +69,13 @@ function Landing() {
             </div>
             <div className={classes.loginBackground} style={{ minHeight: 350 }}>
                 {(loginOrSignup === "login")
-                 ? <Login
+                 ? <LoginBox
                       toggleFunction={toggleLoginOrSignup}
                       submitFunction={loginSubmit}
-                  ></Login>
-                 : <Signup
+                  ></LoginBox>
+                 : <SignupBox
                       toggleFunction={toggleLoginOrSignup}
-                  ></Signup>}
+                  ></SignupBox>}
             </div> 
         </div>
     );
