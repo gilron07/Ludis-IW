@@ -4,6 +4,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 from .utils.enums import Modifier, Role
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import RegexValidator
 
 DEFAULT_ORGANIZATION = 1
 
@@ -11,6 +13,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
     created_at = models.DateField(auto_now_add=True)
     org_image = models.CharField(max_length=1000, null=True, blank=True)
+    code = models.CharField(max_length=255, unique=True, validators=[RegexValidator('^[A-Z]*$',
+                               'Only uppercase letters and allowed.')],)
 
 
 class UserManager(BaseUserManager):
@@ -65,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # gender = models.CharField(max_length=255)
     profile_image = models.CharField(max_length=1000, blank=True, null=True)
     organization = models.ForeignKey(
-        Organization, related_name='organization',
+        Organization, related_name='users',
         default=DEFAULT_ORGANIZATION,
         on_delete=models.PROTECT
     )
@@ -132,3 +136,39 @@ class Tag(models.Model):
         return super(Tag, self).save(*args, **kwargs)
 
 
+class Schedule(models.Model):
+    location = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    notes = models.TextField(null=True, blank=True)
+    date = models.DateTimeField()
+    owner = models.ForeignKey(get_user_model(), related_name='coach_schedule', on_delete=models.CASCADE)
+    workout = models.ForeignKey(Workout, on_delete=models.CASCADE)
+
+    # Assigned users
+    users = models.ManyToManyField(get_user_model(), through='UserSchedule', related_name='user_schedule')
+
+
+class UserSchedule(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE)
+
+    # group =  ForeignKey to Group to indicate if that workout was assigned to a team
+    @property
+    def is_group_workout(self):
+        # return group_id != None
+        return True
+
+    class Meta:
+        unique_together = ('user', 'schedule')
+
+
+class Report(models.Model):
+    schedule = models.ForeignKey(Schedule, related_name="reports", on_delete=models.CASCADE)
+    athlete = models.ForeignKey(get_user_model(), related_name="reports", on_delete=models.CASCADE)
+    date_filled = models.DateTimeField(auto_now_add=True)
+    duration = models.DecimalField(decimal_places=2, max_digits=4, null=True, blank=True)
+    effort = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    satisfaction = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+
+    class Meta:
+        unique_together =('athlete', 'schedule')
