@@ -3,7 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-
+import { useHistory } from "react-router-dom";
+import axiosAPI from '../services/authAxios';
 import { NavLink } from 'react-router-dom';
 
 // icons
@@ -73,6 +74,8 @@ function SignupBox(props) {
     const [birthdate, setBirthdate] = React.useState(null);
     const [athleteOrCoach, setAthleteOrCoach] = React.useState(0);
 
+    const history = useHistory();
+
     function toggleSignupPage() {
         if (signupPage === 0) setSignupPage(1);
         else setSignupPage(0);
@@ -94,12 +97,23 @@ function SignupBox(props) {
         let role;
         if (athleteOrCoach === 0) role = "athlete";
         else role = "coach";
-        console.log(`email: ` + email);
-        console.log(`password: ` + password);
-        console.log(`team code: ` + teamCode);
-        console.log(`full name: ` + fullName);
-        console.log(`birthdate: ` + birthdate);
-        console.log(`role: ` + role);
+        const data = {
+            email,
+            password,
+            full_name: fullName,
+            DOB: birthdate,
+            organization_code: teamCode.toUpperCase(),
+            role: role.toUpperCase()
+        }
+        console.log(data);
+        axiosAPI.post('/signup/', data)
+            .then(res => {
+                history.push('/login')
+            })
+            .catch(err =>{
+                console.log(err);
+            });
+
     }
 
     function generateSignupPage() {
