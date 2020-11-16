@@ -7,6 +7,13 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 
+// dropdown
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import MoodIcon from '@material-ui/icons/Mood';
@@ -27,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
     width: "70vw",
-    minHeight: "70vh",
+    minHeight: "50vh",
     maxHeight: "80vh",
     overflow: "scroll",
     backgroundColor: theme.palette.background.paper,
@@ -35,6 +42,10 @@ const useStyles = makeStyles((theme) => ({
   },
   slider : {
       marginBottom: "45px",
+  },
+  formControl : {
+      margin: 10,
+      width: 90,
   }
 }));
 
@@ -44,7 +55,8 @@ export default function SimpleModal() {
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
 
-  const [duration, setDuration] = useState(0);
+  const [durationMins, setDurationMins] = useState(0);
+  const [durationHours, setDurationHours] = useState(0);
   const [effort, setEffort] = useState(null);
   const [satisfaction, setSatisfaction] = useState(null);
 
@@ -56,40 +68,44 @@ export default function SimpleModal() {
     setOpen(false);
   };
 
-  function handleDurationChange(event, value) {
-    setDuration(value);
-  };
-
-  function handleEffortChange(event, value) {
-    setEffort(value);
-  };
-
-  function handleSatisfactionChange(event, value) {
-    setSatisfaction(value);
-  };
+  function handleDurationMinsChange(event) { setDurationMins(event.target.value);};
+  function handleDurationHoursChange(event) { setDurationHours(event.target.value);};
+  function handleEffortChange(event, value) { setEffort(value); };
+  function handleSatisfactionChange(event, value) { setSatisfaction(value); };
 
   function sendReportJSON() {
-    console.log(`duration: ${duration}`);
-    console.log(`effort: ${effort}`);
-    console.log(`satisfaction: ${satisfaction}`);
+    let report = {}
+    report["duration"] = durationHours + durationMins;
+    report["effort"] = effort;
+    report["satisfaction"] = satisfaction
+    console.log(report);
   }
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <h2>Rate Workout</h2>
-      <div style={{textAlign:"center", width: "80%", margin:"auto"}}>
+      <div style={{textAlign:"center", margin:"auto"}}>
         <Typography style={{textAlign:"left"}}>Duration</Typography>
-        <Slider
-            className={classes.slider}
-            value={duration}
-            onChange={handleDurationChange}
-            aria-labelledby="discrete-slider"
-            valueLabelDisplay="auto"
-            step={15}
-            marks={durationMarks}
-            min={0}
-            max={120}
-        />
+            <FormControl className={classes.formControl}>
+                    <InputLabel>Hours</InputLabel>
+                    <Select value={durationHours} onChange={handleDurationHoursChange} >
+                        <MenuItem value={0}>0 hour</MenuItem>
+                        <MenuItem value={1}>1 hour</MenuItem>
+                        <MenuItem value={2}>2 hours</MenuItem>
+                        <MenuItem value={3}>3 hours</MenuItem>
+                        <MenuItem value={4}>4 hours</MenuItem>
+                        <MenuItem value={5}>5 hours</MenuItem>
+                    </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Minutes</InputLabel>
+                <Select value={durationMins} onChange={handleDurationMinsChange} >
+                    <MenuItem value={0}>0 minutes</MenuItem>
+                    <MenuItem value={.25}>15 minutes</MenuItem>
+                    <MenuItem value={.5}>30 minutes</MenuItem>
+                    <MenuItem value={.75}>45 minutes</MenuItem>
+                </Select>
+        </FormControl>
         <Typography style={{textAlign:"left"}}>Effort</Typography>
         <Slider
             className={classes.slider}
@@ -101,6 +117,7 @@ export default function SimpleModal() {
             marks={effortMarks}
             min={0}
             max={10}
+            style={{width:"80%"}}
         />
         <Typography style={{textAlign:"left"}}>Satisfaction</Typography>
         <Slider
@@ -113,9 +130,8 @@ export default function SimpleModal() {
             marks={satisfactionMarks}
             min={0}
             max={10}
+            style={{width:"80%"}}
         />
-      </div>
-      <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
         <Button variant="contained" color="primary" onClick={sendReportJSON}>
           Rate Workout
         </Button>
@@ -125,7 +141,9 @@ export default function SimpleModal() {
 
   return (
     <div style={{ textAlign: "center"}}>
-      <AddCircleIcon color="primary" style={{ fontSize: 40 }} onClick={handleOpen}></AddCircleIcon>
+      {/* <AddCircleIcon color="primary" style={{ fontSize: 40 }} onClick={handleOpen}></AddCircleIcon> */}
+      <Button color="primary" variant="contained" onClick={handleOpen}>Rate Workout</Button>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -135,14 +153,6 @@ export default function SimpleModal() {
     </div>
   );
 }
-
-const durationMarks = [
-    {value: 0, label: '0 mins'},
-    {value: 30, label: '30 mins'},
-    {value: 60, label: '1 hour'},
-    {value: 90,label: '90 mins'},
-    {value: 120,label: '2 hours +'}
-];
 
 const effortMarks = [
     {value: 0, label: 'No effort'},
