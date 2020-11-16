@@ -5,6 +5,7 @@ from django.db import models
 from .utils.enums import Modifier, Role
 from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import RegexValidator
 
 DEFAULT_ORGANIZATION = 1
 
@@ -12,6 +13,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=255, null=False, blank=False)
     created_at = models.DateField(auto_now_add=True)
     org_image = models.CharField(max_length=1000, null=True, blank=True)
+    code = models.CharField(max_length=255, unique=True, validators=[RegexValidator('^[A-Z]*$',
+                               'Only uppercase letters and allowed.')],)
 
 
 class UserManager(BaseUserManager):
@@ -66,7 +69,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # gender = models.CharField(max_length=255)
     profile_image = models.CharField(max_length=1000, blank=True, null=True)
     organization = models.ForeignKey(
-        Organization, related_name='organization',
+        Organization, related_name='users',
         default=DEFAULT_ORGANIZATION,
         on_delete=models.PROTECT
     )

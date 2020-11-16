@@ -101,13 +101,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    organization_code = serializers.CharField(max_length=255, write_only=True)
+    organization = serializers.ReadOnlyField(source='organization.name')
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email', 'password', 'full_name', 'DOB', 'role', 'profile_image', 'organization']
+        fields = ['id', 'email', 'password', 'full_name', 'DOB', 'role', 'profile_image', 'organization_code', 'organization']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = get_user_model().objects.create_user(**validated_data)
+        organization_code = validated_data.pop('organization_code')
+        try:
+            organization = Organization.objects.get(code=organization_code)
+        except Organization.DoesNotExist:
+            raise serializers.ValidationError("Organization with this code does not exist")
+        user = get_user_model().objects.create_user(**validated_data, organization=organization)
         return user
 
 
