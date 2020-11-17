@@ -59,7 +59,7 @@ function Workouts() {
             {/* {componentDidMount()} */}
             <List>
                 {/* getData returns the workout as an object */}
-                {/* {data.map((workout) => (
+                {/* {athleteSchedule.map((workout) => (
                     <WorkoutComponent
                         title={workout.title}
                         creator={workout.owner}

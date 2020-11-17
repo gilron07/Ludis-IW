@@ -116,7 +116,7 @@ export default function Home() {
 
           </div>
           <div id="calendar-content">
-            <CalendarComponent month={month} week={currentWeek}></CalendarComponent>
+            <CalendarComponent month={month} week={currentWeek} weeklyWorkouts={athleteSchedules}></CalendarComponent>
           </div>
         </TabPanel>
       ))}
@@ -124,3 +124,71 @@ export default function Home() {
     </div>    
   );
 }
+
+
+
+const athleteSchedules = [
+  {
+  "id": 16,
+  "date": "2020-11-13 09:00",
+  "notes": null,
+  "workout": {
+      "id": 18,
+      "title": "Sprints Tuesday Wokrout",
+      "owner": "Gilron Tsabkevich",
+      "tags": [
+          {
+              "name": "sprints"
+          },
+          {
+              "name": "technical"
+          }
+      ]
+  },
+  "owner": "Gilron Tsabkevich",
+  "location": "Jadwin",
+  "athletes": [
+      {
+          "athlete": "Avner Volpert",
+          "athlete_id": 3
+      }
+  ],
+  "reports": [
+      {
+          "id": 2,
+          "duration": "1.50",
+          "effort": 2,
+          "satisfaction": 3,
+          "athlete": 3,
+          "athlete_name": "Avner Volpert"
+      }
+  ]
+  },
+  {
+      "id": 17,
+      "date": "2020-11-16 14:30",
+      "notes": null,
+      "workout": {
+          "id": 18,
+          "title": "Afternoon Workout!",
+          "owner": "Gilron Tsabkevich",
+          "tags": [
+              {
+                  "name": "sprints"
+              },
+              {
+                  "name": "technical"
+              }
+          ]
+      },
+      "owner": "Coach Tsabkevich",
+      "location": "Poe Field",
+      "athletes": [
+          {
+              "athlete": "Avner Volpert",
+              "athlete_id": 3
+          }
+      ],
+      "reports": []
+      }
+];
