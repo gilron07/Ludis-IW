@@ -113,7 +113,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         try:
             organization = Organization.objects.get(code=organization_code)
         except Organization.DoesNotExist:
-            raise serializers.ValidationError("Organization with this code does not exist")
+            raise serializers.ValidationError("Invalid organization code")
         user = get_user_model().objects.create_user(**validated_data, organization=organization)
         return user
 
