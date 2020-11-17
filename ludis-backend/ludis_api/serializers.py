@@ -1,10 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-from .models import Drill, DrillModifier, Workout, Section, Organization, Tag
+from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule, Report
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db import transaction
+from django.db.models import Avg
+
+from .utils.enums import Role
 
 
 class ModifierSerializer(serializers.ModelSerializer):
@@ -16,6 +20,7 @@ class ModifierSerializer(serializers.ModelSerializer):
 class DrillSerializer(serializers.ModelSerializer):
     modifiers = ModifierSerializer(many=True, required=False)
 
+    @transaction.atomic
     def create(self, validated_data):
         modifiers_data = validated_data.pop('modifiers')
         drill = Drill.objects.create(**validated_data)
@@ -32,6 +37,7 @@ class DrillSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
     drills = DrillSerializer(many=True, required=False)
 
+    @transaction.atomic
     def create(self, validated_data):
         drills_data = validated_data.pop('drills')
         section = Section.objects.create(**validated_data)
@@ -50,11 +56,13 @@ class TagSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ['name']
 
+
 class WorkoutSerializer(serializers.ModelSerializer):
     sections = SectionSerializer(many=True, required=False)
     tags = TagSerializer(many=True, required=False)
     owner = serializers.ReadOnlyField(source='owner.full_name')
 
+    @transaction.atomic
     def create(self, validated_data):
         sections_data = validated_data.pop('sections')
         tags = validated_data.pop('tags')
@@ -93,13 +101,20 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    organization_code = serializers.CharField(max_length=255, write_only=True)
+    organization = serializers.ReadOnlyField(source='organization.name')
     class Meta:
         model = get_user_model()
-        fields = ['id', 'email', 'password', 'full_name', 'DOB', 'role', 'profile_image', 'organization']
+        fields = ['id', 'email', 'password', 'full_name', 'DOB', 'role', 'profile_image', 'organization_code', 'organization']
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = get_user_model().objects.create_user(**validated_data)
+        organization_code = validated_data.pop('organization_code')
+        try:
+            organization = Organization.objects.get(code=organization_code)
+        except Organization.DoesNotExist:
+            raise serializers.ValidationError("Invalid organization code")
+        user = get_user_model().objects.create_user(**validated_data, organization=organization)
         return user
 
 
@@ -130,6 +145,103 @@ class UserLoginSerializer(serializers.Serializer):
             'refresh_token': str(tokens),
             'role': user.role
         }
+
+
+class WorkoutShortSerializer(serializers.ModelSerializer):
+    tags = TagSerializer(many=True, read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+
+    class Meta:
+        model = Workout
+        fields = ['id', 'title', 'owner', 'tags']
+
+
+class UserScheduleSerializer(serializers.ModelSerializer):
+    athlete = serializers.ReadOnlyField(source='user.full_name')
+    athlete_id = serializers.ReadOnlyField(source='user.id')
+
+    class Meta:
+        model = UserSchedule
+        fields = ['athlete', 'athlete_id']
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    schedule = serializers.PrimaryKeyRelatedField(queryset=Schedule.objects.all(), write_only=True)
+    athlete = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
+    athlete_name = serializers.ReadOnlyField(source='athlete.full_name')
+
+
+    class Meta:
+        model = Report
+        fields = ['id','duration', 'effort', 'satisfaction', 'schedule', 'athlete', 'athlete_name']
+
+class ScheduleSerializer(serializers.ModelSerializer):
+    workout = WorkoutShortSerializer(read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+    # group =  serializers.ReadOnlyField(source='group.name')
+    athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
+    date = serializers.DateTimeField(source='schedule.date', read_only=True)
+    # reports = ReportSerializer(many=True, read_only=True)
+    reports = serializers.SerializerMethodField(read_only=True)
+
+    # Schedule Averages
+    average_effort = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_duration = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+    average_satisfaction = serializers.DecimalField(decimal_places=2, max_digits=4, read_only=True)
+
+    # For creating schedule
+    dates = serializers.ListField(child=serializers.DateTimeField(), write_only=True)
+    workout_id = serializers.PrimaryKeyRelatedField(queryset=Workout.objects.all(), write_only=True)
+    athletes_ids = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), many=True, write_only=True)
+
+    class Meta:
+        model = Schedule
+        fields = [
+            'id',
+            'date',
+            'notes',
+            'workout',
+            'workout_id',
+            'owner',
+            'athletes_ids',
+            'location',
+            'dates',
+            'athletes',
+            'reports',
+            'average_effort',
+            'average_duration',
+            'average_satisfaction'
+        ]
+
+    # def get_average_effort(self, obj):
+    #     s = Schedule.objects.annotate(average_effort=Avg('reports__effort')).get(pk=obj.id)
+    #     return s.average_effort
+
+
+    def get_reports(self, obj):
+        user = self.context['request'].user
+        if user.role == Role.COACH.value:
+            serializer = ReportSerializer(obj.reports.all(), many=True)
+        else:
+            serializer = ReportSerializer(obj.reports.filter(athlete=user), many=True)
+        return serializer.data
+
+    @transaction.atomic
+    def create(self, validated_data):
+        athletes = validated_data.pop('athletes_ids')
+        dates = validated_data.pop('dates')
+        workout = validated_data.pop('workout_id')
+        if workout.owner.organization != self.context['request'].user.organization:
+            raise serializers.ValidationError('Not allowed Workout')
+        for date in dates:
+            schedule = Schedule.objects.create(**validated_data, date=date, workout=workout)
+            for athlete in athletes:
+                if athlete.organization != self.context['request'].user.organization:
+                    raise serializers.ValidationError('Not allowed User')
+                schedule.users.add(athlete)
+        return schedule
+
+
 
 
 

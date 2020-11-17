@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import axiosAPI from '../services/authAxios';
+import { useHistory } from "react-router-dom";
 
 import { NavLink } from 'react-router-dom';
+import LocalStorageService from "../services/LocalStorageService";
 
 const useStyles = makeStyles((theme) => ({
     loginContainer : {
@@ -47,6 +50,8 @@ function LoginBox(props) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
 
+    const history = useHistory();
+
     const updateEmail = (e) => {
         setEmail(e.target.value);
     }
@@ -59,6 +64,20 @@ function LoginBox(props) {
         props.submitFunction(email, password);
     }
 
+    function loginUser() {
+        axiosAPI.post('/signin/',{email, password})
+            .then((user) =>{
+                const tokenobj = {
+                    'access_token': user.data.access_token,
+                    'refresh_token': user.data.refresh_token
+                }
+                LocalStorageService.setToken(tokenobj);
+                history.push('/home');
+            })
+            .catch(err => {
+               console.log(err)
+            });
+    }
     return (
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
@@ -98,7 +117,7 @@ function LoginBox(props) {
                 color="primary"
                 variant="contained"
                 style ={{width:'100%', margin: '15px 0'}}
-                onClick={submitInfo}
+                onClick={loginUser}
             >
                 Log in
             </Button>

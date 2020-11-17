@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ConfirmProvider } from "material-ui-confirm";
 
 // Theme imports
 import theme from './components/Theme.js'
@@ -19,25 +20,27 @@ import Signup from "./components/Signup";
  
 class App extends Component {
   render() {
-    return (   
-      <ThemeProvider theme={theme}>
-       <BrowserRouter>
-        <div>
-            <Switch>
-             <Route path="/home" component={Home} exact/>
-             <Route path="/workouts" component={Workouts} exact/>
-             <Route path="/workout" component={Workout} exact/>
-             <Route path="/create-workout" component={CreateWorkout} exact/>
-             <Route path="/leaderboards" component={Leaderboards} exact/>
-             <Route path="/settings" component={Settings} exact/>
-             <Route path="/signup" component={Signup} exact/>
-             <Route path="/login" component={Login} exact/>
-             <Route path="/" component={Login} exact/>
-             <Route component={Error}/>
-           </Switch>
-        </div> 
-      </BrowserRouter>
+    return (
+       <ConfirmProvider>
+          <ThemeProvider theme={theme}>
+           <BrowserRouter>
+            <div>
+                <Switch>
+                 <Route path="/home" component={Home} exact/>
+                 <Route path="/workouts" component={Workouts} exact/>
+                 <Route path="/workout" component={Workout} exact/>
+                 <Route path="/create-workout" component={CreateWorkout} exact/>
+                 <Route path="/leaderboards" component={Leaderboards} exact/>
+                 <Route path="/settings" component={Settings} exact/>
+                 <Route path="/signup" component={Signup} exact/>
+                 <Route path="/login" component={Login} exact/>
+                 <Route path="/" component={Login} exact/>
+                 <Route component={Error}/>
+               </Switch>
+            </div> 
+          </BrowserRouter>
       </ThemeProvider>
+      </ConfirmProvider>
     );
   }
 }
