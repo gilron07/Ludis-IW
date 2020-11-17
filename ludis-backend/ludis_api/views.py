@@ -7,9 +7,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from ludis_api.models import Workout, User, Schedule
 from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer, \
-    ScheduleSerializer, ReportSerializer
+    ScheduleSerializer, ReportSerializer, UserShortSerializer
 from django.shortcuts import render
 from ludis_api.permissions import IsWorkoutView
 from ludis_api.utils.enums import Role
@@ -101,3 +102,11 @@ class UserLoginView(APIView):
 
         status_code = status.HTTP_200_OK
         return Response(response, status=status_code)
+
+
+class UserListView(ListAPIView):
+    serializer_class = UserShortSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.value)
