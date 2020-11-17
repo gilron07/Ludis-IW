@@ -112,7 +112,7 @@ function Workout() {
 
     function loadNoReport() {
       if (!coachOrAthlete) {
-        <ReportModal></ReportModal>
+        return(<ReportModal></ReportModal>);
       }
     }
 
@@ -350,13 +350,13 @@ const athleteWorkout = {
         }
     ],
     "reports": [
-        {
-            "id": 2,
-            "duration": "1.50",
-            "effort": 2,
-            "satisfaction": 3,
-            "athlete": 3,
-            "athlete_name": "Avner Volpert"
-        }
+        // {
+        //     "id": 2,
+        //     "duration": "1.50",
+        //     "effort": 2,
+        //     "satisfaction": 3,
+        //     "athlete": 3,
+        //     "athlete_name": "Avner Volpert"
+        // }
     ]
 }
