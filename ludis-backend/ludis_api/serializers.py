@@ -242,7 +242,10 @@ class ScheduleSerializer(serializers.ModelSerializer):
         return schedule
 
 
-
+class UserShortSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ['id', 'full_name']
 
 
 
