@@ -92,12 +92,10 @@ class UserLoginView(APIView):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         response = {
-            'success': 'True',
-            'status_code': status.HTTP_200_OK,
-            'message': 'User logged in successfully',
             'access_token': serializer.data['access_token'],
             'refresh_token': serializer.data['refresh_token'],
-            'role': serializer.data['role']
+            'role': serializer.data['role'],
+            'full_name': serializer.data['full_name']
         }
 
         status_code = status.HTTP_200_OK

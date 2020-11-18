@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Header from './Header.js';
 import CalendarComponent from './CalendarComponent.js';
 import CalendarModal from './CalendarModal.js';
@@ -15,6 +15,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import {UserContext} from "../services/UserContext";
 
 
 TabPanel.propTypes = {
@@ -64,6 +65,7 @@ export default function Home() {
   const [value, setValue] = useState(0);
   const [currentWeek, setWeek] = useState(1);
   const [currentMonth, setMonth] = useState("January");
+  const {user, setUser} = useContext(UserContext);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
