@@ -8,17 +8,24 @@ class CalendarComponent extends React.Component {
         super(props);
     }
 
-    render() {
-        return(
-            <div id="calendar-workouts">
-                <List>
-                    <CalendarWorkout title="Workout 1" month={this.props.month} week={this.props.week}></CalendarWorkout>
-                    <CalendarWorkout title="Workout 2" month={this.props.month} week={this.props.week}></CalendarWorkout>
-                    <CalendarWorkout title="Workout 3" month={this.props.month} week={this.props.week}></CalendarWorkout>
-                </List>
-            </div>
-        )
-    }
+    return(
+        <div id="calendar-workouts">
+            <List>
+                {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
+                    <div>
+                    <CalendarWorkout
+                        title={scheduledWorkout.workout.title}
+                        tags={scheduledWorkout.workout.tags}
+                        location={scheduledWorkout.location}
+                        date={scheduledWorkout.date.split(" ")[0]}
+                        time={scheduledWorkout.date.split(" ")[1]}
+                        month={month}
+                    ></CalendarWorkout>
+                    </div>
+                ))}
+            </List>
+        </div>
+    )
 }
 
 export default CalendarComponent;

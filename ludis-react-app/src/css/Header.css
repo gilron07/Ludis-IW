@@ -6,7 +6,7 @@ table tr{
   height: 50px;
   vertical-align: middle;
   float: left;
-  width: 80vw;
+  width: 90vw;
 }
 
 td {
@@ -25,9 +25,9 @@ td {
   position: fixed;
   top: 0;
   left: 0;
-  width: 80%;
+  width: 90%;
   height: 50px;
-  padding: 0 10vw;
+  padding: 0 5vw;
   box-shadow: 0 0 10px #00000011;
 }
 
@@ -54,9 +54,6 @@ td {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-end;
-}
-
-#header-username {
 }
 
 #profile-avatar {
