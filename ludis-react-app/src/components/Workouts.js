@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
+import {useLocation, useHistory} from 'react-router-dom';
 
 import axiosAPI from '../services/authAxios'
 
@@ -20,25 +21,35 @@ function Alert(props) {
 
 function Workouts() {
     const [data, setData] = useState([]);
-    const [open, setOpen] = React.useState(false);
-    const confirm = useConfirm()
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [openSuccess, setOpenSucess] = React.useState(false);
+    const confirm = useConfirm();
+
+    // if page was rendered after successful workout create
+    const location = useLocation();
+    const history = useHistory();
+    const locationState = location.state;
 
     const openSuccessSnack = () =>{
-        setOpen(true);
+        setOpenSucess(true);
     };
 
+    const openDeleteSnack = () =>{
+        setOpenDelete(true);
+    };
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
           return;
         }
-        setOpen(false);
+        setOpenSucess(false);
+        setOpenDelete(false);
     }
 
     const workoutDelete = (id) => {
         axiosAPI.delete(`/workouts/${id}/`)
             .then(res =>{
                 setData(data.filter(item => item.id != id));
-                openSuccessSnack()
+                openDeleteSnack()
             })
             .catch(err =>{
                 console.log(err)
@@ -62,6 +73,12 @@ function Workouts() {
           setData(result.data)
         };
         fetchData();
+        if (location.state && location.state.created){
+            let state = {...history.location.state};
+            delete state.created
+            history.replace({...history.location, state})
+            openSuccessSnack();
+        }
     }, []);
 
     return(
@@ -110,9 +127,14 @@ function Workouts() {
             {/*<Button variant="outlined" onClick={openSuccessSnack}>*/}
             {/*    Open success snackbar*/}
             {/*</Button>*/}
-            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Snackbar open={openDelete} autoHideDuration={6000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="info">
                     The workout was successfully deleted!
+                </Alert>
+            </Snackbar>
+            <Snackbar open={openSuccess} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Workout was successfully created!
                 </Alert>
             </Snackbar>
         </div>

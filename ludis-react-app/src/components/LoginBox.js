@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, {useContext, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axiosAPI from '../services/authAxios';
 import { useHistory } from "react-router-dom";
+import {UserContext} from "../services/UserContext";
 
 import { NavLink } from 'react-router-dom';
 import LocalStorageService from "../services/LocalStorageService";
@@ -49,6 +50,7 @@ function LoginBox(props) {
     // hooks
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const {user, setUser} = useContext(UserContext)
 
     const history = useHistory();
 
@@ -72,6 +74,7 @@ function LoginBox(props) {
                     'refresh_token': user.data.refresh_token
                 }
                 LocalStorageService.setToken(tokenobj);
+                setUser(user.data)
                 history.push('/home');
             })
             .catch(err => {
@@ -82,7 +85,7 @@ function LoginBox(props) {
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
                 <div className={classes.ludisTitle}>Ludis</div>
-                <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                <img src="/static/assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
             </div>
             {/* <div className={classes.actionTitle}>Log In</div> */}
             <TextField

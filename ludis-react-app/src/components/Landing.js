@@ -63,7 +63,7 @@ function Landing(props) {
         <div className={classes.loginPage}>
             <div className={classes.ambientBackground} style={{ minHeight: 350 }}>
                 <img
-                    src="./assets/court.jpg"
+                    src="/static/assets/court.jpg"
                     className={classes.backgroundImage}
                     style={{minWidth:"max(60vw, calc(64vh + 0px))"}}></img>
             </div>

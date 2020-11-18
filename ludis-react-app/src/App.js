@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useMemo } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ConfirmProvider } from "material-ui-confirm";
 
@@ -16,33 +16,34 @@ import Leaderboards from './components/Leaderboards';
 import Error from './components/Error';
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import {UserContext} from "./services/UserContext";
 
  
-class App extends Component {
-  render() {
+export default function App() {
+    const [user, setUser] = useState(null);
+    const value = useMemo(() => ({user, setUser}), [user, setUser])
     return (
        <ConfirmProvider>
           <ThemeProvider theme={theme}>
            <BrowserRouter>
-            <div>
-                <Switch>
-                 <Route path="/home" component={Home} exact/>
-                 <Route path="/workouts" component={Workouts} exact/>
-                 <Route path="/workout" component={Workout} exact/>
-                 <Route path="/create-workout" component={CreateWorkout} exact/>
-                 <Route path="/leaderboards" component={Leaderboards} exact/>
-                 <Route path="/settings" component={Settings} exact/>
-                 <Route path="/signup" component={Signup} exact/>
-                 <Route path="/login" component={Login} exact/>
-                 <Route path="/" component={Login} exact/>
-                 <Route component={Error}/>
-               </Switch>
-            </div> 
+               <UserContext.Provider value={value}>
+                    <div>
+                        <Switch>
+                         <Route path="/home" component={Home} exact/>
+                         <Route path="/workouts" component={Workouts} exact/>
+                         <Route path="/workout" component={Workout} exact/>
+                         <Route path="/create-workout" component={CreateWorkout} exact/>
+                         <Route path="/leaderboards" component={Leaderboards} exact/>
+                         <Route path="/settings" component={Settings} exact/>
+                         <Route path="/signup" component={Signup} exact/>
+                         <Route path="/login" component={Login} exact/>
+                         <Route path="/" component={Login} exact/>
+                         <Route component={Error}/>
+                       </Switch>
+                    </div>
+               </UserContext.Provider>
           </BrowserRouter>
-      </ThemeProvider>
+        </ThemeProvider>
       </ConfirmProvider>
     );
-  }
 }
- 
-export default App;

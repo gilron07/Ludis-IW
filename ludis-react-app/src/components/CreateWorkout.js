@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 
 import Header from './Header.js';
@@ -38,6 +39,7 @@ let drillIdGenerator = 0;
 
 const CreateWorkout = () => {
   const classes = useStyles();
+  const history = useHistory();
 
   // hooks
   const [workoutJSON, setWorkoutJSON] = useState(
@@ -316,15 +318,15 @@ function renameSection(sectionId, newName) {
     }
 
     function createWorkout() {
-      // window.location.href='/home';
-      // const data = formatJSON();
-      // axiosAPI.post('/workouts/', data)
-      //     .then((res)=>{
-      //       console.log(res)
-      //     })
-      //     .catch((err)=>{
-      //         console.log(err)
-      //     });
+      const data = formatJSON();
+      axiosAPI.post('/workouts/', data)
+          .then((res)=>{
+            console.log(res)
+            history.push('/workouts/', {created:true})
+          })
+          .catch((err)=>{
+              console.log(err)
+          });
     }
 
     function formatJSON() {
