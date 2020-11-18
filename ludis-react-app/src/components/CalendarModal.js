@@ -73,9 +73,10 @@ export default function SimpleModal() {
   const [open, setOpen] = useState(false);
 
   const [datePickerOpen, setDatePickerOpen] = useState(false);
-  const [selectedTime, setSelectedTime] = useState(new Date('2014-08-18T21:11:54'));
-  const [selectedDates, setSelectedDates] = useState("");
-  const [selectedAthleteIds, setSelectedAthleteIds] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(new Date(Date.UTC(2020, 0, 1)));
+  const [selectedDates, setSelectedDates] = useState([new Date(Date.UTC(2020, 0, 1))]);
+  const [location, setLocation] = useState(null);
+  const [selectedAthleteIds, setSelectedAthleteIds] = useState([]);
   const [workoutValue, setWorkoutValue] = React.useState(null);
   const [teamOrIndividual, setTeamOrIndividual] = React.useState(0);
 
@@ -102,11 +103,29 @@ export default function SimpleModal() {
   }
 
   function sendWorkoutJSON() {
-    console.log(`dates: ${selectedDates}`);
-    console.log(`time: ${selectedTime}`);
-    console.log(`workout id: ${workoutValue}`);
-    {teamOrIndividual ?
-      console.log(`assign to: ${selectedAthleteIds}`) : console.log(`assign to: team`)
+    // prepare athlete ids
+    let athleteIds = selectedAthleteIds;
+    for(var i = 0; i < athleteIds.length; i++) {
+      athleteIds[i] = parseInt(athleteIds[i]);
+    }
+    if (!teamOrIndividual) athleteIds = "fullTeam";
+
+    // prepare date and time
+    let newDates = [];
+    for (let i = 0; i < selectedDates.length; i++) {
+      let date = new Date(selectedDates[i].getTime());
+      const hours = selectedTime.getHours();
+      const minutes = selectedTime.getMinutes();
+      date.setUTCHours(hours);
+      date.setUTCMinutes(minutes);
+      newDates.push(date.toISOString());
+    }
+
+    let scheduleJSON = {
+      "location": location,
+      "dates": newDates,
+      "workout_id": workoutValue,
+      "athletes_ids": athleteIds
     }
   
   }
