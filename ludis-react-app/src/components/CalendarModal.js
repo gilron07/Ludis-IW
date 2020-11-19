@@ -4,6 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
 import TextField from '@material-ui/core/TextField';
+import Chip from '@material-ui/core/Chip';
 
 // time picker
 import 'date-fns';
@@ -43,26 +44,42 @@ const useStyles = makeStyles((theme) => ({
     maxHeight: "80vh",
     overflow: "scroll",
     backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(2, 4, 3),
+    padding: "16px 35px",
   },
   formControl: {
     border: "1px solid #00000044",
-    height: "20vh",
+    height: "25vh",
     overflow: "scroll",
+    padding: "0 0 0 20px",
   },
   workoutTitle : {
-    width: "30vw",
+    height: "23px",
+    width: "25vw",
+    minWidth: "175px",
     whiteSpace: "nowrap",
     overflow: "hidden",
-    // backgroundColor: "red",
+    display: "inline-block",
+  },
+  workoutTags : {
+    width: "25vw",
+    minWidth: "200px",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
     display: "inline-block",
   },
   workoutDate : {
-    width: "18vw",
+    height: "23px",
+    width: "50px",
+    minWidth: "100px",
     whiteSpace: "nowrap",
     overflow: "hidden",
-    // backgroundColor: "red",
     display: "inline-block",
+  },
+  workoutLine : {
+    lineHeight:1,
+    marginTop: 3,
+    overflow: "hidden",
+    whiteSpace: "nowrap",
   }
 }));
 
@@ -91,6 +108,10 @@ export default function SimpleModal() {
 
   const handleDateChange = (time) => {
     setSelectedTime(time);
+  };
+
+  const handleLocationChange = (event) => {
+    setLocation(event.target.value);
   };
 
   const handleWorkoutChange = (event) => {
@@ -127,33 +148,41 @@ export default function SimpleModal() {
       "workout_id": workoutValue,
       "athletes_ids": athleteIds
     }
-  
+    
+    console.log(scheduleJSON);
   }
   
   function workoutSelect() {  
     return(
-      <FormControl component="fieldset">
-      <FormLabel component="legend">Select Workout</FormLabel>
-      <RadioGroup
-        value={workoutValue}
-        onChange={handleWorkoutChange}
-      >
-        <div className={classes.formControl}>
-        {workoutData.map((workout, index) => (
-           <FormControlLabel
-           value= {workout.id.toString()}
-           control={<Radio size="small"/>}
-           label= {
-            <div style={{lineHeight:1, marginTop: 3}}>
-              <div className={classes.workoutTitle}>{workout.title}</div>
-              <div className={classes.workoutDate}>{workout.created_at}</div>
-            </div>
-           }
-         />
-        ))}
-       </div>
-      </RadioGroup>
-    </FormControl>
+      <div>
+        <FormLabel component="legend">Select Workout</FormLabel>
+      <div className={classes.formControl}>
+        <FormControl component="fieldset">
+        <RadioGroup
+          value={workoutValue}
+          onChange={handleWorkoutChange}
+        >
+          {workoutData.map((workout, index) => (
+            <FormControlLabel
+            value= {workout.id.toString()}
+            control={<Radio size="small"/>}
+            label= {
+              <div className={classes.workoutLine}>
+                <div className={classes.workoutTitle}>{workout.title}</div>
+                <div className={classes.workoutTags}>
+                  {workout.tags.map((tag) => (
+                    <Chip label={tag.name} style={{margin:"0 2px"}}></Chip>
+                  ))}
+                </div>
+                <div className={classes.workoutDate}>{workout.created_at}</div>
+              </div>
+            }
+          />
+          ))}
+        </RadioGroup>
+      </FormControl>
+    </div>
+    </div>
     )
   }
 
@@ -162,76 +191,105 @@ export default function SimpleModal() {
     setTeamOrIndividual(parseInt(e.currentTarget.id));
 }
   
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2>Schedule Workout</h2>
-      <div style={{display: "flex", justifyContent:"center"}}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <KeyboardTimePicker
-            margin="dense"
-            id="time-picker"
-            label="Workout Time"
-            value={selectedTime}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-                'aria-label': 'change time',
-            }}
-            style={{
-              width: "130px",
-              marginRight: 30
-            }}
-            />
-        </MuiPickersUtilsProvider>
-      <Button
-        variant="outlined"
-        onClick={() => setDatePickerOpen(!datePickerOpen)}
-        style={{ height: 30, margin: "20px 0 0 30px"}}
-      >
-        Select Dates
-      </Button>
-      </div>
-      <MultipleDatesPicker
-        open={datePickerOpen}
-        selectedDates={[]}
-        onCancel={() => setDatePickerOpen(false)}
-        onSubmit={submitDates}
-      />
-      <br></br>
-      {workoutSelect()}
-      {/* athlete select */}
-      <div style={{color: "#00000088", margin: "20px 0 10px 0", textAlign:"center"}}>Assign workout to: </div>
-      <div style={{display: "flex", justifyContent:"center"}}>
-        {teamOrIndividual
-          ? <Button variant="contained" style={{height: 30, margin: "0 10px"}} onClick={toggleTeamOrIndividual} id={0}>All Athletes</Button>
-          : <Button color="primary" variant="contained" style={{height: 30, margin: "0 10px"}} onClick={toggleTeamOrIndividual} id={0}>All Athletes</Button>
-        }
-        {teamOrIndividual
-          ? <Button color="primary" variant="contained" style={{height: 30, margin: "0 10px"}} onClick={toggleTeamOrIndividual} id={1}>Individuals</Button>
-          : <Button variant="contained" style={{height: 30, margin: "0 10px"}} onClick={toggleTeamOrIndividual} id={1}>Individuals</Button>
-        }
-      </div>
-      {teamOrIndividual
-          ? <div style={{ height: 300, width: '100%', marginTop:25 }}>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                checkboxSelection 
-                onSelectionChange={(newSelection) => {
-                  setSelectedAthleteIds(newSelection.rowIds);
-                }}
-              />
-            </div>
-          : null
-        }
-      
-      <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
-        <Button variant="contained" color="primary" onClick={sendWorkoutJSON}>
-          Schedule Workout
-        </Button>
-      </div>
+const body = (
+  <div style={modalStyle} className={classes.paper}>
+    <h2>Schedule Workout</h2>
+    <div style={{display: "flex", justifyContent:"center"}}>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <KeyboardTimePicker
+          margin="dense"
+          id="time-picker"
+          label="Workout Time"
+          value={selectedTime}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+              'aria-label': 'change time',
+          }}
+          style={{
+            width: "130px",
+            marginRight: 30
+          }}
+          />
+      </MuiPickersUtilsProvider>
+    <Button
+      variant="outlined"
+      onClick={() => setDatePickerOpen(!datePickerOpen)}
+      style={{ height: 30, margin: "20px 0 0 30px", whiteSpace:"nowrap", overflow:"hidden"}}
+    >
+      Select Dates
+    </Button>
     </div>
-  );
+    <MultipleDatesPicker
+      open={datePickerOpen}
+      selectedDates={[]}
+      onCancel={() => setDatePickerOpen(false)}
+      onSubmit={submitDates}
+    />
+    <div style={{display:"flex", justifyContent: "center", marginTop: 10}}>
+      <TextField label="Location" value={location} onChange={handleLocationChange}></TextField>
+    </div>
+    <br></br>
+    {workoutSelect()}
+    {/* athlete select */}
+    <div style={{color: "#00000088", margin: "20px 0 10px 0", textAlign:"center"}}>Assign workout to: </div>
+    <div style={{display: "flex", justifyContent:"center"}}>
+      {teamOrIndividual
+        ? <Button
+            variant="contained"
+            style={{height: 30, margin: "0 10px", whiteSpace:"nowrap", overflow:"hidden"}}
+            onClick={toggleTeamOrIndividual} id={0}
+          >
+            All Athletes
+          </Button>
+        : <Button
+            color="primary"
+            variant="contained"
+            style={{height: 30, margin: "0 10px", whiteSpace:"nowrap", overflow:"hidden"}}
+            onClick={toggleTeamOrIndividual}
+            id={0}
+          >
+            All Athletes
+          </Button>
+      }
+      {teamOrIndividual
+        ? <Button
+            color="primary"
+            variant="contained"
+            style={{height: 30, margin: "0 10px", overflow:"hidden"}}
+            onClick={toggleTeamOrIndividual}
+            id={1}
+          >Individuals
+          </Button>
+        : <Button
+            variant="contained"
+            style={{height: 30, margin: "0 10px", overflow:"hidden"}}
+            onClick={toggleTeamOrIndividual}
+            id={1}
+          >Individuals
+          </Button>
+      }
+    </div>
+    {teamOrIndividual
+        ? <div style={{height: 300, width: '90%', minWidth:"300px", paddingTop:25, margin:"auto"}}>
+            <DataGrid
+              rows={athleteData}
+              columns={columns}
+              checkboxSelection 
+              onSelectionChange={(newSelection) => {
+                setSelectedAthleteIds(newSelection.rowIds);
+              }}
+            />
+          </div>
+        : null
+      }
+    
+    <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
+      <Button variant="contained" color="primary" onClick={sendWorkoutJSON}>
+        Schedule Workout
+      </Button>
+    </div>
+  </div>
+);
 
   return (
     <div style={{ textAlign: "center"}}>
@@ -247,38 +305,19 @@ export default function SimpleModal() {
 }
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
-  // {
-  //   field: 'age',
-  //   headerName: 'Age',
-  //   type: 'number',
-  //   width: 90,
-  // },
-  // {
-  //   field: 'fullName',
-  //   headerName: 'Full name',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 160,
-  //   valueGetter: (params) =>
-  //     `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
-  // },
+  { field: 'name', headerName: 'Athlete Name', width: 400 },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+const athleteData = [
+  { id: 1, name: 'Henry Herrington'},
+  { id: 2, name: 'Gilron Tsabkevich'},
+  { id: 3, name: 'Miles Tuncel'},
+  { id: 4, name: 'Rebecca Drachman'},
+  { id: 5, name: 'August VanNewkirk'},
+  { id: 6, name: 'Noah Schwartz'},
+  { id: 7, name: 'Edward Oppenheimer Boyer-Rogers III'},
+  { id: 8, name: 'Ben Schwartz'},
 ];
-
 
 
 const workoutData = [
@@ -287,7 +326,7 @@ const workoutData = [
       "title": "Technical Practice",
       "created_at": "2020-11-09",
       "description": "Please come with appropriate spikes",
-      "tags": [],
+      "tags": [{"name" : "test tag"}],
       "sections": [
           {
               "id": 1,
@@ -370,10 +409,10 @@ const workoutData = [
     "description": "Wear running shoes",
     "tags": [
         {
-            "name": "cardio"
+            "name": "repetition"
         },
         {
-            "name": "technical 2"
+            "name": "non technical"
         }
     ],
     "sections": [],
@@ -388,9 +427,6 @@ const workoutData = [
       {
           "name": "cardio"
       },
-      {
-          "name": "technical 2"
-      }
   ],
   "sections": [],
   "owner": "Henry Herrington"
@@ -402,10 +438,10 @@ const workoutData = [
   "description": "Wear running shoes",
   "tags": [
       {
-          "name": "cardio"
+          "name": "underwater"
       },
       {
-          "name": "technical 2"
+          "name": "technical 44"
       }
   ],
   "sections": [],

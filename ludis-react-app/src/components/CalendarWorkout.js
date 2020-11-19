@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             display: "none",
         },
+        textAlign: "center",
     },
     workoutDelete: {
         paddingTop: 8,
@@ -75,7 +76,19 @@ const useStyles = makeStyles((theme) => ({
         color: "#444",
         marginLeft: 10,
         display: "inline-block",
-    }
+    },
+    coachStatsContainer: {
+        width: 100,
+        textAlign: "center",
+    },
+    coachStat: {
+        fontSize: 18,
+        marginBottom: -5
+    },
+    coachStatLabel: {
+        fontSize: 10,
+
+    },
 }));
 
 function CalendarWorkout(props) {
@@ -88,6 +101,28 @@ function CalendarWorkout(props) {
     const day = props.date.split("-")[2];
     const month = props.date.split("-")[1];
     const year = props.date.split("-")[0];
+
+    function generateCoachData() {
+        if (props.role === "coach") {
+            return(
+                <div className={classes.coachStatsContainer}>
+                    <div style={{borderBottom: "1px solid grey", paddingBottom: 2, marginBottom: -2}}>
+                        <div className={classes.coachStat}>{props.completion[0]}/{props.completion[1]}</div>
+                        <div className={classes.coachStatLabel}>completed</div>
+                    </div>
+                    <div>
+                        <div className={classes.coachStat}>{props.effort}</div>
+                        <div className={classes.coachStatLabel}>avg. effort</div>
+                    </div>
+                </div>
+            )
+        }
+        else {
+            return (
+                <div className={classes.workoutCheckmark}><CheckCircleOutlineIcon></CheckCircleOutlineIcon></div>
+            )
+        }
+    }
 
     return(
         <div className={classes.workoutItem}>
@@ -112,13 +147,13 @@ function CalendarWorkout(props) {
 
                 <div className={classes.tagsContainer}>
                     {props.tags.map((tag) => (
-                        <Chip label={tag.name} style={{margin: "0 2px"}}></Chip>
+                        <Chip label={tag.name} style={{margin: "2px"}}></Chip>
                     ))}
                 </div>
-                <div className={classes.rightContainer}>
-                    <div className={classes.workoutCheckmark}><CheckCircleOutlineIcon></CheckCircleOutlineIcon></div>
-                    <div class={classes.workoutChevron}><ChevronRightIcon></ChevronRightIcon></div>
-                </div>
+                {generateCoachData()}
+                
+                <div class={classes.workoutChevron}><ChevronRightIcon></ChevronRightIcon></div>
+                
             </ListItem>
         </div>
     );
