@@ -172,3 +172,23 @@ class Report(models.Model):
 
     class Meta:
         unique_together =('athlete', 'schedule')
+
+class Challenge(models.Model):
+    title = models.CharField(max_length=1000)
+    description = models.TextField()
+    due_date = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    modifier = models.CharField(max_length=255, choices=Modifier.challenge_choices(), null=False)
+    unit = models.CharField(max_length=255)
+    ascended_modifier = models.BooleanField(default=True) # Highest wins
+    owner = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return self.title
+
+class ChallengeResponse(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL)
+    challenge = models.ForeignKey(Challenge, related_name="challenge_responses")
+    result_numeric = models.DecimalField(max_digits=6, decimal_places=2, blak=True, null=True)
+    result_time = models.TimeField(blank=True, null=True)
+

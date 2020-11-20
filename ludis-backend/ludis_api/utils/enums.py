@@ -15,6 +15,12 @@ class Modifier(Enum):
     def choices(cls):
         return ((key.value, key.name) for key in cls)
 
+    @classmethod
+    def challenge_choices(cls):
+        return ((key.value, key.name) for key in cls
+                if key.value not in ['rest_between_sets', 'rest_between_reps', 'intensity'])
+
+
 
 class Role(Enum):
     COACH = 'Coach'
@@ -23,8 +29,6 @@ class Role(Enum):
     @classmethod
     def choices(cls):
         return ((item.name, item.value) for item in cls)
-
-
 
 
 
