@@ -65,7 +65,7 @@ function Workout() {
     const classes = useStyles();
 
     // 0 means coach is viewing page, 1 means athlete is viewing page
-    const [coachOrAthlete, setCoachOrAthlete] = React.useState(0);
+    const [coachOrAthlete, setCoachOrAthlete] = React.useState(1);
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
@@ -111,8 +111,8 @@ function Workout() {
     }
 
     function loadNoReport() {
-      if (!coachOrAthlete) {
-        <ReportModal></ReportModal>
+      if (coachOrAthlete) {
+        return(<ReportModal></ReportModal>)
       }
     }
 
@@ -350,13 +350,13 @@ const athleteWorkout = {
         }
     ],
     "reports": [
-        {
-            "id": 2,
-            "duration": "1.50",
-            "effort": 2,
-            "satisfaction": 3,
-            "athlete": 3,
-            "athlete_name": "Avner Volpert"
-        }
+        // {
+        //     "id": 2,
+        //     "duration": "1.50",
+        //     "effort": 2,
+        //     "satisfaction": 3,
+        //     "athlete": 3,
+        //     "athlete_name": "Avner Volpert"
+        // }
     ]
 }

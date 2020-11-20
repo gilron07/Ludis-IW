@@ -4,6 +4,7 @@ import CalendarWorkout from './CalendarWorkout.js';
 import List from '@material-ui/core/List';
 
 function CalendarComponent(props) {
+
     return(
         <div id="calendar-workouts">
             <List>

@@ -61,7 +61,7 @@ function TabPanel(props) {
 export default function Home() {
 
   // replace with context
-  const [role, setRole] = useState("athlete");
+  const [role, setRole] = useState("coach");
 
   let athleteSchedules;
     if (role === "athlete") {

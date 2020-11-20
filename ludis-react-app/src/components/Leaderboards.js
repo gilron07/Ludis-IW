@@ -1,8 +1,7 @@
 import React from 'react';
 import Header from './Header.js';
 import LeaderboardComponent from './LeaderboardComponent.js';
-
-import '../css/Leaderboards.css';
+import LeaderboardModal from './LeaderboardModal.js';
 
 const Leaderboards = () => {
    return (
@@ -14,6 +13,7 @@ const Leaderboards = () => {
          <LeaderboardComponent title="Backwards 50m"></LeaderboardComponent>
          <LeaderboardComponent title="Poker Pushups"></LeaderboardComponent>
          <LeaderboardComponent title="Hurdle Challenge"></LeaderboardComponent>
+         <LeaderboardModal></LeaderboardModal>
       </div>
     );
 }
