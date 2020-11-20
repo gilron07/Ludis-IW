@@ -9,7 +9,7 @@ function Header() {
         <tbody>
         <tr>
           <td id="hamburger-column"><Navigation /></td>
-          <td id="logo-column"><img src="./assets/ludis-logo.png" id="header-logo" alt="Ludis Logo"/></td>
+          <td id="logo-column"><img src="/static/ludis-logo.png" id="header-logo" alt="Ludis Logo"/></td>
           <td id="title-column"><div className="title"> Ludis </div></td>
           <td id="user-column">
             <div id="user-dropdown-select">
@@ -17,7 +17,7 @@ function Header() {
                 Gilron Tsabkevich
               </div>
               <div>
-                <img src="default-avatar.png" id="profile-avatar" alt="Profile Avatar"></img>
+                <img src="/static/default-avatar.png" id="profile-avatar" alt="Profile Avatar"></img>
               </div>
             </div>
           </td>

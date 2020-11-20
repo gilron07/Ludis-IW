@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+from ludis.views import index
+
 from django.views.generic.base import TemplateView
 
 from ludis_api.urls import url_patterns
-from ludis_api.views import index
+# from ludis_api.views import index
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/", include(url_patterns)),
-    re_path('.*', index)
+    re_path('.*', index, name="index")
     # path('', index),
     # re_path(r'^.*/$', index)
 ]

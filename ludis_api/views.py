@@ -16,7 +16,7 @@ from ludis_api.permissions import IsWorkoutView
 from ludis_api.utils.enums import Role
 
 def index(request):
-    return render(request, "build/index.html")
+    return render(request, "index.html")
 
 
 class WorkoutViewSet(ModelViewSet):
