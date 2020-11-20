@@ -1,1 +1,3 @@
-web: gunicorn --chdir ./ludis-backend/ ludis.wsgi --log-file -
+release: python manage.py migrate
+web: npm run build --log-file -
+web: gunicorn ludis.wsgi --logfile -
