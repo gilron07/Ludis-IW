@@ -1,3 +1,3 @@
-web: npm run build --log-file -
+release: python manage.py migrate
 web: gunicorn ludis.wsgi --logfile -
 
