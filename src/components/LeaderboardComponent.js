@@ -17,12 +17,28 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 20,
         '&:hover': {
             backgroundColor: "#7adec7",
-        }
+        },
     },
     avatar : {
         height: 30,
         width: 30,
-    }
+    },
+    dateCol : {
+        [theme.breakpoints.down('xs')]: {
+            display: "none",
+        },
+        width: "5%",
+        minWidth: 150,
+        textAlign: "center",
+    },
+    dateLabel : {
+        [theme.breakpoints.down('xs')]: {
+            display: "none",
+        },
+        width: "5%",
+        minWidth: 150,
+        textAlign: "center",
+    },
 }));
 
 const fakeData =
@@ -78,24 +94,29 @@ function LeaderboardComponent(props) {
     return(
         <List>
             <ListItem button onClick={handleClick} className={classes.drillHeader}>
-            <ListItemText primary={props.title}/>
-            {open ? <ExpandLess /> : <ExpandMore />}
+                <ListItemText primary={props.title}/>
+                <div style={{width: "25%", minWidth: 70, maxWidth: 200, textAlign: "center"}}>{props.unit}</div>
+                <div className={classes.dateLabel}>Date Set</div>
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {fakeData.records.map((record, index) => (
-                        <ListItem style={{ position: "relative" }} divider>
+                        <ListItem style={{ position: "relative", overflow: "hidden", }} divider>
                             <div style={{backgroundColor: medalColors[index], height: "100%", width: "calc(100% - 30px)", position: "absolute", zIndex: -1}}></div>
-                            <div style={{width: 60, textAlign: "center"}}>{formatPlace(index)}</div>
+                            <div style={{width: 70, textAlign: "center"}}>{formatPlace(index)}</div>
                             <div style={{width: 50, textAlign: "center"}}>
                                 <Avatar className={classes.avatar}>{
                                     // get initials
                                     record.name.split(" ").map((nameWord) => (nameWord[0]))
                                 }</Avatar>
                             </div>
-                            <ListItemText primary={record.name} style={{minWidth: 150, width: "50%", overflow: "hidden", whiteSpace: "nowrap"}}/>
-                            <ListItemText primary={record.record} style={{width: "5%", textAlign: "center"}}/>
-                            <ListItemText primary={record.date.split("T")[0]} style={{width: "5%", textAlign: "center"}}/>
+                            <ListItemText primary={record.name} style={{width: "50%", minWidth: 150, whiteSpace: "nowrap"}}/>
+                            <ListItemText primary={record.record} style={{width: "30%", minWidth: 70, maxWidth: 200, textAlign: "center"}}/>
+                            <ListItemText className={classes.dateCol}
+                                primary={
+                                    `${record.date.split("T")[0].split("-")[1]}/${record.date.split("T")[0].split("-")[2]}/${record.date.split("T")[0].split("-")[0]}`
+                                }
+                            />
                         </ListItem>
                     ))}
                 </List>
