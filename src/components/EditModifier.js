@@ -28,7 +28,9 @@ const units = {
     "weight": ["lb", "kg"],
     "time": ["hours", "minutes", "seconds"],
     "distance": ["miles", "kilometers", "meters", "laps"],
-    "intensity": null
+    "intensity": null,
+    "reps": null,
+    "sets": null
 }
 
 function EditModifier(props) {

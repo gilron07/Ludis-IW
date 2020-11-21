@@ -9,13 +9,31 @@ const Leaderboards = () => {
          <Header/>
          <h1>Leaderboards</h1>
          <p>Start a friendly competition with teammates!</p>
-         
-         <LeaderboardComponent title="Backwards 50m"></LeaderboardComponent>
-         <LeaderboardComponent title="Poker Pushups"></LeaderboardComponent>
-         <LeaderboardComponent title="Hurdle Challenge"></LeaderboardComponent>
+         {data.map((leaderboard) => (
+               <LeaderboardComponent
+                  title={leaderboard.title}
+                  unit={leaderboard.unit.charAt(0).toUpperCase() + leaderboard.unit.slice(1)}
+               ></LeaderboardComponent>
+         ))}
          <LeaderboardModal></LeaderboardModal>
       </div>
     );
 }
  
 export default Leaderboards;
+
+
+const data = [
+   {
+      "title" : "Backwards 50m",
+      "unit" : "seconds"
+   },
+   {
+      "title" : "Poker Pushups",
+      "unit" : "reps"
+   },
+   {
+      "title" : "Hurdle Challenge",
+      "unit" : "meters"
+   },
+]
