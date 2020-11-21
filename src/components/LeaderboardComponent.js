@@ -65,9 +65,9 @@ function LeaderboardComponent(props) {
     function formatPlace(n) {
         let lastDigit = n % 10 + 1;
         let ordinal = "th";
-        if (lastDigit == 1) ordinal = "st";
-        else if (lastDigit == 2) ordinal = "nd";
-        else if (lastDigit == 3) ordinal = "rd";
+        if (lastDigit === 1) ordinal = "st";
+        else if (lastDigit === 2) ordinal = "nd";
+        else if (lastDigit === 3) ordinal = "rd";
 
         // check if it's a "teen" number
         if ((n % 100) < 14 && (n % 100) > 10) ordinal = "th";
