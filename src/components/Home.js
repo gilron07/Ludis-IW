@@ -1,9 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import Header from './Header.js';
 import CalendarComponent from './CalendarComponent.js';
 import CalendarModal from './CalendarModal.js';
 import Button from '@material-ui/core/Button';
 import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
+import axiosAPI from '../services/authAxios'
 
 import '../css/Home.css';
 
@@ -62,6 +63,15 @@ export default function Home() {
 
   // replace with context
   const [role, setRole] = useState("coach");
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+      const fetchData = async () => {
+          const result = await axiosAPI.get('/schedule/');
+          setData(result.data);
+      };
+      fetchData();
+  }, [])
 
   let athleteSchedules;
     if (role === "athlete") {
@@ -243,7 +253,7 @@ export default function Home() {
 
   function getRelevantWorkouts() {
     // filter by month
-    const thisMonthWorkouts = athleteSchedules.filter(function (workout) {
+    const thisMonthWorkouts = data.filter(function (workout) {
       return workout.date.split(" ")[0].split("-")[1] == currentMonth;
     });
 
