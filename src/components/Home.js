@@ -4,6 +4,7 @@ import CalendarComponent from './CalendarComponent.js';
 import CalendarModal from './CalendarModal.js';
 import Button from '@material-ui/core/Button';
 import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
+import axiosAPI from '../services/authAxios'
 
 import '../css/Home.css';
 
@@ -70,6 +71,39 @@ export default function Home() {
 
   // replace with context
   const [role, setRole] = useState("coach");
+  const [schdeuleData, setScheduleData] = useState([]);
+  const [workoutsData, setWorkoutsData] = useState([]);
+  const [athleteListData, setAthleteListData] = useState([]);
+
+
+  function updateScheduleView(schedule){
+      setScheduleData(schedule);
+  }
+  useEffect(() => {
+      const fetchScheduleData = async () => {
+          const result = await axiosAPI.get('/schedule/');
+          setScheduleData(result.data);
+      };
+      fetchScheduleData();
+  }, []);
+
+  useEffect(() =>{
+        const fetchWorkoutsData = async () =>{
+          const result = await axiosAPI.get('/workouts/');
+          setWorkoutsData(result.data)
+        };
+        fetchWorkoutsData();
+    }, []);
+
+    useEffect(() =>{
+        const fetchAthletesListData = async () =>{
+          const result = await axiosAPI.get('/users/');
+          setAthleteListData(result.data);
+          console.log(athleteListData);
+        };
+        fetchAthletesListData();
+    }, []);
+
 
   let athleteSchedules;
     if (role === "athlete") {
@@ -423,7 +457,11 @@ export default function Home() {
           </div>
         </TabPanel>
       ))}
-      <CalendarModal></CalendarModal>
+      <CalendarModal
+          workoutsList={workoutsData}
+          thletesList={athleteListData}
+          updateSchdeule={setScheduleData}
+      ></CalendarModal>
     </div>    
   );
 }
