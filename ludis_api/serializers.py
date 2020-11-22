@@ -182,7 +182,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.full_name')
     # group =  serializers.ReadOnlyField(source='group.name')
     athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
-    date = serializers.DateTimeField(source='schedule.date', read_only=True)
+    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M", read_only=True)
     # reports = ReportSerializer(many=True, read_only=True)
     reports = serializers.SerializerMethodField(read_only=True)
 

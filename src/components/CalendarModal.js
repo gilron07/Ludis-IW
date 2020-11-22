@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
+import axiosAPI from '../services/authAxios'
 
 // time picker
 import 'date-fns';
@@ -83,7 +84,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal(props) {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
@@ -96,7 +97,15 @@ export default function SimpleModal() {
   const [selectedAthleteIds, setSelectedAthleteIds] = useState([]);
   const [workoutValue, setWorkoutValue] = React.useState(null);
   const [teamOrIndividual, setTeamOrIndividual] = React.useState(0);
+  const [athleteListData, setAthleteListData] = useState([]);
 
+    useEffect(() =>{
+        const fetchAthletesListData = async () =>{
+          const result = await axiosAPI.get('/users/');
+          setAthleteListData(result.data);
+        };
+        fetchAthletesListData();
+    }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -123,7 +132,7 @@ export default function SimpleModal() {
     setSelectedDates(dates);
   }
 
-  function sendWorkoutJSON() {
+  function ScheduleJSON() {
     // prepare athlete ids
     let athleteIds = selectedAthleteIds;
     for(var i = 0; i < athleteIds.length; i++) {
@@ -150,9 +159,28 @@ export default function SimpleModal() {
     }
     
     console.log(scheduleJSON);
+    return scheduleJSON
   }
-  
-  function workoutSelect() {  
+
+  function createSchedule(){
+      const data = ScheduleJSON();
+      axiosAPI.post('/schedule/', data)
+          .then(() => {
+              axiosAPI.get('/schedule/')
+                  .then((res) => {
+                      props.updateSchdeule(res.data);
+                  })
+                  .catch((err) =>{
+                      console.log(err)
+                  });
+              handleClose();
+          })
+          .catch((err) => {
+             console.log(err);
+          });
+  }
+
+  function workoutSelect(props) {
     return(
       <div>
         <FormLabel component="legend">Select Workout</FormLabel>
@@ -162,7 +190,7 @@ export default function SimpleModal() {
           value={workoutValue}
           onChange={handleWorkoutChange}
         >
-          {workoutData.map((workout, index) => (
+          {props.workoutsList.map((workout, index) => (
             <FormControlLabel
             value= {workout.id.toString()}
             control={<Radio size="small"/>}
@@ -229,7 +257,7 @@ const body = (
       <TextField label="Location" value={location} onChange={handleLocationChange}></TextField>
     </div>
     <br></br>
-    {workoutSelect()}
+    {workoutSelect(props)}
     {/* athlete select */}
     <div style={{color: "#00000088", margin: "20px 0 10px 0", textAlign:"center"}}>Assign workout to: </div>
     <div style={{display: "flex", justifyContent:"center"}}>
@@ -272,7 +300,7 @@ const body = (
     {teamOrIndividual
         ? <div style={{height: 300, width: '90%', minWidth:"300px", paddingTop:25, margin:"auto"}}>
             <DataGrid
-              rows={athleteData}
+              rows={athleteListData}
               columns={columns}
               checkboxSelection 
               onSelectionChange={(newSelection) => {
@@ -284,7 +312,7 @@ const body = (
       }
     
     <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
-      <Button variant="contained" color="primary" onClick={sendWorkoutJSON}>
+      <Button variant="contained" color="primary" onClick={createSchedule}>
         Schedule Workout
       </Button>
     </div>
@@ -305,7 +333,7 @@ const body = (
 }
 
 const columns = [
-  { field: 'name', headerName: 'Athlete Name', width: 400 },
+  { field: 'full_name', headerName: 'Athlete Name', width: 400 },
 ];
 
 const athleteData = [
@@ -319,148 +347,148 @@ const athleteData = [
   { id: 8, name: 'Ben Schwartz'},
 ];
 
-
-const workoutData = [
-  {
-      "id": 1,
-      "title": "Technical Practice",
-      "created_at": "2020-11-09",
-      "description": "Please come with appropriate spikes",
-      "tags": [{"name" : "test tag"}],
-      "sections": [
-          {
-              "id": 1,
-              "name": "warm up",
-              "order": 1,
-              "drills": [
-                  {
-                      "id": 1,
-                      "drill_name": "B-skips",
-                      "created_at": "2020-10-31T15:59:20.246136Z",
-                      "order": 1,
-                      "modifiers": [
-                          {
-                              "id": 1,
-                              "modifier": "Reps",
-                              "unit": null,
-                              "quantity": 5
-                          },
-                          {
-                              "id": 2,
-                              "modifier": "Time",
-                              "unit": "minutes",
-                              "quantity": 5
-                          }
-                      ]
-                  }
-              ]
-          }
-      ],
-      "owner": "Henry Herrington"
-  },
-  {
-      "id": 2,
-      "title": "Running Practice",
-      "created_at": "2020-11-09",
-      "description": "Wear running shoes",
-      "tags": [
-          {
-              "name": "cardio"
-          },
-          {
-              "name": "technical 2"
-          }
-      ],
-      "sections": [
-          {
-              "id": 2,
-              "name": "warm up",
-              "order": 1,
-              "drills": [
-                  {
-                      "id": 2,
-                      "drill_name": "Sprints",
-                      "created_at": "2020-11-09T20:13:00.205946Z",
-                      "order": 1,
-                      "modifiers": [
-                          {
-                              "id": 3,
-                              "modifier": "Reps",
-                              "unit": null,
-                              "quantity": 5
-                          },
-                          {
-                              "id": 4,
-                              "modifier": "Time",
-                              "unit": "minutes",
-                              "quantity": 5
-                          }
-                      ]
-                  }
-              ]
-          }
-      ],
-      "owner": "Henry Herrington"
-  },
-  {
-    "id": 3,
-    "title": "Swimming Practice",
-    "created_at": "1999-02-09",
-    "description": "Wear running shoes",
-    "tags": [
-        {
-            "name": "repetition"
-        },
-        {
-            "name": "non technical"
-        }
-    ],
-    "sections": [],
-    "owner": "Henry Herrington"
-},
-{
-  "id": 4,
-  "title": "Walking Practice",
-  "created_at": "1999-02-09",
-  "description": "Wear running shoes",
-  "tags": [
-      {
-          "name": "cardio"
-      },
-  ],
-  "sections": [],
-  "owner": "Henry Herrington"
-},
-{
-  "id": 5,
-  "title": "Scuba Practice",
-  "created_at": "1999-02-09",
-  "description": "Wear running shoes",
-  "tags": [
-      {
-          "name": "underwater"
-      },
-      {
-          "name": "technical 44"
-      }
-  ],
-  "sections": [],
-  "owner": "Henry Herrington"
-},
-{
-  "id": 6,
-  "title": "Sleeping Practice",
-  "created_at": "1999-02-09",
-  "description": "Wear running shoes",
-  "tags": [
-      {
-          "name": "cardio"
-      },
-      {
-          "name": "technical 2"
-      }
-  ],
-  "sections": [],
-  "owner": "Henry Herrington"
-},
-]
+//
+// const workoutData = [
+//   {
+//       "id": 1,
+//       "title": "Technical Practice",
+//       "created_at": "2020-11-09",
+//       "description": "Please come with appropriate spikes",
+//       "tags": [{"name" : "test tag"}],
+//       "sections": [
+//           {
+//               "id": 1,
+//               "name": "warm up",
+//               "order": 1,
+//               "drills": [
+//                   {
+//                       "id": 1,
+//                       "drill_name": "B-skips",
+//                       "created_at": "2020-10-31T15:59:20.246136Z",
+//                       "order": 1,
+//                       "modifiers": [
+//                           {
+//                               "id": 1,
+//                               "modifier": "Reps",
+//                               "unit": null,
+//                               "quantity": 5
+//                           },
+//                           {
+//                               "id": 2,
+//                               "modifier": "Time",
+//                               "unit": "minutes",
+//                               "quantity": 5
+//                           }
+//                       ]
+//                   }
+//               ]
+//           }
+//       ],
+//       "owner": "Henry Herrington"
+//   },
+//   {
+//       "id": 2,
+//       "title": "Running Practice",
+//       "created_at": "2020-11-09",
+//       "description": "Wear running shoes",
+//       "tags": [
+//           {
+//               "name": "cardio"
+//           },
+//           {
+//               "name": "technical 2"
+//           }
+//       ],
+//       "sections": [
+//           {
+//               "id": 2,
+//               "name": "warm up",
+//               "order": 1,
+//               "drills": [
+//                   {
+//                       "id": 2,
+//                       "drill_name": "Sprints",
+//                       "created_at": "2020-11-09T20:13:00.205946Z",
+//                       "order": 1,
+//                       "modifiers": [
+//                           {
+//                               "id": 3,
+//                               "modifier": "Reps",
+//                               "unit": null,
+//                               "quantity": 5
+//                           },
+//                           {
+//                               "id": 4,
+//                               "modifier": "Time",
+//                               "unit": "minutes",
+//                               "quantity": 5
+//                           }
+//                       ]
+//                   }
+//               ]
+//           }
+//       ],
+//       "owner": "Henry Herrington"
+//   },
+//   {
+//     "id": 3,
+//     "title": "Swimming Practice",
+//     "created_at": "1999-02-09",
+//     "description": "Wear running shoes",
+//     "tags": [
+//         {
+//             "name": "repetition"
+//         },
+//         {
+//             "name": "non technical"
+//         }
+//     ],
+//     "sections": [],
+//     "owner": "Henry Herrington"
+// },
+// {
+//   "id": 4,
+//   "title": "Walking Practice",
+//   "created_at": "1999-02-09",
+//   "description": "Wear running shoes",
+//   "tags": [
+//       {
+//           "name": "cardio"
+//       },
+//   ],
+//   "sections": [],
+//   "owner": "Henry Herrington"
+// },
+// {
+//   "id": 5,
+//   "title": "Scuba Practice",
+//   "created_at": "1999-02-09",
+//   "description": "Wear running shoes",
+//   "tags": [
+//       {
+//           "name": "underwater"
+//       },
+//       {
+//           "name": "technical 44"
+//       }
+//   ],
+//   "sections": [],
+//   "owner": "Henry Herrington"
+// },
+// {
+//   "id": 6,
+//   "title": "Sleeping Practice",
+//   "created_at": "1999-02-09",
+//   "description": "Wear running shoes",
+//   "tags": [
+//       {
+//           "name": "cardio"
+//       },
+//       {
+//           "name": "technical 2"
+//       }
+//   ],
+//   "sections": [],
+//   "owner": "Henry Herrington"
+// },
+// ]

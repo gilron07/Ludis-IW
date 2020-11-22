@@ -78,7 +78,9 @@ function EditDrill(props) {
         "distance": true,
         "weight": false,
         "time": false,
-        "intensity": false
+        "intensity": false,
+        "reps": false,
+        "sets": false
     });
 
     const handleClick = () => {
@@ -119,7 +121,7 @@ function EditDrill(props) {
     };
 
     function falseModifiers() {
-        let falseMods = ["distance", "weight", "time", "intensity"];
+        let falseMods = ["distance", "weight", "time", "intensity", "reps", "sets"];
         for (let i = 0; i < props.modifiers.length; i++) {
             let existingMod = props.modifiers[i]["modifier"];
             if (falseMods.includes(existingMod)){

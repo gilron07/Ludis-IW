@@ -4,12 +4,13 @@ import CalendarWorkout from './CalendarWorkout.js';
 import List from '@material-ui/core/List';
 
 function CalendarComponent(props) {
-
-    return(
+    return (
         <div id="calendar-workouts">
             <List>
+
                 {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
                     <div>
+                        {console.log(scheduledWorkout)}
                     <CalendarWorkout
                         title={scheduledWorkout.workout.title}
                         tags={scheduledWorkout.workout.tags}
