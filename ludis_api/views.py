@@ -44,12 +44,19 @@ class ScheduleViewSet(ModelViewSet):
                 .filter(owner__organization=self.request.user.organization)
         else:
             queryset = self.request.user.user_schedule.all()
-        queryset.annotate(average_effort=Avg('reports__effort'))
-        return queryset
+        return queryset.order_by('date')
 
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response({'status': 'Scheduling successfully created'}, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=True, methods=['post'])
     def set_report(self, request, pk=None):
@@ -63,7 +70,7 @@ class ScheduleViewSet(ModelViewSet):
             return Response({'status': "Invalid user"}, status=status.HTTP_400_BAD_REQUEST)
         serializer.save()
         status_code = status.HTTP_200_OK
-        return Response({'status': 'Report successfully set'}, status=status_code)
+        return Response({'message': 'Report successfully set'}, status=status_code)
 
 
 class UserRegistrationView(APIView):
@@ -107,4 +114,4 @@ class UserListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.value)
+        return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.value).order_by('full_name')

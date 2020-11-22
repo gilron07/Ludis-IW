@@ -63,15 +63,39 @@ export default function Home() {
 
   // replace with context
   const [role, setRole] = useState("coach");
-  const [data, setData] = useState([]);
+  const [schdeuleData, setScheduleData] = useState([]);
+  const [workoutsData, setWorkoutsData] = useState([]);
+  const [athleteListData, setAthleteListData] = useState([]);
 
+
+  function updateScheduleView(schedule){
+      setScheduleData(schedule);
+  }
   useEffect(() => {
-      const fetchData = async () => {
+      const fetchScheduleData = async () => {
           const result = await axiosAPI.get('/schedule/');
-          setData(result.data);
+          setScheduleData(result.data);
       };
-      fetchData();
-  }, [])
+      fetchScheduleData();
+  }, []);
+
+  useEffect(() =>{
+        const fetchWorkoutsData = async () =>{
+          const result = await axiosAPI.get('/workouts/');
+          setWorkoutsData(result.data)
+        };
+        fetchWorkoutsData();
+    }, []);
+
+    useEffect(() =>{
+        const fetchAthletesListData = async () =>{
+          const result = await axiosAPI.get('/users/');
+          setAthleteListData(result.data);
+          console.log(athleteListData);
+        };
+        fetchAthletesListData();
+    }, []);
+
 
   let athleteSchedules;
     if (role === "athlete") {
@@ -253,7 +277,7 @@ export default function Home() {
 
   function getRelevantWorkouts() {
     // filter by month
-    const thisMonthWorkouts = data.filter(function (workout) {
+    const thisMonthWorkouts = schdeuleData.filter(function (workout) {
       return workout.date.split(" ")[0].split("-")[1] == currentMonth;
     });
 
@@ -323,7 +347,11 @@ export default function Home() {
           </div>
         </TabPanel>
       ))}
-      <CalendarModal></CalendarModal>
+      <CalendarModal
+          workoutsList={workoutsData}
+          thletesList={athleteListData}
+          updateSchdeule={setScheduleData}
+      ></CalendarModal>
     </div>    
   );
 }
