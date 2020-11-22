@@ -7,7 +7,7 @@
     width: 30px;
     text-align: center;
     box-shadow: 0 2px 3px 1px #00000033;
-    margin-right: 5%;
+    margin: 1%;
 }
 
 .week-button-select {
@@ -24,7 +24,7 @@
 
 .week-button-label {
     text-transform: lowercase;
-    margin-right: 5%;
+    margin-right: 2%;
 }
 
 .week-selector-container {
