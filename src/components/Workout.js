@@ -66,13 +66,9 @@ function Workout(props) {
     // 0 means coach is viewing page, 1 means athlete is viewing page
     const [coachOrAthlete, setCoachOrAthlete] = React.useState(1);
     // working on hook vvv
-    // const [importedWorkout, setImportedWorkout] = React.useState(1);
-
-    let importedWorkout;
-
-    if (coachOrAthlete) importedWorkout = athleteWorkout;
-    else importedWorkout = coachWorkout;
-
+    const [importedWorkout, setImportedWorkout] = React.useState(
+       coachOrAthlete ? athleteWorkout : coachWorkout
+    );
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
@@ -119,7 +115,13 @@ function Workout(props) {
 
     function loadNoReport() {
       if (coachOrAthlete) {
-        return(<ReportModal workoutId={props.location.workoutId}></ReportModal>)
+        return(
+            <ReportModal
+                workoutId={props.location.workoutId}
+                mainWorkout={importedWorkout}
+                updateMainWorkout={setImportedWorkout}
+            ></ReportModal>
+        )
       }
     }
 
@@ -139,6 +141,7 @@ function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
+            {JSON.stringify(importedWorkout)}
             {`workout id: ${props.location.workoutId}`}
             {
                 // later, we can add functions to sort data by order
