@@ -79,12 +79,14 @@ export default function SimpleModal(props) {
     report["effort"] = effort;
     report["satisfaction"] = satisfaction;
     report["workoutId"] = props.workoutId;
-    console.log(report);
+    // console.log(report);
 
-    let newWorkout = props.mainWorkout;
+    // deep clone to trigger rerender
+    let newWorkout = JSON.parse(JSON.stringify(props.mainWorkout));
     newWorkout.reports.push(report);
+    console.log(newWorkout);
     props.updateMainWorkout(newWorkout);
-    console.log(props.mainWorkout);
+    handleClose();
   }
 
   const body = (

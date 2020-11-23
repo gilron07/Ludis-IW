@@ -141,7 +141,7 @@ function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
-            {JSON.stringify(importedWorkout)}
+            {/* {JSON.stringify(importedWorkout)} */}
             {`workout id: ${props.location.workoutId}`}
             {
                 // later, we can add functions to sort data by order
