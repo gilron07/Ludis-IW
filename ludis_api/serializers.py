@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule, Report
+from .models import Drill, DrillModifier, Workout, Section, Organization, Tag, Schedule, UserSchedule, Report, \
+    Challenge, ChallengeResponse
 from django.contrib.auth import get_user_model
 from rest_framework_jwt.settings import api_settings
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -177,13 +178,13 @@ class ReportSerializer(serializers.ModelSerializer):
         model = Report
         fields = ['id','duration', 'effort', 'satisfaction', 'schedule', 'athlete', 'athlete_name']
 
+
 class ScheduleSerializer(serializers.ModelSerializer):
     workout = WorkoutShortSerializer(read_only=True)
     owner = serializers.ReadOnlyField(source='owner.full_name')
     # group =  serializers.ReadOnlyField(source='group.name')
     athletes = UserScheduleSerializer(source="userschedule_set", many=True, read_only=True)
     date = serializers.DateTimeField(format="%Y-%m-%d %H:%M", read_only=True)
-    # reports = ReportSerializer(many=True, read_only=True)
     reports = serializers.SerializerMethodField(read_only=True)
 
     # Schedule Averages
@@ -248,6 +249,31 @@ class UserShortSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ['id', 'full_name']
+
+
+class ChallengeResponseSerializer(serializers.ModelSerializer):
+    challenge = serializers.PrimaryKeyRelatedField(queryset=Challenge.objects.all(), write_only=True)
+    user = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
+    user_name = serializers.ReadOnlyField(source='user.full_name')
+    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M", read_only=True)
+
+    class Meta:
+        model = ChallengeResponse
+        fields =['user', 'result','date','challenge',  'user_name']
+
+
+class ChallengeSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.full_name')
+    responses = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Challenge
+        fields = ['id', 'title', 'description', 'due_date', 'modifier', 'unit', 'ascended_modifier', 'responses', 'owner']
+
+    def get_responses(self, obj):
+        order = '-result' if obj.ascended_modifier else 'result'
+        serializer = ChallengeResponseSerializer(obj.challenge_responses.all().order_by(order), many=True)
+        return serializer.data
 
 
 
