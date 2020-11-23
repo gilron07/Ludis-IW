@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Chip from '@material-ui/core/Chip';
+import { Link } from 'react-router-dom';
 
 //icons
 import LocationOnIcon from '@material-ui/icons/LocationOn';
@@ -126,7 +127,14 @@ function CalendarWorkout(props) {
 
     return(
         <div className={classes.workoutItem}>
-            <ListItem button component="a" href="./workout">
+            <Link
+                style={{textDecoration:"none", color: "inherit"}}
+                to={{
+                    pathname: "/workout",
+                    workoutId: props.workoutId// your data array of objects
+                }}
+            >
+            <ListItem button>
                 <div className={classes.leftContainer}>
                     <div className={classes.workoutDate}>
                         <div className={classes.workoutDateD}>{day}</div>
@@ -155,6 +163,7 @@ function CalendarWorkout(props) {
                 <div class={classes.workoutChevron}><ChevronRightIcon></ChevronRightIcon></div>
                 
             </ListItem>
+            </Link>
         </div>
     );
 }

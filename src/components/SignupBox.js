@@ -67,11 +67,11 @@ function SignupBox(props) {
     const classes = useStyles();
     const [signupPage, setSignupPage] = React.useState(0);
 
-    const [email, setEmail] = React.useState(null);
-    const [password, setPassword] = React.useState(null);
-    const [teamCode, setTeamCode] = React.useState(null);
-    const [fullName, setFullName] = React.useState(null);
-    const [birthdate, setBirthdate] = React.useState(null);
+    const [email, setEmail] = React.useState("");
+    const [password, setPassword] = React.useState("");
+    const [teamCode, setTeamCode] = React.useState("");
+    const [fullName, setFullName] = React.useState("");
+    const [birthdate, setBirthdate] = React.useState("");
     const [athleteOrCoach, setAthleteOrCoach] = React.useState(0);
 
     const history = useHistory();
@@ -154,7 +154,7 @@ function SignupBox(props) {
                 <div>
                 <TextField value={fullName} onChange={updateFullName} variant="outlined" label="Full Name" margin="dense" fullWidth size="small"/>
                 <TextField
-                    // value={birthdate}
+                    value={birthdate}
                     onChange={updateBirthdate}
                     type="date"
                     variant="outlined"
@@ -183,6 +183,16 @@ function SignupBox(props) {
             </div>
             )
         }
+    }
+
+    function formComplete() {
+        if (email.trim() === "" ||
+            password.trim() === "" ||
+            fullName.trim() === "" ||
+            teamCode.length !== 6 ||
+            birthdate === "")
+            return true;
+        return false;
     }
 
     return (
@@ -216,6 +226,7 @@ function SignupBox(props) {
                 variant="contained"
                 style ={{width:'100%', margin: '15px 0'}}
                 onClick={submitInfo}
+                disabled={formComplete()}
             >
                 Sign Up
             </Button>
