@@ -8,9 +8,10 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
-from ludis_api.models import Workout, User, Schedule
+from django.db import transaction
+from ludis_api.models import Workout, User, Schedule, Challenge, ChallengeResponse
 from ludis_api.serializers import WorkoutSerializer, UserRegistrationSerializer, UserLoginSerializer, \
-    ScheduleSerializer, ReportSerializer, UserShortSerializer
+    ScheduleSerializer, ReportSerializer, UserShortSerializer, ChallengeSerializer, ChallengeResponseSerializer
 from django.shortcuts import render
 from ludis_api.permissions import IsWorkoutView
 from ludis_api.utils.enums import Role
@@ -63,7 +64,6 @@ class ScheduleViewSet(ModelViewSet):
         user = self.request.user
         request.data["schedule"] = pk
         request.data["athlete"] = user.id
-        print(user.id)
         serializer = ReportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         if not Schedule.objects.get(pk=pk).users.filter(id=user.id).exists():
@@ -115,3 +115,30 @@ class UserListView(ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.value).order_by('full_name')
+
+
+class ChallengeViewSet(ModelViewSet):
+    serializer_class = ChallengeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Challenge.objects.filter(owner__organization=self.request.user.organization)
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+    @transaction.atomic
+    @action(detail=True, methods=['post'])
+    def set_response(self, request, pk=None):
+        user = self.request.user
+        request.data["challenge"] = pk
+        request.data["user"] = user.id
+        # Would delete if response already exists
+        ChallengeResponse.objects.filter(challenge=pk, user=user.id).delete()
+        serializer = ChallengeResponseSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        if Challenge.objects.get(pk=pk).owner.organization != self.request.user.organization:
+            return Response({'status': "Invalid user"}, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
+        status_code = status.HTTP_200_OK
+        return Response(serializer.data, status=status_code)

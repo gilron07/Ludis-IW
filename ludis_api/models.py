@@ -175,11 +175,11 @@ class Report(models.Model):
 
 class Challenge(models.Model):
     title = models.CharField(max_length=1000)
-    description = models.TextField()
-    due_date = models.DateTimeField()
+    description = models.TextField(null=True, blank=True)
+    due_date = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     modifier = models.CharField(max_length=255, choices=Modifier.challenge_choices(), null=False)
-    unit = models.CharField(max_length=255)
+    unit = models.CharField(max_length=255, blank=True, null=True)
     ascended_modifier = models.BooleanField(default=True) # Highest wins
     owner = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
 
@@ -189,6 +189,8 @@ class Challenge(models.Model):
 class ChallengeResponse(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
     challenge = models.ForeignKey(Challenge, related_name="challenge_responses", on_delete=models.CASCADE)
-    result_numeric = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    result_time = models.TimeField(blank=True, null=True)
+    result = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together=('user', 'challenge')

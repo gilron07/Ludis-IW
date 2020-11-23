@@ -3,13 +3,15 @@ from django.conf.urls import url
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
-from ludis_api.views import WorkoutViewSet, UserRegistrationView, UserLoginView, ScheduleViewSet, UserListView
+from ludis_api.views import WorkoutViewSet, UserRegistrationView, UserLoginView, ScheduleViewSet, UserListView, \
+    ChallengeViewSet
 
 from django.urls import path
 router = DefaultRouter()
 
 router.register("workouts", WorkoutViewSet, basename='Workout')
 router.register("schedule", ScheduleViewSet, basename='Schedule')
+router.register("challenge", ChallengeViewSet, basename="Challenge")
 url_patterns = router.urls
 
 url_patterns += [
