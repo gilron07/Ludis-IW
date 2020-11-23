@@ -61,26 +61,33 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Workout() {
+function Workout(props) {
     const classes = useStyles();
-
     // 0 means coach is viewing page, 1 means athlete is viewing page
     const [coachOrAthlete, setCoachOrAthlete] = React.useState(1);
+    // working on hook vvv
+    // const [importedWorkout, setImportedWorkout] = React.useState(1);
+
+    let importedWorkout;
+
+    if (coachOrAthlete) importedWorkout = athleteWorkout;
+    else importedWorkout = coachWorkout;
+
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
       
       // athlete view else coach view
-      if (coachOrAthlete === 1) {
-        duration = athleteWorkout["reports"][0]["duration"];
-        effort = athleteWorkout["reports"][0]["effort"];
-        satisfaction = athleteWorkout["reports"][0]["satisfaction"];
+      if (coachOrAthlete) {
+        duration = importedWorkout["reports"][0]["duration"];
+        effort = importedWorkout["reports"][0]["effort"];
+        satisfaction = importedWorkout["reports"][0]["satisfaction"];
         average="";
       }
       else {
-        duration = coachWorkout["average_duration"];
-        effort = coachWorkout["average_effort"];
-        satisfaction = coachWorkout["average_satisfaction"];
+        duration = importedWorkout["average_duration"];
+        effort = importedWorkout["average_effort"];
+        satisfaction = importedWorkout["average_satisfaction"];
         average="Averages";
       } 
       
@@ -112,25 +119,39 @@ function Workout() {
 
     function loadNoReport() {
       if (coachOrAthlete) {
-        return(<ReportModal></ReportModal>)
+        return(<ReportModal workoutId={props.location.workoutId}></ReportModal>)
       }
+    }
+
+    function styleModifier(modifier) {
+        const mod = modifier["modifier"].toLowerCase();
+        if (mod === "sets" || mod === "reps") {
+            return modifier["quantity"] + " " + mod
+        }
+        else if (mod === "intensity") {
+            return modifier["quantity"] + "% intensity"
+        }
+        else if (mod === "distance" || mod === "time" || mod === "weight") {
+            return modifier["quantity"] + " " + modifier["unit"]
+        }
     }
 
     return(
         <div id="calendar-workouts">
             <Header></Header>
+            {`workout id: ${props.location.workoutId}`}
             {
                 // later, we can add functions to sort data by order
                 <div>
                     <h1 class="workout-title">{data.title}
-                    {athleteWorkout["reports"].length === 0
+                    {importedWorkout["reports"].length === 0
                       ? null
                       : <CheckCircleOutlineIcon
                           style={{marginLeft: 15, color: "#8ac290"}}
                         ></CheckCircleOutlineIcon>
                     }</h1>
 
-                    {athleteWorkout["reports"].length === 0
+                    {importedWorkout["reports"].length === 0
                       ?loadNoReport()
                       :loadCompletedReport()
                     }
@@ -138,7 +159,7 @@ function Workout() {
                     <div id="logistics-container">
                         <div class="logistic-container">
                             <LocationOnIcon className={classes.logisticsIcon}></LocationOnIcon>
-                            {athleteWorkout["location"]}
+                            {importedWorkout["location"]}
                         </div>
                         <div class="logistic-container">
                             <ScheduleIcon className={classes.logisticsIcon}></ScheduleIcon>
@@ -169,11 +190,21 @@ function Workout() {
                                     <TimelineContent>{
                                         <div>
                                         {drill["drill_name"]}
-                                        {drill["modifiers"].map((modifier) => (
-                                            <div>
-                                            {`${modifier["modifier"]}: ${modifier["quantity"]}`}
+                                            <div style={{paddingLeft: 20}}>
+                                                {drill["modifiers"].map((modifier, index) => (
+                                                    // JSON.stringify(modifier)
+                                                    <span
+                                                        style = {{
+                                                            color: "#777",
+                                                            paddingLeft: 5
+                                                        }}
+                                                    >
+                                                        {styleModifier(modifier)}
+                                                        {index !== drill["modifiers"].length - 1 ? ", " : ""}
+                                                    </span>
+                                                    // `${modifier["quantity"]} ${modifier["unit"]}: , `
+                                                ))}
                                             </div>
-                                        ))}
                                         </div>
                                     }</TimelineContent>
                                 </TimelineItem>

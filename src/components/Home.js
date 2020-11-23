@@ -79,30 +79,30 @@ export default function Home() {
   function updateScheduleView(schedule){
       setScheduleData(schedule);
   }
-  useEffect(() => {
-      const fetchScheduleData = async () => {
-          const result = await axiosAPI.get('/schedule/');
-          setScheduleData(result.data);
-      };
-      fetchScheduleData();
-  }, []);
+  // useEffect(() => {
+  //     const fetchScheduleData = async () => {
+  //         const result = await axiosAPI.get('/schedule/');
+  //         setScheduleData(result.data);
+  //     };
+  //     fetchScheduleData();
+  // }, []);
 
-  useEffect(() =>{
-        const fetchWorkoutsData = async () =>{
-          const result = await axiosAPI.get('/workouts/');
-          setWorkoutsData(result.data)
-        };
-        fetchWorkoutsData();
-    }, []);
+  // useEffect(() =>{
+  //       const fetchWorkoutsData = async () =>{
+  //         const result = await axiosAPI.get('/workouts/');
+  //         setWorkoutsData(result.data)
+  //       };
+  //       fetchWorkoutsData();
+  //   }, []);
 
-    useEffect(() =>{
-        const fetchAthletesListData = async () =>{
-          const result = await axiosAPI.get('/users/');
-          setAthleteListData(result.data);
-          console.log(athleteListData);
-        };
-        fetchAthletesListData();
-    }, []);
+  //   useEffect(() =>{
+  //       const fetchAthletesListData = async () =>{
+  //         const result = await axiosAPI.get('/users/');
+  //         setAthleteListData(result.data);
+  //         console.log(athleteListData);
+  //       };
+  //       fetchAthletesListData();
+  //   }, []);
 
 
   let athleteSchedules;
@@ -340,7 +340,6 @@ export default function Home() {
   const weeks = [1, 2, 3, 4];
 
   function getRelevantWorkouts() {
-
 
     // filter by month
     const thisMonthWorkouts = athleteSchedules.filter(function (workout) {

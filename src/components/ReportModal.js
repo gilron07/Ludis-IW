@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SimpleModal() {
+export default function SimpleModal(props) {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
@@ -77,7 +77,8 @@ export default function SimpleModal() {
     let report = {}
     report["duration"] = durationHours + durationMins;
     report["effort"] = effort;
-    report["satisfaction"] = satisfaction
+    report["satisfaction"] = satisfaction;
+    report["workoutId"] = props.workoutId;
     console.log(report);
   }
 
@@ -131,7 +132,7 @@ export default function SimpleModal() {
             min={0}
             max={10}
             style={{width:"80%"}}
-        />
+        /><br></br>
         <Button variant="contained" color="primary" onClick={sendReportJSON}>
           Rate Workout
         </Button>

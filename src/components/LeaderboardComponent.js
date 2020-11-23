@@ -19,26 +19,53 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: "#7adec7",
         },
     },
+    headerTitle: {
+        // backgroundColor: "purple",
+        width: "70%",
+        minWidth: 150,
+    },
     avatar : {
         height: 30,
         width: 30,
+    },
+    nameCol : {
+        width: "calc(70% - 100px)",
+        minWidth: 150,
+        whiteSpace: "nowrap",
+        // backgroundColor: "pink"
     },
     dateCol : {
         [theme.breakpoints.down('xs')]: {
             display: "none",
         },
-        width: "5%",
-        minWidth: 150,
+        width: "15%",
         textAlign: "center",
+        // backgroundColor: "red",
     },
-    dateLabel : {
+    dateColLabel : {
         [theme.breakpoints.down('xs')]: {
             display: "none",
         },
-        width: "5%",
-        minWidth: 150,
+        width: "15%",
         textAlign: "center",
+        // backgroundColor: "orange",
     },
+    recordCol : {
+        width: "15%",
+        textAlign: "center",
+        // backgroundColor: "yellow",
+        [theme.breakpoints.down('xs')]: {
+            width: "30%",
+        },
+    },
+    recordColLabel : {
+        width: "15%",
+        textAlign: "center",
+        // backgroundColor: "green",
+        [theme.breakpoints.down('xs')]: {
+            width: "30%",
+        },
+    }
 }));
 
 const fakeData =
@@ -94,29 +121,29 @@ function LeaderboardComponent(props) {
     return(
         <List>
             <ListItem button onClick={handleClick} className={classes.drillHeader}>
-                <ListItemText primary={props.title}/>
-                <div style={{width: "25%", minWidth: 70, maxWidth: 200, textAlign: "center"}}>{props.unit}</div>
-                <div className={classes.dateLabel}>Date Set</div>
+                {/* spacer */}
+                {/* <div style={{width: "120px"}}></div> */}
+                <div className={classes.headerTitle}>{props.title}</div>
+                <div className={classes.recordColLabel}>{props.unit}</div>
+                <div className={classes.dateColLabel}>Date Set</div>
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
                     {fakeData.records.map((record, index) => (
                         <ListItem style={{ position: "relative", overflow: "hidden", }} divider>
                             <div style={{backgroundColor: medalColors[index], height: "100%", width: "calc(100% - 30px)", position: "absolute", zIndex: -1}}></div>
-                            <div style={{width: 70, textAlign: "center"}}>{formatPlace(index)}</div>
-                            <div style={{width: 50, textAlign: "center"}}>
+                            <div style={{width: 60, textAlign: "center"}}>{formatPlace(index)}</div>
+                            <div style={{width: 40, textAlign: "center"}}>
                                 <Avatar className={classes.avatar}>{
                                     // get initials
                                     record.name.split(" ").map((nameWord) => (nameWord[0]))
                                 }</Avatar>
                             </div>
-                            <ListItemText primary={record.name} style={{width: "50%", minWidth: 150, whiteSpace: "nowrap"}}/>
-                            <ListItemText primary={record.record} style={{width: "30%", minWidth: 70, maxWidth: 200, textAlign: "center"}}/>
-                            <ListItemText className={classes.dateCol}
-                                primary={
-                                    `${record.date.split("T")[0].split("-")[1]}/${record.date.split("T")[0].split("-")[2]}/${record.date.split("T")[0].split("-")[0]}`
-                                }
-                            />
+                            <div className={classes.nameCol}>{record.name}</div>
+                            <div className={classes.recordCol}>{record.record}</div>
+                            <div className={classes.dateCol}>
+                                {`${record.date.split("T")[0].split("-")[1]}/${record.date.split("T")[0].split("-")[2]}/${record.date.split("T")[0].split("-")[0]}`}
+                            </div>
                         </ListItem>
                     ))}
                 </List>
