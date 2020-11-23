@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
-
+    'corsheaders',
     'rest_framework',
 
     'ludis_api'
@@ -54,12 +54,19 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'ludis.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    "https://goludis.herokuapp.com",
+    "http://localhost:8080",
+]
 
 TEMPLATES = [
     {
