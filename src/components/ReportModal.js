@@ -80,6 +80,11 @@ export default function SimpleModal(props) {
     report["satisfaction"] = satisfaction;
     report["workoutId"] = props.workoutId;
     console.log(report);
+
+    let newWorkout = props.mainWorkout;
+    newWorkout.reports.push(report);
+    props.updateMainWorkout(newWorkout);
+    console.log(props.mainWorkout);
   }
 
   const body = (
