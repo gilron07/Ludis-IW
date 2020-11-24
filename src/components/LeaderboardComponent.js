@@ -1,6 +1,9 @@
 import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+
 // list imports
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,6 +12,9 @@ import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import Avatar from '@material-ui/core/Avatar';
+
+// icons
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
 const useStyles = makeStyles((theme) => ({
     drillHeader: {
@@ -65,8 +71,25 @@ const useStyles = makeStyles((theme) => ({
         [theme.breakpoints.down('xs')]: {
             width: "30%",
         },
-    }
+    }, 
+
 }));
+
+function generateAvatarColor(name) {
+
+    const colors = [
+        "#89a7d9",  // blue
+        "#6e9c6d", // green
+        "#b56757", // red
+        "orange",
+        "#756aab" // purple
+    ]
+
+    const firstInit = name[0].charCodeAt(0);
+    const secondInit = name[1].charCodeAt(0);
+    const simpleHash = (firstInit + secondInit) % colors.length
+    return colors[simpleHash];
+}
 
 const fakeData =
     {
@@ -95,12 +118,29 @@ const fakeData =
         ]
     }
 
+    function getDate() {
+        const todayDate = new Date();
+        const dateParts = todayDate.toISOString().split("T")[0].split("-");
+        return `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
+    }
+
 function LeaderboardComponent(props) {
     const classes=useStyles();
     const [open, setOpen] = useState(true);
+    const [newRecord, setNewRecord] = useState("");
+
+    const handleNewRecord = (event) => {
+        const val = event.target.value;
+        setNewRecord(val);
+    }
 
     function handleClick() {
        setOpen(!open);
+    }
+
+    function submitNewRecord() {
+        console.log(`new record: ${newRecord}`);
+        console.log(`leaderboard id: ${props.id}`)
     }
 
     const medalColors = ["#ffe3b5", "#eee", "#eddaad"];
@@ -119,7 +159,7 @@ function LeaderboardComponent(props) {
     }
 
     return(
-        <List>
+        <List style={{marginBottom: 25}}>
             <ListItem button onClick={handleClick} className={classes.drillHeader}>
                 {/* spacer */}
                 {/* <div style={{width: "120px"}}></div> */}
@@ -134,7 +174,12 @@ function LeaderboardComponent(props) {
                             <div style={{backgroundColor: medalColors[index], height: "100%", width: "calc(100% - 30px)", position: "absolute", zIndex: -1}}></div>
                             <div style={{width: 60, textAlign: "center"}}>{formatPlace(index)}</div>
                             <div style={{width: 40, textAlign: "center"}}>
-                                <Avatar className={classes.avatar}>{
+                                <Avatar className={classes.avatar} style={{ 
+                                    backgroundColor: generateAvatarColor(
+                                        record.name.split(" ")
+                                    ),
+                                    }}
+                                >{
                                     // get initials
                                     record.name.split(" ").map((nameWord) => (nameWord[0]))
                                 }</Avatar>
@@ -146,6 +191,25 @@ function LeaderboardComponent(props) {
                             </div>
                         </ListItem>
                     ))}
+
+                    {/* entry for new inputs */}
+                    <ListItem style={{ position: "relative"}} divider>
+                        <div style={{width: 60, textAlign: "center"}}>{formatPlace(fakeData.records.length)}</div>
+                        <div style={{width: 40, textAlign: "center"}}>
+                            <Avatar className={classes.avatar} style={{backgroundColor: "grey"}}>??</Avatar>
+                        </div>
+                        <div className={classes.nameCol}>[username]</div>
+                        <div className={classes.recordCol} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                            {newRecord.trim() !== ""
+                                ? <IconButton onClick={submitNewRecord} size="small" style={{color: "#74a360", marginLeft: -40, marginRight: 10}}>
+                                    <CheckCircleOutlineIcon></CheckCircleOutlineIcon>
+                                </IconButton>
+                                : null
+                            }
+                            <TextField style={{width: 50, marginRight: -10}} value={newRecord} onChange={handleNewRecord}></TextField>
+                        </div>
+                        <div className={classes.dateCol}>{getDate()}</div>
+                    </ListItem>
                 </List>
             </Collapse>
         </List>
