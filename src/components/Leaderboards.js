@@ -11,6 +11,7 @@ const Leaderboards = () => {
          <p>Start a friendly competition with teammates!</p>
          {data.map((leaderboard) => (
                <LeaderboardComponent
+                  id={leaderboard.id}
                   title={leaderboard.title}
                   unit={leaderboard.unit.charAt(0).toUpperCase() + leaderboard.unit.slice(1)}
                ></LeaderboardComponent>
@@ -25,14 +26,17 @@ export default Leaderboards;
 
 const data = [
    {
+      "id" : "1",
       "title" : "Backwards 50m",
       "unit" : "seconds"
    },
    {
+      "id" : "2",
       "title" : "Poker Pushups",
       "unit" : "reps"
    },
    {
+      "id" : "3",
       "title" : "Hurdle Challenge",
       "unit" : "meters"
    },
