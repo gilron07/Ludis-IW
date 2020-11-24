@@ -65,7 +65,7 @@ ROOT_URLCONF = 'ludis.urls'
 
 CORS_ALLOWED_ORIGINS = [
     "https://goludis.herokuapp.com",
-    "http://localhost:8080",
+    "http://localhost:8000",
 ]
 
 TEMPLATES = [

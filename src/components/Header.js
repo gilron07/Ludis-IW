@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import '../css/Header.css';
 import Navigation from '../components/Navigation';
+import {UserContext} from "../services/UserContext";
 
 function Header() {
+  const {user} = useContext(UserContext)
   return (
     <div id="header">
       <table cellSpacing="0">
@@ -14,7 +16,7 @@ function Header() {
           <td id="user-column">
             <div id="user-dropdown-select">
               <div id="header-username">
-                Gilron Tsabkevich
+                {user.full_name}
               </div>
               <div>
                 <img src="/static/default-avatar.png" id="profile-avatar" alt="Profile Avatar"></img>

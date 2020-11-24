@@ -109,6 +109,19 @@ class UserLoginView(APIView):
         return Response(response, status=status_code)
 
 
+class UserTokenVerify(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        response = {
+            'role': request.user.role,
+            'full_name': request.user.full_name
+        }
+
+        status_code = status.HTTP_200_OK
+        return Response(response, status=status_code)
+
+
 class UserListView(ListAPIView):
     serializer_class = UserShortSerializer
     permission_classes = [permissions.IsAuthenticated]

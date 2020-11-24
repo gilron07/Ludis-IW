@@ -72,11 +72,8 @@ const CreateWorkout = () => {
   // tag functions ---------------------------------------
 
   const handleDelete = (removalTag) => () => {
-
-    console.log(workoutJSON.filter);
     // // clone workout object
     const newTags = workoutJSON["tags"].filter((tag) => tag !== removalTag)
-    console.log(newTags);
     let newJSON = {...workoutJSON};
     newJSON["tags"] = newTags;
     setWorkoutJSON(newJSON);

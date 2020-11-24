@@ -37,4 +37,4 @@ const LocalStorageService = (function (){
 
 })();
 
-export default LocalStorageService
+export default LocalStorageService;

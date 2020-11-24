@@ -1,7 +1,10 @@
-import React, { Component, useState, useMemo } from 'react';
+import React, {Component, useState, useMemo, useEffect} from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { ConfirmProvider } from "material-ui-confirm";
 
+import {ProtectedRoute} from "./services/ProtectedRoute";
+import LocalStorageService from "./services/LocalStorageService";
+import axiosAPI from "./services/authAxios"
 // Theme imports
 import theme from './components/Theme.js'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -22,14 +25,29 @@ import {UserContext} from "./services/UserContext";
 export default function App() {
     const [user, setUser] = useState(null);
     const value = useMemo(() => ({user, setUser}), [user, setUser])
+
+    // useEffect(() =>{
+    //     const loggedInUser = LocalStorageService.getAccessToken();
+    //     if (loggedInUser){
+    //         // Get user's data from server
+    //         axiosAPI.post('/token/verify/')
+    //             .then((user) => {
+    //                 setUser(user.data);
+    //                 console.log("User Verified");
+    //             })
+    //             .catch((err) =>{
+    //                 console.log(err)
+    //             });
+    //     }
+    // },[])
     return (
        <ConfirmProvider>
           <ThemeProvider theme={theme}>
-           <BrowserRouter>
-               <UserContext.Provider value={value}>
+              <UserContext.Provider value={value}>
+                <BrowserRouter>
                     <div>
                         <Switch>
-                         <Route path="/home" component={Home} exact/>
+                         <ProtectedRoute path="/home" component={Home} exact/>
                          <Route path="/workouts" component={Workouts} exact/>
                          <Route path="/workout" component={Workout} exact/>
                          <Route path="/create-workout" component={CreateWorkout} exact/>
@@ -41,8 +59,8 @@ export default function App() {
                          <Route component={Error}/>
                        </Switch>
                     </div>
-               </UserContext.Provider>
-          </BrowserRouter>
+                </BrowserRouter>
+              </UserContext.Provider>
         </ThemeProvider>
       </ConfirmProvider>
     );

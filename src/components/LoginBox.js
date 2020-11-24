@@ -74,7 +74,7 @@ function LoginBox(props) {
                     'refresh_token': user.data.refresh_token
                 }
                 LocalStorageService.setToken(tokenobj);
-                setUser(user.data)
+                setUser(user.data);
                 history.push('/home');
             })
             .catch(err => {
