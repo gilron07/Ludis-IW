@@ -3,13 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { Link } from 'react-router-dom';
 
 // icons
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
     workoutItem: {
@@ -34,7 +34,18 @@ function CalendarWorkout(props){
                 </ListItem>
                 {/* <FileCopyIcon></FileCopyIcon> */}
                 <ListItemSecondaryAction>
-                    <IconButton onClick={props.workoutDelete} workoutid={props.id}>
+                <Link
+                    style={{textDecoration:"none", color: "inherit"}}
+                    to={{
+                        pathname: "/create-workout",
+                        workout: props.workout // object representing workout
+                    }}
+                >
+                    <IconButton size="small">
+                        <EditIcon/>
+                    </IconButton>
+                </Link>
+                    <IconButton onClick={props.workoutDelete} workoutid={props.id} size="small">
                         <DeleteIcon/>
                     </IconButton>
                 </ListItemSecondaryAction>
