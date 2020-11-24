@@ -16,7 +16,6 @@ function CalendarComponent(props) {
             <List>
                 {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
                     <div>
-                        {console.log(scheduledWorkout)}
                     <CalendarWorkout
                         title={scheduledWorkout.workout.title}
                         workoutId={scheduledWorkout.id}

@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 from ludis_api.views import WorkoutViewSet, UserRegistrationView, UserLoginView, ScheduleViewSet, UserListView, \
-    ChallengeViewSet
+    ChallengeViewSet, UserTokenVerify
 
 from django.urls import path
 router = DefaultRouter()
@@ -16,6 +16,7 @@ url_patterns = router.urls
 
 url_patterns += [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token/verify/', UserTokenVerify.as_view(), name='token_verify'),
     path('users/', UserListView.as_view()),
     url(r'^signup', UserRegistrationView.as_view()),
     url(r'^signin', UserLoginView.as_view()),

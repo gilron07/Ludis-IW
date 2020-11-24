@@ -97,15 +97,6 @@ export default function SimpleModal(props) {
   const [selectedAthleteIds, setSelectedAthleteIds] = useState([]);
   const [workoutValue, setWorkoutValue] = React.useState(null);
   const [teamOrIndividual, setTeamOrIndividual] = React.useState(0);
-  const [athleteListData, setAthleteListData] = useState([]);
-
-    useEffect(() =>{
-        const fetchAthletesListData = async () =>{
-          const result = await axiosAPI.get('/users/');
-          setAthleteListData(result.data);
-        };
-        fetchAthletesListData();
-    }, []);
 
   const handleOpen = () => {
     setOpen(true);
@@ -157,8 +148,7 @@ export default function SimpleModal(props) {
       "workout_id": workoutValue,
       "athletes_ids": athleteIds
     }
-    
-    console.log(scheduleJSON);
+
     return scheduleJSON
   }
 
@@ -300,7 +290,7 @@ const body = (
     {teamOrIndividual
         ? <div style={{height: 300, width: '90%', minWidth:"300px", paddingTop:25, margin:"auto"}}>
             <DataGrid
-              rows={athleteListData}
+              rows={props.athletesList}
               columns={columns}
               checkboxSelection 
               onSelectionChange={(newSelection) => {

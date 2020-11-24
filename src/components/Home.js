@@ -16,6 +16,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import {UserContext} from "../services/UserContext";
 
 
 TabPanel.propTypes = {
@@ -75,34 +76,30 @@ export default function Home() {
   const [workoutsData, setWorkoutsData] = useState([]);
   const [athleteListData, setAthleteListData] = useState([]);
 
+  const {user} = useContext(UserContext);
+  useEffect(() => {
+      const fetchScheduleData = async () => {
+          const result = await axiosAPI.get('/schedule/');
+          setScheduleData(result.data);
+      };
+      fetchScheduleData();
+  }, []);
 
-  function updateScheduleView(schedule){
-      setScheduleData(schedule);
-  }
-  // useEffect(() => {
-  //     const fetchScheduleData = async () => {
-  //         const result = await axiosAPI.get('/schedule/');
-  //         setScheduleData(result.data);
-  //     };
-  //     fetchScheduleData();
-  // }, []);
+  useEffect(() =>{
+        const fetchWorkoutsData = async () =>{
+          const result = await axiosAPI.get('/workouts/');
+          setWorkoutsData(result.data)
+        };
+        fetchWorkoutsData();
+    }, []);
 
-  // useEffect(() =>{
-  //       const fetchWorkoutsData = async () =>{
-  //         const result = await axiosAPI.get('/workouts/');
-  //         setWorkoutsData(result.data)
-  //       };
-  //       fetchWorkoutsData();
-  //   }, []);
-
-  //   useEffect(() =>{
-  //       const fetchAthletesListData = async () =>{
-  //         const result = await axiosAPI.get('/users/');
-  //         setAthleteListData(result.data);
-  //         console.log(athleteListData);
-  //       };
-  //       fetchAthletesListData();
-  //   }, []);
+    useEffect(() =>{
+        const fetchAthletesListData = async () =>{
+          const result = await axiosAPI.get('/users/');
+          setAthleteListData(result.data);
+        };
+        fetchAthletesListData();
+    }, []);
 
 
   let athleteSchedules;
@@ -342,7 +339,7 @@ export default function Home() {
   function getRelevantWorkouts() {
 
     // filter by month
-    const thisMonthWorkouts = athleteSchedules.filter(function (workout) {
+    const thisMonthWorkouts = schdeuleData.filter(function (workout) {
       return parseInt(workout.date.split(" ")[0].split("-")[1]) === currentMonth + 1;
     });
 
@@ -389,7 +386,6 @@ export default function Home() {
   function formatMonth(month, index) {
     const todayDate = new Date();
     let todayYear = todayDate.getFullYear();
-    // console.log(value > 3);
     if (index > 2) todayYear++;
     return `${months[month]} ${todayYear}`;
   }
@@ -398,7 +394,7 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <Header />
-          <h1 >Calendars ({role} view)</h1>
+          <h1 >Calendars ({user.role} view)</h1>
       <AppBar
         position="static"
         id="month-bar"
@@ -451,14 +447,14 @@ export default function Home() {
               month={month + 1}
               week={currentWeek}
               weeklyScheduledWorkouts={getRelevantWorkouts()}
-              role={role}
+              role={user.role}
             ></CalendarComponent>
           </div>
         </TabPanel>
       ))}
       <CalendarModal
           workoutsList={workoutsData}
-          thletesList={athleteListData}
+          athletesList={athleteListData}
           updateSchdeule={setScheduleData}
       ></CalendarModal>
     </div>    

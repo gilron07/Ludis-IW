@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
+import axiosAPI from '../services/authAxios'
+
 
 // slider
 import Typography from '@material-ui/core/Typography';
@@ -78,15 +80,20 @@ export default function SimpleModal(props) {
     report["duration"] = durationHours + durationMins;
     report["effort"] = effort;
     report["satisfaction"] = satisfaction;
-    report["workoutId"] = props.workoutId;
-    // console.log(report);
+    console.log(report);
 
-    // deep clone to trigger rerender
-    let newWorkout = JSON.parse(JSON.stringify(props.mainWorkout));
-    newWorkout.reports.push(report);
-    console.log(newWorkout);
-    props.updateMainWorkout(newWorkout);
-    handleClose();
+    axiosAPI.post(`/schedule/${props.workoutId}/set_report/`, report)
+        .then(()=>{
+                // deep clone to trigger rerender
+                let newWorkout = JSON.parse(JSON.stringify(props.mainWorkout));
+                newWorkout.reports.push(report);
+                console.log(newWorkout);
+                props.updateMainWorkout(newWorkout);
+                handleClose();
+        })
+        .catch((err) =>{
+            console.log(err)
+        });
   }
 
   const body = (
