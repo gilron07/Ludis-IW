@@ -206,7 +206,7 @@ function LeaderboardComponent(props) {
                                 </IconButton>
                                 : null
                             }
-                            <TextField style={{width: 50, marginRight: -10}} value={newRecord} onChange={handleNewRecord}></TextField>
+                            <TextField type="number" style={{width: 50, marginRight: -10}} value={newRecord} onChange={handleNewRecord}></TextField>
                         </div>
                         <div className={classes.dateCol}>{getDate()}</div>
                     </ListItem>

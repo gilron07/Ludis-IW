@@ -37,34 +37,37 @@ const useStyles = makeStyles((theme) => ({
 let sectionIdGenerator = 0;
 let drillIdGenerator = 0;
 
-const CreateWorkout = () => {
+const CreateWorkout = (props) => {
   const classes = useStyles();
   const history = useHistory();
 
   // hooks
   const [workoutJSON, setWorkoutJSON] = useState(
-    {
-      "title": "My Workout",
-      "created_at": "",
-      "description": "",
-      "tags": [],
-      "sections": [
+    (typeof props.location.workout === "undefined")
+      ? 
         {
-          "id": sectionIdGenerator,
-          "name": "Section Title",
-          "order": sectionIdGenerator++,
-          "drills": [
-              {
-                  "id": drillIdGenerator,
-                  "drill_name": "Drill Title",
-                  "created_at": "2020-10-31T15:59:20.246136Z",
-                  "order": drillIdGenerator++,
-                  "modifiers": []
-              }
+          "title": "My Workout",
+          "created_at": "",
+          "description": "",
+          "tags": [],
+          "sections": [
+            {
+              "id": sectionIdGenerator,
+              "name": "Section Title",
+              "order": sectionIdGenerator++,
+              "drills": [
+                  {
+                      "id": drillIdGenerator,
+                      "drill_name": "Drill Title",
+                      "created_at": "2020-10-31T15:59:20.246136Z",
+                      "order": drillIdGenerator++,
+                      "modifiers": []
+                  }
+              ]
+          }
           ]
-      }
-      ]
-    }
+        }
+      : props.location.workout
   );
 
   const [hashtag, setHashtag] = useState("");
@@ -329,6 +332,19 @@ function renameSection(sectionId, newName) {
           });
     }
 
+    function updateWorkout() {
+      const data = formatJSON();
+      // here, send the updated JSON to the backend
+      // axiosAPI.post('/workouts/', data)
+      //     .then((res)=>{
+      //       console.log(res)
+      //       history.push('/workouts/', {created:true})
+      //     })
+      //     .catch((err)=>{
+      //         console.log(err)
+      //     });
+    }
+
     function formatJSON() {
       let outputJSON = JSON.parse(JSON.stringify(workoutJSON));
       // outputJSON = deleteEmptyModifiers(outputJSON);
@@ -414,14 +430,20 @@ function renameSection(sectionId, newName) {
       <Button className={classes.button} onClick={addSection}>New Section</Button>
          
       <div className = {classes.createWorkoutContainer}>
-        <Button
-          color="secondary"
-          className={classes.createWorkoutButton}
-          onClick={createWorkout}
-          disabled = {workoutJSON["title"].trim() === ""}
-        >
-          Create Workout
-        </Button>
+        {(typeof props.location.workout === "undefined")
+          ? <Button
+              color="secondary"
+              className={classes.createWorkoutButton}
+              onClick={createWorkout}
+              disabled = {workoutJSON["title"].trim() === ""}
+            >Create Workout</Button>
+          : <Button
+              color="secondary"
+              className={classes.createWorkoutButton}
+              onClick={updateWorkout}
+              disabled = {workoutJSON["title"].trim() === ""}
+            >Update Workout</Button>
+        }
         <br></br>
         {workoutJSON["title"].trim() === ""
           ? <p style={{color: "red"}}>Workout Name cannot be blank</p>
