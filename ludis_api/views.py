@@ -97,11 +97,13 @@ class UserLoginView(APIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print(serializer.data)
         response = {
             'access_token': serializer.data['access_token'],
             'refresh_token': serializer.data['refresh_token'],
             'role': serializer.data['role'],
-            'full_name': serializer.data['full_name']
+            'full_name': serializer.data['full_name'],
+            'organization': serializer.data['organization']
         }
 
         status_code = status.HTTP_200_OK
@@ -114,7 +116,8 @@ class UserTokenVerify(APIView):
     def post(self, request):
         response = {
             'role': request.user.role,
-            'full_name': request.user.full_name
+            'full_name': request.user.full_name,
+            'organization': request.user.organization.name
         }
 
         status_code = status.HTTP_200_OK

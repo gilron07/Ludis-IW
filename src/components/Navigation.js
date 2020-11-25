@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import clsx from 'clsx';
 import '../css/Navigation.css';
 import { NavLink } from 'react-router-dom';
@@ -8,6 +8,7 @@ import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import {UserContext} from "../services/UserContext";
 
 // icons
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -17,6 +18,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import LocalStorageService from "../services/LocalStorageService";
 
 const useStyles = makeStyles({
   list: {
@@ -35,6 +37,8 @@ export default function TemporaryDrawer() {
     left: false,
   });
 
+  const {user, setUser} = useContext(UserContext)
+
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -52,7 +56,8 @@ export default function TemporaryDrawer() {
   };
 
   function logoutFunction() {
-    alert("This logout function works!")
+    LocalStorageService.clearToken();
+    setUser(null);
   }
 
   const pages = {
@@ -91,12 +96,12 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <div id="profile-wrapper">
-        <img id="nav-profile-avatar" src="/static/assets/default-avatar.png"></img>
+        <img id="nav-profile-avatar" src="/static/default-avatar.png"></img>
         <div id="user-name">
-          Gilron Tsabkevich
+          {user.full_name}
         </div>
         <div id="user-team">
-          Princeton University Track & Field
+          {user.organization}
         </div>
       </div>
       <List>

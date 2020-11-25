@@ -125,7 +125,9 @@ class UserLoginSerializer(serializers.Serializer):
     role = serializers.CharField(max_length=20, read_only=True)
     access_token = serializers.CharField(max_length=255, read_only=True)
     refresh_token = serializers.CharField(max_length=255, read_only=True)
+    organization = serializers.CharField(max_length=255, read_only=True)
     full_name = serializers.CharField(max_length=255, read_only=True)
+
 
     def validate(self, data):
         email = data.get("email", None)
@@ -146,7 +148,8 @@ class UserLoginSerializer(serializers.Serializer):
             'access_token': str(tokens.access_token),
             'refresh_token': str(tokens),
             'role': user.role,
-            'full_name': user.full_name
+            'full_name': user.full_name,
+            'organization': user.organization.name
         }
 
 
