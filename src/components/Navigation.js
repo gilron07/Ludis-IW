@@ -102,8 +102,16 @@ export default function TemporaryDrawer() {
       <List>
         {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text, index) => (
           // if logout, for the navlink have onClick={function}
-          <NavLink onClick={logoutFunction} to={pages[text].link} className="nav-link" key={index}>
-            <Divider />
+          (text === "logout") 
+          ? <NavLink onClick={logoutFunction} to={pages[text].link} className="nav-link" key={index}>
+              <Divider />
+              <ListItem button key={text} >
+                <ListItemIcon>{pages[text].icon}</ListItemIcon>
+                <ListItemText primary={pages[text].title} />
+              </ListItem>
+            </NavLink>
+          : <NavLink to={pages[text].link} className="nav-link" key={index}>
+          <Divider />
           <ListItem button key={text} >
             <ListItemIcon>{pages[text].icon}</ListItemIcon>
             <ListItemText primary={pages[text].title} />
