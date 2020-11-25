@@ -59,7 +59,12 @@ export default function LeaderboardReportModal(props) {
   };
 
   const updateRecord = (event) => {
-    setNewRecord(event.target.value)
+      setNewRecord(event.target.value);
+  }
+  const handleBlur = (event) => {
+      var num = parseFloat(newRecord);
+      var cleanNum = num.toFixed(2);
+      setNewRecord(cleanNum);
   }
 
   function sendJSON() {
@@ -92,6 +97,7 @@ export default function LeaderboardReportModal(props) {
             type="number"
             value={newRecord}
             onChange={updateRecord}
+            onBlur={handleBlur}
             label="New Record"
             style={{
               width: "80%",
