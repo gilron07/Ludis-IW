@@ -65,7 +65,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     # additional fields to user
     DOB = models.DateField(blank=False, null=False)
-    role = models.CharField(max_length=255, choices=Role.choices(), default=Role.ATHLETE.value)
+    role = models.CharField(max_length=255, choices=Role.choices(), default=Role.ATHLETE)
     # gender = models.CharField(max_length=255)
     profile_image = models.CharField(max_length=1000, blank=True, null=True)
     organization = models.ForeignKey(
@@ -189,7 +189,7 @@ class Challenge(models.Model):
 class ChallengeResponse(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, null=True)
     challenge = models.ForeignKey(Challenge, related_name="challenge_responses", on_delete=models.CASCADE)
-    result = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+    result = models.DecimalField(max_digits=6, decimal_places=2)
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:

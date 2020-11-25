@@ -51,7 +51,7 @@ export default function App() {
                          <Route path="/workouts" component={Workouts} exact/>
                          <Route path="/workout" component={Workout} exact/>
                          <Route path="/create-workout" component={CreateWorkout} exact/>
-                         <Route path="/leaderboards" component={Leaderboards} exact/>
+                         <ProtectedRoute path="/leaderboards" component={Leaderboards} exact/>
                          <Route path="/settings" component={Settings} exact/>
                          <Route path="/signup" component={Signup} exact/>
                          <Route path="/login" component={Login} exact/>

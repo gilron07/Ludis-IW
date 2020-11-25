@@ -199,7 +199,7 @@ function SignupBox(props) {
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
                 <div className={classes.ludisTitle}>Ludis</div>
-                <img src="./assets/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                <img src="/static/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
             </div>
             {/* <div className={classes.actionTitle}>Sign Up</div> */}
             <div className={classes.pageContainer}>

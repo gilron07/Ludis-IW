@@ -223,7 +223,7 @@ class ScheduleSerializer(serializers.ModelSerializer):
 
     def get_reports(self, obj):
         user = self.context['request'].user
-        if user.role == Role.COACH.value:
+        if user.role == Role.COACH.name:
             serializer = ReportSerializer(obj.reports.all(), many=True)
         else:
             serializer = ReportSerializer(obj.reports.filter(athlete=user), many=True)
@@ -255,7 +255,7 @@ class ChallengeResponseSerializer(serializers.ModelSerializer):
     challenge = serializers.PrimaryKeyRelatedField(queryset=Challenge.objects.all(), write_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
     user_name = serializers.ReadOnlyField(source='user.full_name')
-    date = serializers.DateTimeField(format="%Y-%m-%d %H:%M", read_only=True)
+    date = serializers.DateTimeField(read_only=True)
 
     class Meta:
         model = ChallengeResponse

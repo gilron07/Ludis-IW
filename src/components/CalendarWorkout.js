@@ -104,7 +104,7 @@ function CalendarWorkout(props) {
     const year = props.date.split("-")[0];
 
     function generateCoachData() {
-        if (props.role === "Coach") {
+        if (props.role === "COACH") {
             return(
                 <div className={classes.coachStatsContainer}>
                     <div style={{borderBottom: "1px solid grey", paddingBottom: 2, marginBottom: -2}}>

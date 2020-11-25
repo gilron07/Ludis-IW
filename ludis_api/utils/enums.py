@@ -11,6 +11,7 @@ class Modifier(Enum):
     distance = 'distance'
     intensity = 'intensity'
 
+
     @classmethod
     def choices(cls):
         return ((key.value, key.name) for key in cls)

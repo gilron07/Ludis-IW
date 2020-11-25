@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputLabel from '@material-ui/core/InputLabel';
+import axiosAPI from '../services/authAxios'
 
 // radio buttons
 import Radio from '@material-ui/core/Radio';
@@ -66,6 +67,23 @@ export default function LeaderboardReportModal(props) {
     console.log(`new record: ${newRecord}`)
   }
 
+  function sendChallengeResponse(){
+      const data = {
+          result: newRecord
+      }
+      axiosAPI.post(`/challenge/${props.id}/set_response/`, data)
+          .then(() =>{
+             axiosAPI.get('/challenge/')
+                 .then((res) => {
+                    props.setLeaderboardData(res.data);
+                    handleClose();
+                 })
+          })
+          .catch((err) =>{
+              console.log(err);
+          });
+  }
+
   const body = (
       <div style={modalStyle} className={classes.paper}>
         <h2>Add New Record</h2>
@@ -86,7 +104,7 @@ export default function LeaderboardReportModal(props) {
         </div>
 
         <div style={{textAlign:"center"}}>
-          <Button variant="contained" color="primary" onClick={sendJSON}>
+          <Button variant="contained" color="primary" onClick={sendChallengeResponse}>
             Submit Record
           </Button>
         </div>

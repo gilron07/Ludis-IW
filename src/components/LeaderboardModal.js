@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import NativeSelect from '@material-ui/core/NativeSelect';
 import InputLabel from '@material-ui/core/InputLabel';
+import axiosAPI from '../services/authAxios'
 
 // radio buttons
 import Radio from '@material-ui/core/Radio';
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function LeaderboardModal() {
+export default function LeaderboardModal(props) {
   const classes = useStyles();
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
@@ -98,15 +99,31 @@ export default function LeaderboardModal() {
     }
   }
 
-  function sendLeaderboardJSON() {
-    const leaderboard = {
+  function createChallenge(){
+    const data = leaderboardJSON();
+    axiosAPI.post('/challenge/', data)
+        .then((res)=>{
+          axiosAPI.get('/challenge/')
+              .then((res) =>{
+                props.setLeaderboardData(res.data);
+                handleClose();
+              })
+        })
+        .catch((err)=>{
+          console.log(err);
+        });
+  }
+
+  function leaderboardJSON() {
+    const leaderboardJSON = {
       "title" : leaderboardTitle,
-      "metric" : modifierType,
+      "modifier" : modifierType,
       "unit" : modifierUnit,
-      "order" : rankOrder
+      "ascended_modifier" : rankOrder === "high"
     }
 
-    console.log(JSON.stringify(leaderboard));
+    console.log(JSON.stringify(leaderboardJSON));
+    return leaderboardJSON;
   }
 
   const body = (
@@ -155,7 +172,7 @@ export default function LeaderboardModal() {
         </div>
 
         <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
-          <Button variant="contained" color="primary" onClick={sendLeaderboardJSON}>
+          <Button variant="contained" color="primary" onClick={createChallenge}>
             Create Leaderboard
           </Button>
         </div>

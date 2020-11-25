@@ -172,23 +172,23 @@ function LeaderboardComponent(props) {
             </ListItem>
             <Collapse in={open} timeout="auto" unmountOnExit>
                 <List component="div" disablePadding>
-                    {fakeData.records.map((record, index) => (
+                    {props.responses.map((record, index) => (
                         <ListItem style={{ position: "relative", overflow: "hidden", }} divider>
                             <div style={{backgroundColor: medalColors[index], height: "100%", width: "calc(100% - 30px)", position: "absolute", zIndex: -1}}></div>
                             <div style={{width: 60, textAlign: "center"}}>{formatPlace(index)}</div>
                             <div style={{width: 40, textAlign: "center"}}>
                                 <Avatar className={classes.avatar} style={{ 
                                     backgroundColor: generateAvatarColor(
-                                        record.name.split(" ")
+                                        record.user_name.split(" ")
                                     ),
                                     }}
                                 >{
                                     // get initials
-                                    record.name.split(" ").map((nameWord) => (nameWord[0]))
+                                    record.user_name.split(" ").map((nameWord) => (nameWord[0]))
                                 }</Avatar>
                             </div>
-                            <div className={classes.nameCol}>{record.name}</div>
-                            <div className={classes.recordCol}>{record.record}</div>
+                            <div className={classes.nameCol}>{record.user_name}</div>
+                            <div className={classes.recordCol}>{parseFloat(record.result)}</div>
                             <div className={classes.dateCol}>
                                 {`${record.date.split("T")[0].split("-")[1]}/${record.date.split("T")[0].split("-")[2]}/${record.date.split("T")[0].split("-")[0]}`}
                             </div>
@@ -196,6 +196,7 @@ function LeaderboardComponent(props) {
                     ))}
                 </List>
                 <LeaderboardReportModal
+                    setLeaderboardData={props.setLeaderboardData}
                     unit = {props.unit}
                     id = {props.id}    
                 ></LeaderboardReportModal>

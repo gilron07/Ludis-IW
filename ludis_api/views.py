@@ -37,8 +37,7 @@ class ScheduleViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = None
-
-        if self.request.user.role == Role.COACH.value:
+        if self.request.user.role == Role.COACH.name:
             queryset = Schedule.objects.annotate(average_effort=Avg('reports__effort'),
                                                  average_duration =Avg('reports__duration'),
                                                  average_satisfaction=Avg('reports__satisfaction'))\
@@ -127,7 +126,7 @@ class UserListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.value).order_by('full_name')
+        return User.objects.filter(organization=self.request.user.organization, role=Role.ATHLETE.name).order_by('full_name')
 
 
 class ChallengeViewSet(ModelViewSet):
