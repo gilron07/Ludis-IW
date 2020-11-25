@@ -452,11 +452,16 @@ export default function Home() {
           </div>
         </TabPanel>
       ))}
-      <CalendarModal
+
+      {user.role === "coach"
+        ?
+        <CalendarModal
           workoutsList={workoutsData}
           athletesList={athleteListData}
           updateSchdeule={setScheduleData}
-      ></CalendarModal>
+        ></CalendarModal>
+        : null
+      }
     </div>    
   );
 }

@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
+import LeaderboardReportModal from './LeaderboardReportModal';
 
 // list imports
 import List from '@material-ui/core/List';
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme) => ({
         },
         width: "15%",
         textAlign: "center",
+        marginRight: "15px",
         // backgroundColor: "red",
     },
     dateColLabel : {
@@ -54,6 +56,7 @@ const useStyles = makeStyles((theme) => ({
         },
         width: "15%",
         textAlign: "center",
+        marginRight: "15px",
         // backgroundColor: "orange",
     },
     recordCol : {
@@ -191,26 +194,11 @@ function LeaderboardComponent(props) {
                             </div>
                         </ListItem>
                     ))}
-
-                    {/* entry for new inputs */}
-                    <ListItem style={{ position: "relative"}} divider>
-                        <div style={{width: 60, textAlign: "center"}}>{formatPlace(fakeData.records.length)}</div>
-                        <div style={{width: 40, textAlign: "center"}}>
-                            <Avatar className={classes.avatar} style={{backgroundColor: "grey"}}>??</Avatar>
-                        </div>
-                        <div className={classes.nameCol}>[username]</div>
-                        <div className={classes.recordCol} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                            {newRecord.trim() !== ""
-                                ? <IconButton onClick={submitNewRecord} size="small" style={{color: "#74a360", marginLeft: -40, marginRight: 10}}>
-                                    <CheckCircleOutlineIcon></CheckCircleOutlineIcon>
-                                </IconButton>
-                                : null
-                            }
-                            <TextField type="number" style={{width: 50, marginRight: -10}} value={newRecord} onChange={handleNewRecord}></TextField>
-                        </div>
-                        <div className={classes.dateCol}>{getDate()}</div>
-                    </ListItem>
                 </List>
+                <LeaderboardReportModal
+                    unit = {props.unit}
+                    id = {props.id}    
+                ></LeaderboardReportModal>
             </Collapse>
         </List>
     )
