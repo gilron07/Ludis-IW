@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext, useState} from 'react';
 import Header from './Header.js';
 import ReportModal from './ReportModal.js';
+import {UserContext} from "../services/UserContext";
 
 // Material UI components
 import Chip from '@material-ui/core/Chip';
@@ -63,18 +64,18 @@ const useStyles = makeStyles((theme) => ({
 
 function Workout(props) {
     const classes = useStyles();
-    // 0 means coach is viewing page, 1 means athlete is viewing page
-    const [coachOrAthlete, setCoachOrAthlete] = React.useState(1);
+    const {user} = useContext(UserContext);
+
     // working on hook vvv
-    const [importedWorkout, setImportedWorkout] = React.useState(
-       coachOrAthlete ? athleteWorkout : coachWorkout
+    const [importedWorkout, setImportedWorkout] = useState(
+       user.role === "athlete" ? athleteWorkout : coachWorkout
     );
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
       
       // athlete view else coach view
-      if (coachOrAthlete) {
+      if (user.role === "athlete") {
         duration = importedWorkout["reports"][0]["duration"];
         effort = importedWorkout["reports"][0]["effort"];
         satisfaction = importedWorkout["reports"][0]["satisfaction"];
@@ -114,15 +115,14 @@ function Workout(props) {
     }
 
     function loadNoReport() {
-      if (coachOrAthlete) {
-        return(
+      if (user.role === "coach") return;
+      else return(
             <ReportModal
                 workoutId={props.location.workoutId}
                 mainWorkout={importedWorkout}
                 updateMainWorkout={setImportedWorkout}
             ></ReportModal>
         )
-      }
     }
 
     function styleModifier(modifier) {
@@ -142,7 +142,8 @@ function Workout(props) {
         <div id="calendar-workouts">
             <Header></Header>
             {/* {JSON.stringify(importedWorkout)} */}
-            {`workout id: ${props.location.workoutId}`}
+            {`workout id: ${props.location.workoutId}, `}
+            {`user role: ${user.role}`}
             {
                 // later, we can add functions to sort data by order
                 <div>

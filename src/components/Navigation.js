@@ -51,6 +51,10 @@ export default function TemporaryDrawer() {
     setState({ ...state, [anchor]: open });
   };
 
+  function logoutFunction() {
+    alert("This logout function works!")
+  }
+
   const pages = {
     home: {
       title: 'Home',
@@ -97,7 +101,8 @@ export default function TemporaryDrawer() {
       </div>
       <List>
         {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text, index) => (
-          <NavLink to={pages[text].link} className="nav-link" key={index}>
+          // if logout, for the navlink have onClick={function}
+          <NavLink onClick={logoutFunction} to={pages[text].link} className="nav-link" key={index}>
             <Divider />
           <ListItem button key={text} >
             <ListItemIcon>{pages[text].icon}</ListItemIcon>

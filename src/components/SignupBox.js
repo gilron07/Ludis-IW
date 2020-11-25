@@ -139,7 +139,7 @@ function SignupBox(props) {
                         fullWidth size="small"
                         style = {{width: "150px"}}
                         inputProps={{
-                            maxLength: 6,
+                            maxLength: 7,
                             style: {
                                 textTransform: 'uppercase',
                                 textAlign: 'center',
@@ -189,7 +189,7 @@ function SignupBox(props) {
         if (email.trim() === "" ||
             password.trim() === "" ||
             fullName.trim() === "" ||
-            teamCode.length !== 6 ||
+            teamCode.length !== 7 ||
             birthdate === "")
             return true;
         return false;
