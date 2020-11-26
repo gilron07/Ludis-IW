@@ -62,20 +62,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-function Workout(props) {
+export default function Workout(props) {
     const classes = useStyles();
     const {user} = useContext(UserContext);
-
-    // working on hook vvv
-    const [importedWorkout, setImportedWorkout] = useState(
-       user.role === "athlete" ? athleteWorkout : coachWorkout
-    );
+    
+    const [importedWorkout, setImportedWorkout] = useState(props.location.workout);
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
       
       // athlete view else coach view
-      if (user.role === "athlete") {
+      if (user.role.toLowerCase() === "athlete") {
         duration = importedWorkout["reports"][0]["duration"];
         effort = importedWorkout["reports"][0]["effort"];
         satisfaction = importedWorkout["reports"][0]["satisfaction"];
@@ -115,10 +112,15 @@ function Workout(props) {
     }
 
     function loadNoReport() {
-      if (user.role === "coach") return;
+      if (user.role.toLowerCase() === "coach")
+      return (
+          <div style={{color: "#777", width: "100%", textAlign:"center"}}>
+              No reports completed.
+          </div>
+      );
       else return(
             <ReportModal
-                workoutId={props.location.workoutId}
+                workoutId={props.location.workout.id}
                 mainWorkout={importedWorkout}
                 updateMainWorkout={setImportedWorkout}
             ></ReportModal>
@@ -138,28 +140,15 @@ function Workout(props) {
         }
     }
 
-    return(
-        <div id="calendar-workouts">
-            <Header></Header>
-            {/* {JSON.stringify(importedWorkout)} */}
-            {`workout id: ${props.location.workoutId}, `}
-            {`user role: ${user.role}`}
-            {
-                // later, we can add functions to sort data by order
+    function generateScheduleData() {
+        if (props.location.scheduledWorkout) {
+            return (
                 <div>
-                    <h1 class="workout-title">{data.title}
                     {importedWorkout["reports"].length === 0
-                      ? null
-                      : <CheckCircleOutlineIcon
-                          style={{marginLeft: 15, color: "#8ac290"}}
-                        ></CheckCircleOutlineIcon>
-                    }</h1>
-
-                    {importedWorkout["reports"].length === 0
-                      ?loadNoReport()
-                      :loadCompletedReport()
+                        ?loadNoReport()
+                        :loadCompletedReport()
                     }
-                    
+                                
                     <div id="logistics-container">
                         <div class="logistic-container">
                             <LocationOnIcon className={classes.logisticsIcon}></LocationOnIcon>
@@ -170,10 +159,39 @@ function Workout(props) {
                             Wed, 11am <br></br> Sep 18th
                         </div>
                     </div>
-    
+
                     <div id="tags-container">
                         <Chip label="Technical" /> <Chip label="Conditioning" />
                     </div>
+                </div>
+            );
+        }
+    }
+
+    function addCheckCircle() {
+        if (props.location.scheduledWorkout) {
+            if (importedWorkout["reports"].length === 0) {
+                return (
+                    <CheckCircleOutlineIcon style={{marginLeft: 15, color: "#8ac290"}}
+                    ></CheckCircleOutlineIcon>
+                );
+            }
+        }     
+    }
+
+    return(
+        <div id="calendar-workouts">
+            <Header></Header>
+            {/* {JSON.stringify(importedWorkout)} */}
+            {`workout id: ${props.location.workout.id}, `}
+            {`user role: ${user.role}, `}
+            {`scheduled workout: ${props.location.scheduledWorkout}`}
+            {
+                // later, we can add functions to sort data by order
+                <div>
+                    <h1 class="workout-title">{data.title}{addCheckCircle()}</h1>
+
+                    {generateScheduleData()}
 
                     <hr></hr>
                     <div id="plan-container">
@@ -196,7 +214,7 @@ function Workout(props) {
                                         {drill["drill_name"]}
                                             <div style={{paddingLeft: 20}}>
                                                 {drill["modifiers"].map((modifier, index) => (
-                                                    // JSON.stringify(modifier)
+
                                                     <span
                                                         style = {{
                                                             color: "#777",
@@ -222,8 +240,6 @@ function Workout(props) {
         </div>
     )
 }
-
-export default Workout;
 
 // need to fetch this workout plan based on id in the specific workout JSON (coachWorkout or athleteJSON)
 const data = {
@@ -321,77 +337,78 @@ const data = {
     "owner": "Henry Herrington"
 }
 
-const coachWorkout = {
-    "id": 17,
-    "notes": null,
-    "workout": {
-        "id": 18,
-        "title": "Sprints Tuesday Wokrout",
-        "owner": "Gilron Tsabkevich",
-        "tags": [
-            {
-                "name": "sprints"
-            },
-            {
-                "name": "technical"
-            }
-        ]
-    },
-    "owner": "Gilron Tsabkevich",
-    "location": "Jadwin",
-    "athletes": [
-        {
-            "athlete": "Avner Volpert",
-            "athlete_id": 3
-        }
-    ],
-    "reports": [
-        {
-            "id": 1,
-            "duration": "2.50",
-            "effort": 8,
-            "satisfaction": 10,
-            "athlete": 1,
-            "athlete_name": "Gilron Tsabkevich"
-        }
-    ],
-    "average_effort": "8.00",
-    "average_duration": "2.50",
-    "average_satisfaction": "10.00"
-}
 
-const athleteWorkout = {
-    "id": 16,
-    "notes": null,
-    "workout": {
-        "id": 18,
-        "title": "Sprints Tuesday Wokrout",
-        "owner": "Gilron Tsabkevich",
-        "tags": [
-            {
-                "name": "sprints"
-            },
-            {
-                "name": "technical"
-            }
-        ]
-    },
-    "owner": "Gilron Tsabkevich",
-    "location": "Jadwin",
-    "athletes": [
-        {
-            "athlete": "Avner Volpert",
-            "athlete_id": 3
-        }
-    ],
-    "reports": [
-        // {
-        //     "id": 2,
-        //     "duration": "1.50",
-        //     "effort": 2,
-        //     "satisfaction": 3,
-        //     "athlete": 3,
-        //     "athlete_name": "Avner Volpert"
-        // }
-    ]
-}
+// const coachWorkout = {
+//     "id": 17,
+//     "notes": null,
+//     "workout": {
+//         "id": 18,
+//         "title": "Sprints Tuesday Wokrout",
+//         "owner": "Gilron Tsabkevich",
+//         "tags": [
+//             {
+//                 "name": "sprints"
+//             },
+//             {
+//                 "name": "technical"
+//             }
+//         ]
+//     },
+//     "owner": "Gilron Tsabkevich",
+//     "location": "Jadwin",
+//     "athletes": [
+//         {
+//             "athlete": "Avner Volpert",
+//             "athlete_id": 3
+//         }
+//     ],
+//     "reports": [
+//         {
+//             "id": 1,
+//             "duration": "2.50",
+//             "effort": 8,
+//             "satisfaction": 10,
+//             "athlete": 1,
+//             "athlete_name": "Gilron Tsabkevich"
+//         }
+//     ],
+//     "average_effort": "8.00",
+//     "average_duration": "2.50",
+//     "average_satisfaction": "10.00"
+// }
+
+// const athleteWorkout = {
+//     "id": 16,
+//     "notes": null,
+//     "workout": {
+//         "id": 18,
+//         "title": "Sprints Tuesday Wokrout",
+//         "owner": "Gilron Tsabkevich",
+//         "tags": [
+//             {
+//                 "name": "sprints"
+//             },
+//             {
+//                 "name": "technical"
+//             }
+//         ]
+//     },
+//     "owner": "Gilron Tsabkevich",
+//     "location": "Jadwin",
+//     "athletes": [
+//         {
+//             "athlete": "Avner Volpert",
+//             "athlete_id": 3
+//         }
+//     ],
+//     "reports": [
+//         // {
+//         //     "id": 2,
+//         //     "duration": "1.50",
+//         //     "effort": 2,
+//         //     "satisfaction": 3,
+//         //     "athlete": 3,
+//         //     "athlete_name": "Avner Volpert"
+//         // }
+//     ]
+// }

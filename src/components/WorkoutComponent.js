@@ -19,21 +19,53 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function CalendarWorkout(props){
+
+export default function WorkoutComponent(props){
     const classes = useStyles();
+
+    function formatDate() {
+        const creationDate = props.workout.created_at.split("T")[0].split("-");
+        return `${creationDate[1]}/${creationDate[2]}/${creationDate[0]}`;
+    }
+
     return(
         <div className={classes.workoutItem}>
+            <Link
+                style={{textDecoration:"none", color: "inherit"}}
+                to={{
+                    pathname: "/workout",
+                    workout: props.workout,
+                    scheduledWorkout: false
+                }}
+            >
             <ListItem button>
-                <ListItemText primary={props.title} secondary={"Created by " + props.creator + " at " + props.created_at} />
-                <ListItem>
+                <div
+                    style={{
+                        // backgroundColor: "yellow",
+                        width: "30%",
+                        minWidth: 250,
+                        overflow: "hidden",
+                    }}
+                >
+                    {props.workout.title}
+                    <div style={{
+                        color: "#777",
+                        fontSize: 12,
+                    }}>
+                        Created by {props.workout.owner} <br></br>
+                        {formatDate()}
+                    </div>
+                </div>
+
+                <div style= {{width: "100%", marginRight: 30}}>
                     {
-                        props.tags.map((tag) =>(
-                            <Chip label= {tag.name} style={{margin: "0 5px"}}/>
+                        props.workout.tags.map((tag) =>(
+                            <Chip label= {tag.name} style={{margin: "1px 5px"}}/>
                         ))
                     }
-                </ListItem>
+                </div>
                 {/* <FileCopyIcon></FileCopyIcon> */}
-                <ListItemSecondaryAction>
+                <ListItemSecondaryAction style={{}}>
                 <Link
                     style={{textDecoration:"none", color: "inherit"}}
                     to={{
@@ -45,7 +77,7 @@ function CalendarWorkout(props){
                         <EditIcon/>
                     </IconButton>
                 </Link>
-                    <IconButton onClick={props.workoutDelete} workoutid={props.id} size="small">
+                    <IconButton onClick={props.workoutDelete} workoutid={props.workout.id} size="small">
                         <DeleteIcon/>
                     </IconButton>
                 </ListItemSecondaryAction>
@@ -56,10 +88,8 @@ function CalendarWorkout(props){
                 {/*</ListItemSecondaryAction>*/}
                  {/*<div class="workout-chevron"></ChevronRightIcon></div>*/}
             </ListItem>
+            </Link>
 
         </div>
     )
-
 }
-
-export default CalendarWorkout;
