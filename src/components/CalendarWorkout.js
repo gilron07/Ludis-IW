@@ -131,7 +131,8 @@ function CalendarWorkout(props) {
                 style={{textDecoration:"none", color: "inherit"}}
                 to={{
                     pathname: "/workout",
-                    workoutId: props.workoutId// your data array of objects
+                    workout: props.workout, // your data array of objects
+                    scheduledWorkout: true
                 }}
             >
             <ListItem button>

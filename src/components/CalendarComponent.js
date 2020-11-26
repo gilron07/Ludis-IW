@@ -17,6 +17,7 @@ function CalendarComponent(props) {
                 {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
                     <div>
                     <CalendarWorkout
+                        workout={scheduledWorkout}
                         title={scheduledWorkout.workout.title}
                         workoutId={scheduledWorkout.id}
                         tags={scheduledWorkout.workout.tags}

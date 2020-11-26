@@ -67,19 +67,19 @@ function Workouts() {
 
     };
 
-    // useEffect(() =>{
-    //     const fetchData = async () =>{
-    //       const result = await axiosAPI.get('/workouts/');
-    //       setData(result.data)
-    //     };
-    //     fetchData();
-    //     if (location.state && location.state.created){
-    //         let state = {...history.location.state};
-    //         delete state.created
-    //         history.replace({...history.location, state})
-    //         openSuccessSnack();
-    //     }
-    // }, []);
+    useEffect(() =>{
+        const fetchData = async () =>{
+          const result = await axiosAPI.get('/workouts/');
+          setData(result.data)
+        };
+        fetchData();
+        if (location.state && location.state.created){
+            let state = {...history.location.state};
+            delete state.created
+            history.replace({...history.location, state})
+            openSuccessSnack();
+        }
+    }, []);
 
     return(
         <div id="calendar-workouts">
@@ -91,12 +91,7 @@ function Workouts() {
                  {data.map((workout) => (
                     <WorkoutComponent
                         workout={workout}
-                        title={workout.title}
-                        creator={workout.owner}
-                        created_at={workout.created_at}
                         key={workout.id}
-                        id = {workout.id}
-                        tags={workout.tags}
                         workoutDelete={handleDelete}
                     ></WorkoutComponent>
                 ))}
@@ -104,12 +99,7 @@ function Workouts() {
 								{exampleWorkouts.map((workout) => (
                     <WorkoutComponent
                         workout={workout}
-                        title={workout.title}
-                        creator={workout.owner}
-                        created_at={workout.created_at}
                         key={workout.id}
-                        id = {workout.id}
-                        tags={workout.tags}
                         workoutDelete={handleDelete}
                     ></WorkoutComponent>
                 ))}
@@ -138,10 +128,11 @@ function Workouts() {
 
 const exampleWorkouts = [
 	{
+        "id": 1,
 		"title": "My Workout",
 		"created_at": "2020-10-31T15:59:20.246136Z",
 		"description": "",
-		"tags": [{"name": "yonkers"}],
+		"tags": [{"name": "test tag"}, {"name": "test tag 2"}, {"name": "test tag 3"}],
 		"sections": [
 			{
 				"id": 0,
@@ -166,6 +157,7 @@ const exampleWorkouts = [
 		"owner": "Gilron Tsabkevich"
 	},
 	{
+        "id": 2,
 		"title": "My Workout 2",
 		"created_at": "2021-06-14T15:59:20.246136Z",
 		"description": "",
