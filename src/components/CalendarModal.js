@@ -46,12 +46,18 @@ const useStyles = makeStyles((theme) => ({
     overflow: "scroll",
     backgroundColor: theme.palette.background.paper,
     padding: "16px 35px",
+    // backgroundColor: "green"
+  },
+  dialog: {
+    backgroundColor: "red",
   },
   formControl: {
     border: "1px solid #00000044",
-    height: "25vh",
+    minHeight: 50,
+    maxHeight: 300,
     overflow: "scroll",
-    padding: "0 0 0 20px",
+    width: "calc(90% - 25px)",
+    margin: "auto",
   },
   workoutTitle : {
     height: "23px",
@@ -81,6 +87,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 3,
     overflow: "hidden",
     whiteSpace: "nowrap",
+  },
+  formLabel : {
+    color: "#00000088",
+    margin: "20px 0 5px 0",
+    textAlign:"center"
   }
 }));
 
@@ -92,11 +103,10 @@ export default function SimpleModal(props) {
 
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date(Date.UTC(2020, 0, 1)));
-  const [selectedDates, setSelectedDates] = useState([new Date(Date.UTC(2020, 0, 1))]);
-  const [location, setLocation] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [location, setLocation] = useState("Remote");
   const [selectedAthleteIds, setSelectedAthleteIds] = useState([]);
   const [workoutValue, setWorkoutValue] = React.useState(null);
-  const [teamOrIndividual, setTeamOrIndividual] = React.useState(0);
 
   const handleOpen = () => {
     setOpen(true);
@@ -129,7 +139,6 @@ export default function SimpleModal(props) {
     for(var i = 0; i < athleteIds.length; i++) {
       athleteIds[i] = parseInt(athleteIds[i]);
     }
-    if (!teamOrIndividual) athleteIds = "fullTeam";
 
     // prepare date and time
     let newDates = [];
@@ -173,133 +182,134 @@ export default function SimpleModal(props) {
   function workoutSelect(props) {
     return(
       <div>
-        <FormLabel component="legend">Select Workout</FormLabel>
-      <div className={classes.formControl}>
-        <FormControl component="fieldset">
-        <RadioGroup
-          value={workoutValue}
-          onChange={handleWorkoutChange}
-        >
-          {props.workoutsList.map((workout, index) => (
-            <FormControlLabel
-            value= {workout.id.toString()}
-            control={<Radio size="small"/>}
-            label= {
-              <div className={classes.workoutLine}>
-                <div className={classes.workoutTitle}>{workout.title}</div>
-                <div className={classes.workoutTags}>
-                  {workout.tags.map((tag) => (
-                    <Chip label={tag.name} style={{margin:"0 2px"}}></Chip>
-                  ))}
-                </div>
-                <div className={classes.workoutDate}>{workout.created_at}</div>
-              </div>
-            }
-          />
-          ))}
-        </RadioGroup>
-      </FormControl>
-    </div>
-    </div>
+        <div className={classes.formLabel}>Select Workout</div>
+        <div className={classes.formControl} style={{paddingLeft: 20}}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              value={workoutValue}
+              onChange={handleWorkoutChange}
+            >
+              {props.workoutsList.map((workout, index) => (
+                <FormControlLabel
+                value= {workout.id.toString()}
+                control={<Radio size="small"/>}
+                label= {
+                  <div className={classes.workoutLine}>
+                    <div className={classes.workoutTitle}>{workout.title}</div>
+                    <div className={classes.workoutTags}>
+                      {workout.tags.map((tag) => (
+                        <Chip label={tag.name} style={{margin:"0 2px"}}></Chip>
+                      ))}
+                    </div>
+                    <div className={classes.workoutDate}>{workout.created_at}</div>
+                  </div>
+                }
+              />
+              ))}
+            </RadioGroup>
+          </FormControl>
+          {props.workoutsList.length == 0
+            ? <div style={{textAlign: "center", fontSize: 14, marginLeft: -20}}>No Workouts Created</div>
+            : null
+          }
+        </div>
+      </div>
     )
   }
 
-  const toggleTeamOrIndividual = (e) => {
-    if (typeof e.currentTarget.id !== "string") return;
-    setTeamOrIndividual(parseInt(e.currentTarget.id));
-}
+  function formatSelectedDates() {
+    const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    let finalDates = [];
+
+    console.log(selectedDates);
+
+    let selectedMiliseconds = [...selectedDates];
+
+    for (let i = 0; i < selectedMiliseconds.length; i++) {
+      selectedMiliseconds[i] = selectedMiliseconds[i].getTime();
+    }
+
+    
+
+    let sortedDates = [...selectedMiliseconds];
+    sortedDates = sortedDates.sort();
+
+    for (let i = 0; i < sortedDates.length; i++) {
+      let newDate = new Date(sortedDates[i])
+      let stringDate = newDate.toISOString().split("T")[0].split("-");
+      let day = newDate.getDay();
+      stringDate = weekDays[day] + ", " + stringDate[1] + "/" + stringDate[2] + "/" + stringDate[0]
+      finalDates.push(stringDate)
+    }
+
+    return (<div>
+      {finalDates.map((date) => (
+        <div>{date}<hr style={{backgroundColor: "#CCC", height: 1, border: "none"}}></hr></div>
+      ))}
+    </div>);
+  }
   
 const body = (
   <div style={modalStyle} className={classes.paper}>
     <h2>Schedule Workout</h2>
-    <div style={{display: "flex", justifyContent:"center"}}>
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardTimePicker
-          margin="dense"
-          id="time-picker"
-          label="Workout Time"
-          value={selectedTime}
-          onChange={handleDateChange}
-          KeyboardButtonProps={{
-              'aria-label': 'change time',
-          }}
-          style={{
-            width: "130px",
-            marginRight: 30
-          }}
-          />
+    <div style={{display: "flex", justifyContent:"center", alignItems: "center"}}>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardTimePicker
+            margin="dense"
+            id="time-picker"
+            label="Workout Time"
+            value={selectedTime}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+                'aria-label': 'change time',
+            }}
+            style={{
+              width: "130px",
+              marginRight: 30
+            }}
+            />
       </MuiPickersUtilsProvider>
-    <Button
-      variant="outlined"
-      onClick={() => setDatePickerOpen(!datePickerOpen)}
-      style={{ height: 30, margin: "20px 0 0 30px", whiteSpace:"nowrap", overflow:"hidden"}}
-    >
-      Select Dates
-    </Button>
-    </div>
-    <MultipleDatesPicker
-      open={datePickerOpen}
-      selectedDates={[]}
-      onCancel={() => setDatePickerOpen(false)}
-      onSubmit={submitDates}
-    />
-    <div style={{display:"flex", justifyContent: "center", marginTop: 10}}>
       <TextField label="Location" value={location} onChange={handleLocationChange}></TextField>
     </div>
-    <br></br>
+    <div>
+      <div style={{display:"flex", justifyContent: "center", marginTop: 10}}>
+        <Button
+          variant="outlined"
+          onClick={() => setDatePickerOpen(!datePickerOpen)}
+          style={{ height: 30, marginTop: "20px", whiteSpace:"nowrap", overflow:"hidden"}}
+        >
+          Select Dates
+        </Button>
+      </div>
+      <div className={classes.formLabel}>Selected Dates</div>
+      <div className={classes.formControl} style={{textAlign: "center", paddingTop: 10}}>
+        {formatSelectedDates()}
+      </div>
+
+      <MultipleDatesPicker
+        open={datePickerOpen}
+        selectedDates={[]}
+        onCancel={() => setDatePickerOpen(false)}
+        onSubmit={submitDates}
+
+      />
+    </div>
+
     {workoutSelect(props)}
     {/* athlete select */}
-    <div style={{color: "#00000088", margin: "20px 0 10px 0", textAlign:"center"}}>Assign workout to: </div>
-    <div style={{display: "flex", justifyContent:"center"}}>
-      {teamOrIndividual
-        ? <Button
-            variant="contained"
-            style={{height: 30, margin: "0 10px", whiteSpace:"nowrap", overflow:"hidden"}}
-            onClick={toggleTeamOrIndividual} id={0}
-          >
-            All Athletes
-          </Button>
-        : <Button
-            color="primary"
-            variant="contained"
-            style={{height: 30, margin: "0 10px", whiteSpace:"nowrap", overflow:"hidden"}}
-            onClick={toggleTeamOrIndividual}
-            id={0}
-          >
-            All Athletes
-          </Button>
-      }
-      {teamOrIndividual
-        ? <Button
-            color="primary"
-            variant="contained"
-            style={{height: 30, margin: "0 10px", overflow:"hidden"}}
-            onClick={toggleTeamOrIndividual}
-            id={1}
-          >Individuals
-          </Button>
-        : <Button
-            variant="contained"
-            style={{height: 30, margin: "0 10px", overflow:"hidden"}}
-            onClick={toggleTeamOrIndividual}
-            id={1}
-          >Individuals
-          </Button>
-      }
+    <div className={classes.formLabel}>Select Athletes</div>
+    <div style={{minHeight: 100, maxHeight: "25vw", width: '90%', margin:"auto", overflow: "scroll"}}>
+      <DataGrid
+        hideFooter
+        rows={props.athletesList}
+        columns={columns}
+        checkboxSelection 
+        onSelectionChange={(newSelection) => {
+          setSelectedAthleteIds(newSelection.rowIds);
+        }}
+        style={{overflow: "scroll"}}
+      />
     </div>
-    {teamOrIndividual
-        ? <div style={{height: 300, width: '90%', minWidth:"300px", paddingTop:25, margin:"auto"}}>
-            <DataGrid
-              rows={props.athletesList}
-              columns={columns}
-              checkboxSelection 
-              onSelectionChange={(newSelection) => {
-                setSelectedAthleteIds(newSelection.rowIds);
-              }}
-            />
-          </div>
-        : null
-      }
     
     <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
       <Button variant="contained" color="primary" onClick={createSchedule}>
