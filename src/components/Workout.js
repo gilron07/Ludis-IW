@@ -1,11 +1,12 @@
-import React, { useContext, useState} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Header from './Header.js';
 import ReportModal from './ReportModal.js';
 import {UserContext} from "../services/UserContext";
 
+import axiosAPI from '../services/authAxios'
+
 // Material UI components
 import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Timeline imports
@@ -62,11 +63,21 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
+
 export default function Workout(props) {
     const classes = useStyles();
     const {user} = useContext(UserContext);
     
     const [importedWorkout, setImportedWorkout] = useState(props.location.workout);
+    const [axiosData, setAxiosData] = useState("");
+
+    useEffect(() =>{
+        const fetchData = async () =>{
+          const result = await axiosAPI.get(`/workouts/${props.location.workout.id}`);
+          setAxiosData(result.data)
+        };
+        fetchData();
+    }, []);
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
@@ -182,6 +193,7 @@ export default function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
+            {JSON.stringify(axiosData)}
             {/* {JSON.stringify(importedWorkout)} */}
             {`workout id: ${props.location.workout.id}, `}
             {`user role: ${user.role}, `}
