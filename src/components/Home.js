@@ -2,8 +2,6 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import Header from './Header.js';
 import CalendarComponent from './CalendarComponent.js';
 import CalendarModal from './CalendarModal.js';
-import Button from '@material-ui/core/Button';
-import MultipleDatesPicker from '@randex/material-ui-multiple-dates-picker';
 import axiosAPI from '../services/authAxios'
 
 import '../css/Home.css';
@@ -77,6 +75,8 @@ export default function Home() {
   const [athleteListData, setAthleteListData] = useState([]);
 
   const {user} = useContext(UserContext);
+  // const user = {"role":"coach"};
+
   useEffect(() => {
       const fetchScheduleData = async () => {
           const result = await axiosAPI.get('/schedule/');

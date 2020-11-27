@@ -47,6 +47,7 @@ export default function App() {
                 <BrowserRouter>
                     <div>
                         <Switch>
+                          {/* should be ProtectedRoute */}
                          <ProtectedRoute path="/home" component={Home} exact/>
                          <Route path="/workouts" component={Workouts} exact/>
                          <Route path="/workout" component={Workout} exact/>
