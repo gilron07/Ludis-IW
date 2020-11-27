@@ -453,7 +453,7 @@ export default function Home() {
         </TabPanel>
       ))}
 
-      {user.role === "coach"
+      {user.role.toLowerCase() === "coach"
         ?
         <CalendarModal
           workoutsList={workoutsData}
