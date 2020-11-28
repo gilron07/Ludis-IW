@@ -50,6 +50,7 @@ function LoginBox(props) {
     // hooks
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
+    const [error, setError] = useState(false);
     const {user, setUser} = useContext(UserContext)
 
     const history = useHistory();
@@ -78,6 +79,7 @@ function LoginBox(props) {
                 history.push('/home');
             })
             .catch(err => {
+                setError(true);
                console.log(err)
             });
     }
@@ -85,7 +87,7 @@ function LoginBox(props) {
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
                 <div className={classes.ludisTitle}>Ludis</div>
-                <img src="/static/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                <img src="/static/LOGOS-09.png" alt="logo" className={classes.ludisLogo}/>
             </div>
             {/* <div className={classes.actionTitle}>Log In</div> */}
             <TextField
@@ -116,6 +118,7 @@ function LoginBox(props) {
             <div className={classes.loginLink} style={{textAlign: "right"}}>
                 Forgot Password
             </div>
+            {error && <p style={{color:'red'}}>Invalid email or password</p>}
             <Button
                 color="primary"
                 variant="contained"

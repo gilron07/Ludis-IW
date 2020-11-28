@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 import Header from './Header.js';
 import EditSection from './EditSection';
@@ -15,6 +18,10 @@ import axiosAPI from '../services/authAxios'
 import '../css/CreateWorkout.css'; 
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
   tagsInput: {
   },
   createTagButton: {
@@ -31,6 +38,15 @@ const useStyles = makeStyles((theme) => ({
   button: {
     boxShadow: "0 2px 4px #00000044",
     marginTop: "5px"
+  },
+
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 }));      
 
@@ -71,6 +87,7 @@ const CreateWorkout = (props) => {
   );
 
   const [hashtag, setHashtag] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // tag functions ---------------------------------------
 
@@ -319,9 +336,11 @@ function renameSection(sectionId, newName) {
 
     function createWorkout() {
       const data = formatJSON();
+      setLoading(true);
       axiosAPI.post('/workouts/', data)
           .then((res)=>{
             console.log(res)
+            setLoading(false);
             history.push('/workouts', {created:true})
           })
           .catch((err)=>{
@@ -428,12 +447,15 @@ function renameSection(sectionId, newName) {
          
       <div className = {classes.createWorkoutContainer}>
         {(typeof props.location.workout === "undefined")
-          ? <Button
+          ? <div className={classes.wrapper}>
+            <Button
               color="secondary"
               className={classes.createWorkoutButton}
               onClick={createWorkout}
-              disabled = {workoutJSON["title"].trim() === ""}
+              disabled = {loading || workoutJSON["title"].trim() === ""}
             >Create Workout</Button>
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
           : <Button
               color="secondary"
               className={classes.createWorkoutButton}
