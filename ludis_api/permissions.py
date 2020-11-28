@@ -6,7 +6,7 @@ class IsWorkoutView(permissions.BasePermission):
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user.role == Role.COACH
+        return request.user.role == Role.COACH.name
 
     def has_object_permission(self, request, view, obj):
         if request.user.organization == obj.owner.organization and \

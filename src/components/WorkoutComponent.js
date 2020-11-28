@@ -16,7 +16,15 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: "3px solid orange",
         marginBottom: "10px",
         boxShadow: "0 1px 2px 1px #00000011",
+        position: "relative",
     },
+    tagContainer : {
+        [theme.breakpoints.down('xs')]: {
+            display: "none",
+        },
+        width: "100%",
+        marginRight: 30,
+    }
 }));
 
 
@@ -34,14 +42,13 @@ export default function WorkoutComponent(props){
                 style={{textDecoration:"none", color: "inherit"}}
                 to={{
                     pathname: "/workout",
-                    workout: props.workout,
-                    scheduledWorkout: false
+                    scheduledWorkout: null,
+                    baseWorkoutId: props.workout.id
                 }}
             >
             <ListItem button>
                 <div
                     style={{
-                        // backgroundColor: "yellow",
                         width: "30%",
                         minWidth: 250,
                         overflow: "hidden",
@@ -57,7 +64,7 @@ export default function WorkoutComponent(props){
                     </div>
                 </div>
 
-                <div style= {{width: "100%", marginRight: 30}}>
+                <div className={classes.tagContainer}>
                     {
                         props.workout.tags.map((tag) =>(
                             <Chip label= {tag.name} style={{margin: "1px 5px"}}/>
@@ -65,8 +72,18 @@ export default function WorkoutComponent(props){
                     }
                 </div>
                 {/* <FileCopyIcon></FileCopyIcon> */}
-                <ListItemSecondaryAction style={{}}>
-                <Link
+                {/*<ListItemSecondaryAction>*/}
+                {/*    <IconButton>*/}
+                {/*        <ChevronRightIcon/>*/}
+                {/*    </IconButton>*/}
+                {/*</ListItemSecondaryAction>*/}
+                 {/*<div class="workout-chevron"></ChevronRightIcon></div>*/}
+            </ListItem>
+            </Link>
+
+            <div style={{position: "absolute", bottom: 0, right: 20, height: "100%"}}>
+                <div style={{position: "relative", top: "50%", transform:"translateY(-50%)"}}>
+                {/* <Link
                     style={{textDecoration:"none", color: "inherit"}}
                     to={{
                         pathname: "/create-workout",
@@ -76,19 +93,12 @@ export default function WorkoutComponent(props){
                     <IconButton size="small">
                         <EditIcon/>
                     </IconButton>
-                </Link>
+                </Link> */}
                     <IconButton onClick={props.workoutDelete} workoutid={props.workout.id} size="small">
                         <DeleteIcon/>
                     </IconButton>
-                </ListItemSecondaryAction>
-                {/*<ListItemSecondaryAction>*/}
-                {/*    <IconButton>*/}
-                {/*        <ChevronRightIcon/>*/}
-                {/*    </IconButton>*/}
-                {/*</ListItemSecondaryAction>*/}
-                 {/*<div class="workout-chevron"></ChevronRightIcon></div>*/}
-            </ListItem>
-            </Link>
+                </div>
+            </div>
 
         </div>
     )

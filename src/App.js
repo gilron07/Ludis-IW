@@ -49,11 +49,11 @@ export default function App() {
                         <Switch>
                           {/* should be ProtectedRoute */}
                          <ProtectedRoute path="/home" component={Home} exact/>
-                         <Route path="/workouts" component={Workouts} exact/>
-                         <Route path="/workout" component={Workout} exact/>
-                         <Route path="/create-workout" component={CreateWorkout} exact/>
+                         <ProtectedRoute path="/workouts" component={Workouts} exact/>
+                         <ProtectedRoute path="/workout" component={Workout} exact/>
+                         <ProtectedRoute path="/create-workout" component={CreateWorkout} exact/>
                          <ProtectedRoute path="/leaderboards" component={Leaderboards} exact/>
-                         <Route path="/settings" component={Settings} exact/>
+                         <ProtectedRoute path="/settings" component={Settings} exact/>
                          <Route path="/signup" component={Signup} exact/>
                          <Route path="/login" component={Login} exact/>
                          <Route path="/" component={Login} exact/>

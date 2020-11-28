@@ -65,19 +65,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function Workout(props) {
+    const scheduledWorkout = props.location.scheduledWorkout;
+    const baseWorkoutId = props.location.baseWorkoutId;
     const classes = useStyles();
     const {user} = useContext(UserContext);
-    
-    const [importedWorkout, setImportedWorkout] = useState(props.location.workout);
+
+    const [importedWorkout, setImportedWorkout] = useState(scheduledWorkout);
     const [axiosData, setAxiosData] = useState("");
 
     useEffect(() =>{
         const fetchData = async () =>{
-          const result = await axiosAPI.get(`/workouts/${props.location.workout.id}`);
+          const result = await axiosAPI.get(`/workouts/${baseWorkoutId}/`);
           setAxiosData(result.data)
         };
         fetchData();
     }, []);
+
 
     function loadCompletedReport() {
       let duration, effort, satisfaction, average;
@@ -131,7 +134,7 @@ export default function Workout(props) {
       );
       else return(
             <ReportModal
-                workoutId={props.location.workout.id}
+                workoutId={scheduledWorkout.id}
                 mainWorkout={importedWorkout}
                 updateMainWorkout={setImportedWorkout}
             ></ReportModal>
@@ -152,7 +155,7 @@ export default function Workout(props) {
     }
 
     function generateScheduleData() {
-        if (props.location.scheduledWorkout) {
+        if (scheduledWorkout) {
             return (
                 <div>
                     {importedWorkout["reports"].length === 0
@@ -180,7 +183,7 @@ export default function Workout(props) {
     }
 
     function addCheckCircle() {
-        if (props.location.scheduledWorkout) {
+        if (scheduledWorkout) {
             if (importedWorkout["reports"].length === 0) {
                 return (
                     <CheckCircleOutlineIcon style={{marginLeft: 15, color: "#8ac290"}}
@@ -193,59 +196,61 @@ export default function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
-            {JSON.stringify(axiosData)}
+            {console.log(JSON.stringify(axiosData.sections))}
             {/* {JSON.stringify(importedWorkout)} */}
-            {`workout id: ${props.location.workout.id}, `}
+            {`workout id: ${baseWorkoutId}, `}
             {`user role: ${user.role}, `}
-            {`scheduled workout: ${props.location.scheduledWorkout}`}
+            {`scheduled workout: ${scheduledWorkout}`}
             {
                 // later, we can add functions to sort data by order
                 <div>
-                    <h1 class="workout-title">{data.title}{addCheckCircle()}</h1>
+                    <h1 class="workout-title">{axiosData.title}{addCheckCircle()}</h1>
 
                     {generateScheduleData()}
 
                     <hr></hr>
                     <div id="plan-container">
                         <p id="plan-title">Plan</p>
-                        {data.sections.map((section) => (
+                        {typeof axiosData.sections == "undefined"
+                        ? null
+                        : 
+                        axiosData.sections.map((section) => (
                             <div class="section-container">
-                            <div class="section-name">{section.name}</div>
-                            
-                            <Timeline class={classes.timeline}>    
-                            {(section.drills).map((drill, index) => (            
-                                <TimelineItem>
-                                    <TimelineOppositeContent
-                                        className={classes.oppositeContent}
-                                    ></TimelineOppositeContent>
-                                    {(index === section.drills.length - 1)
-                                        ? <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/></TimelineSeparator>
-                                        : <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/><TimelineConnector /></TimelineSeparator>}
-                                    <TimelineContent>{
-                                        <div>
-                                        {drill["drill_name"]}
-                                            <div style={{paddingLeft: 20}}>
-                                                {drill["modifiers"].map((modifier, index) => (
-
-                                                    <span
-                                                        style = {{
-                                                            color: "#777",
-                                                            paddingLeft: 5
-                                                        }}
-                                                    >
-                                                        {styleModifier(modifier)}
-                                                        {index !== drill["modifiers"].length - 1 ? ", " : ""}
-                                                    </span>
-                                                    // `${modifier["quantity"]} ${modifier["unit"]}: , `
-                                                ))}
-                                            </div>
-                                        </div>
-                                    }</TimelineContent>
-                                </TimelineItem>
-                            ))}
-                            </Timeline>
+                                <div class="section-name">{section.name}</div>       
+                                <Timeline class={classes.timeline}>    
+                                    {(section.drills).map((drill, index) => (            
+                                        <TimelineItem>
+                                            <TimelineOppositeContent
+                                                className={classes.oppositeContent}
+                                            ></TimelineOppositeContent>
+                                            {(index === section.drills.length - 1)
+                                                ? <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/></TimelineSeparator>
+                                                : <TimelineSeparator><TimelineDot variant="outlined" color="secondary"/><TimelineConnector /></TimelineSeparator>}
+                                            <TimelineContent>{
+                                                <div>
+                                                    {drill["drill_name"]}
+                                                    <div style={{paddingLeft: 20}}>
+                                                        {drill["modifiers"].map((modifier, index) => (
+                                                            <span
+                                                                style = {{
+                                                                    color: "#777",
+                                                                    paddingLeft: 5
+                                                                }}
+                                                            >
+                                                                {styleModifier(modifier)}
+                                                                {index !== drill["modifiers"].length - 1 ? ", " : ""}
+                                                            </span>
+                                                            // `${modifier["quantity"]} ${modifier["unit"]}: , `
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            }</TimelineContent>
+                                        </TimelineItem>
+                                    ))}
+                                </Timeline>
                             </div>
-                        ))}
+                        ))
+                        }
                     </div>
                 </div>
             }

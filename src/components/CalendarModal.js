@@ -107,6 +107,15 @@ export default function SimpleModal(props) {
   const [location, setLocation] = useState("Remote");
   const [selectedAthleteIds, setSelectedAthleteIds] = useState([]);
   const [workoutValue, setWorkoutValue] = React.useState(null);
+  const [athleteData, setAthleteData] = useState([]);
+
+  useEffect(() =>{
+    const fetchAthletesListData = async () =>{
+      const result = await axiosAPI.get('/users/');
+      setAthleteData(result.data);
+    };
+    fetchAthletesListData();
+  }, []);   
 
   const handleOpen = () => {
     setOpen(true);
@@ -221,7 +230,7 @@ export default function SimpleModal(props) {
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let finalDates = [];
 
-    console.log(selectedDates);
+    // console.log(selectedDates);
 
     let selectedMiliseconds = [...selectedDates];
 
@@ -298,15 +307,19 @@ const body = (
     {workoutSelect(props)}
     {/* athlete select */}
     <div className={classes.formLabel}>Select Athletes</div>
-    <div style={{minHeight: 100, maxHeight: "25vw", width: '90%', margin:"auto", overflow: "scroll"}}>
+    {JSON.stringify(athleteData)}
+    <div
+      style={{minHeight: 300, width: '90%', margin:"auto"}}
+      >
       <DataGrid
-        hideFooter
-        rows={props.athletesList}
+        // hideFooter
+        rows={athleteData}
         columns={columns}
         checkboxSelection 
         onSelectionChange={(newSelection) => {
           setSelectedAthleteIds(newSelection.rowIds);
         }}
+        pageSize={5}
         style={{overflow: "scroll"}}
       />
     </div>
@@ -336,16 +349,13 @@ const columns = [
   { field: 'full_name', headerName: 'Athlete Name', width: 400 },
 ];
 
-const athleteData = [
-  { id: 1, name: 'Henry Herrington'},
-  { id: 2, name: 'Gilron Tsabkevich'},
-  { id: 3, name: 'Miles Tuncel'},
-  { id: 4, name: 'Rebecca Drachman'},
-  { id: 5, name: 'August VanNewkirk'},
-  { id: 6, name: 'Noah Schwartz'},
-  { id: 7, name: 'Edward Oppenheimer Boyer-Rogers III'},
-  { id: 8, name: 'Ben Schwartz'},
-];
+// const athleteData = [
+//   { id: 1, full_name: 'Henry Herrington'},
+//   { id: 2, full_name: 'Gilron Tsabkevich'},
+//   { id: 3, full_name: 'Miles Tuncel'},
+//   { id: 4, full_name: 'Rebecca Drachman'},
+//   { id: 5, full_name: 'August VanNewkirk'}
+// ];
 
 //
 // const workoutData = [

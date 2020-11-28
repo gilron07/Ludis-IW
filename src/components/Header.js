@@ -4,7 +4,7 @@ import Navigation from '../components/Navigation';
 import {UserContext} from "../services/UserContext";
 
 function Header() {
-  const {user} = useContext(UserContext)
+  const {user} = useContext(UserContext);
   return (
     <div id="header">
       <table cellSpacing="0">
@@ -31,4 +31,3 @@ function Header() {
 }
 
 export default Header;
-
