@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     leftContainer: {
@@ -107,14 +108,23 @@ function CalendarWorkout(props) {
         if (props.role === "COACH") {
             return(
                 <div className={classes.coachStatsContainer}>
-                    <div style={{borderBottom: "1px solid grey", paddingBottom: 2, marginBottom: -2}}>
-                        <div className={classes.coachStat}>{props.completion[0]}/{props.completion[1]}</div>
-                        <div className={classes.coachStatLabel}>completed</div>
-                    </div>
-                    <div>
-                        <div className={classes.coachStat}>{props.effort}</div>
-                        <div className={classes.coachStatLabel}>avg. effort</div>
-                    </div>
+                    {props.effort !== null
+                    ? 
+                        <div>
+                            <div style={{borderBottom: "1px solid grey", paddingBottom: 2, marginBottom: -2}}>
+                                <div className={classes.coachStat}>{props.completion[0]}/{props.completion[1]}</div>
+                                <div className={classes.coachStatLabel}>completed</div>
+                            </div>
+                            <div>
+                                <div className={classes.coachStat}>{props.effort}</div>
+                                <div className={classes.coachStatLabel}>avg. effort</div>
+                            </div>
+                        </div>
+                    :   <div style={{paddingBottom: 2, marginBottom: -2}}>
+                            <div className={classes.coachStat}>{props.completion[0]}/{props.completion[1]}</div>
+                            <div className={classes.coachStatLabel}>completed</div>
+                        </div>
+                    }
                 </div>
             )
         }
@@ -131,8 +141,8 @@ function CalendarWorkout(props) {
                 style={{textDecoration:"none", color: "inherit"}}
                 to={{
                     pathname: "/workout",
-                    workout: props.workout, // your data array of objects
-                    scheduledWorkout: true
+                    scheduledWorkout: props.scheduledWorkout,
+                    baseWorkoutId: props.baseWorkout.id,
                 }}
             >
             <ListItem button>
@@ -144,18 +154,18 @@ function CalendarWorkout(props) {
                     </div>
                     <ListItemText
                         className={classes.workoutTitle}
-                        primary={props.title}
+                        primary={props.baseWorkout.title}
                         secondary={
                             <div style={{display: "flex", alignItems:"center"}}>
                                 <LocationOnIcon></LocationOnIcon>
-                                <div>{props.location}</div>
+                                <div>{props.scheduledWorkout.location}</div>
                             </div>
                         }
                     />
                 </div>
 
                 <div className={classes.tagsContainer}>
-                    {props.tags.map((tag) => (
+                    {props.baseWorkout.tags.map((tag) => (
                         <Chip label={tag.name} style={{margin: "2px"}}></Chip>
                     ))}
                 </div>

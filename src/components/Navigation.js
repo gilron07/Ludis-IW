@@ -87,6 +87,15 @@ export default function TemporaryDrawer() {
       icon: <ExitToAppIcon/>
     }
   };
+
+  let relevantPages;
+  if (user.role.toLowerCase() === "coach") {
+    relevantPages = ['home', 'workouts', 'leaderboards', 'settings', 'logout'];
+  }
+  else {
+    relevantPages = ['home', 'leaderboards', 'settings', 'logout'];
+  }
+
   
   const list = (anchor) => (
     <div
@@ -105,7 +114,7 @@ export default function TemporaryDrawer() {
         </div>
       </div>
       <List>
-        {['home', 'workouts', 'leaderboards', 'settings', 'logout'].map((text, index) => (
+        {relevantPages.map((text, index) => (
           // if logout, for the navlink have onClick={function}
           (text === "logout") 
           ? <NavLink onClick={logoutFunction} to={pages[text].link} className="nav-link" key={index}>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header.js';
 import { useConfirm } from 'material-ui-confirm';
-import '../css/Workouts.css';
 import WorkoutComponent from './WorkoutComponent.js';
 import List from '@material-ui/core/List';
 import { NavLink } from 'react-router-dom';
@@ -95,16 +94,8 @@ function Workouts() {
                         workoutDelete={handleDelete}
                     ></WorkoutComponent>
                 ))}
-                {/* Offline Data */}
-								{exampleWorkouts.map((workout) => (
-                    <WorkoutComponent
-                        workout={workout}
-                        key={workout.id}
-                        workoutDelete={handleDelete}
-                    ></WorkoutComponent>
-                ))}
             </List>
-            <div id="create-workout-button" onClick="newWorkout">
+            <div style={{textAlign: "center"}} onClick="newWorkout">
                 <NavLink to="create-workout">
                     <AddCircleIcon color="primary" style={{ fontSize: 40}}></AddCircleIcon>
                 </NavLink>
@@ -125,75 +116,5 @@ function Workouts() {
         </div>
     )
 }
-
-const exampleWorkouts = [
-	{
-        "id": 1,
-		"title": "My Workout",
-		"created_at": "2020-10-31T15:59:20.246136Z",
-		"description": "",
-		"tags": [{"name": "test tag"}, {"name": "test tag 2"}, {"name": "test tag 3"}],
-		"sections": [
-			{
-				"id": 0,
-				"name": "Swim 1",
-				"order":1,
-				"drills": [
-						{
-								"id": 2,
-								"drill_name": "Call 1",
-								"order": 1,
-								"modifiers": []
-						},
-						{
-							"id": 3,
-							"drill_name": "Cald 1",
-							"order": 1,
-							"modifiers": []
-					}
-				]
-			}
-		],
-		"owner": "Gilron Tsabkevich"
-	},
-	{
-        "id": 2,
-		"title": "My Workout 2",
-		"created_at": "2021-06-14T15:59:20.246136Z",
-		"description": "",
-		"tags": [{"name":"tag"}],
-		"sections": [
-			{
-				"id": 5,
-				"name": "Jumpers 2",
-				"order": 1,
-				"drills": [
-						{
-								"id": 1,
-								"drill_name": "Run Fast 2",
-								"created_at": "2020-10-31T15:59:20.246136Z",
-								"order": 1,
-								"modifiers": []
-						}
-				]
-			},
-			{
-				"id": 6,
-				"name": "Swimmies 2",
-				"order": 1,
-				"drills": [
-						{
-								"id": 1,
-								"drill_name": "Run Fast!!",
-								"created_at": "2020-10-31T15:59:20.246136Z",
-								"order": 1,
-								"modifiers": []
-						}
-				]
-			}
-		],
-		"owner": "Henry"
-	}
-];
 
 export default Workouts;

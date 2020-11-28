@@ -91,16 +91,7 @@ export default function Home() {
           setWorkoutsData(result.data)
         };
         fetchWorkoutsData();
-    }, []);
-
-    useEffect(() =>{
-        const fetchAthletesListData = async () =>{
-          const result = await axiosAPI.get('/users/');
-          setAthleteListData(result.data);
-        };
-        fetchAthletesListData();
-    }, []);
-
+  }, []);
 
   let athleteSchedules;
     if (role === "athlete") {

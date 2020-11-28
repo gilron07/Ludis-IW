@@ -322,7 +322,7 @@ function renameSection(sectionId, newName) {
       axiosAPI.post('/workouts/', data)
           .then((res)=>{
             console.log(res)
-            history.push('/workouts/', {created:true})
+            history.push('/workouts', {created:true})
           })
           .catch((err)=>{
               console.log(err)

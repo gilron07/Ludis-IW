@@ -16,12 +16,10 @@ function CalendarComponent(props) {
             <List>
                 {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
                     <div>
+                        {/* {JSON.stringify(scheduledWorkout)} */}
                     <CalendarWorkout
-                        workout={scheduledWorkout}
-                        title={scheduledWorkout.workout.title}
-                        workoutId={scheduledWorkout.id}
-                        tags={scheduledWorkout.workout.tags}
-                        location={scheduledWorkout.location}
+                        scheduledWorkout={scheduledWorkout}
+                        baseWorkout={scheduledWorkout.workout}
                         date={scheduledWorkout.date.split(" ")[0]}
                         time={scheduledWorkout.date.split(" ")[1]}
                         month={props.month}
