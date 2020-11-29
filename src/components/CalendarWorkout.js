@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 //icons
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import PersonIcon from '@material-ui/icons/Person';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import { SignalCellularNullSharp } from '@material-ui/icons';
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     workoutDate: {
         height: "58px",
         width: "58px",
-        marginRight: "20px",
+        marginRight: "15px",
         display: "inline-block",
     },
     workoutDateD: {
@@ -52,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: "3px solid orange",
         marginBottom: "10px",
         boxShadow: "0 1px 2px 1px #00000011",
-        overflow: "hidden",
+        overflow: "scroll",
     },
     tagsContainer:{
         width: "50%",
@@ -89,7 +90,6 @@ const useStyles = makeStyles((theme) => ({
     },
     coachStatLabel: {
         fontSize: 10,
-
     },
 }));
 
@@ -148,17 +148,25 @@ function CalendarWorkout(props) {
             <ListItem button>
                 <div className={classes.leftContainer}>
                     <div className={classes.workoutDate}>
-                        <div className={classes.workoutDateD}>{day}</div>
-                        <div className={classes.workoutDateM}>{months[month - 1]}</div>
-                        <div className={classes.workoutDateY}>{year}</div>
+                        <div style={{paddingTop: "25%"}}>
+                            <div className={classes.workoutDateD}>{day}</div>
+                            <div className={classes.workoutDateM}>{months[month - 1]}</div>
+                            <div className={classes.workoutDateY}>{year}</div>
+                        </div>
                     </div>
                     <ListItemText
                         className={classes.workoutTitle}
                         primary={props.baseWorkout.title}
                         secondary={
-                            <div style={{display: "flex", alignItems:"center"}}>
-                                <LocationOnIcon></LocationOnIcon>
-                                <div>{props.scheduledWorkout.location}</div>
+                            <div>
+                                <div style={{display: "flex", alignItems:"center"}}>
+                                    <LocationOnIcon></LocationOnIcon>
+                                    {props.scheduledWorkout.location}
+                                </div>
+                                <div style={{display: "flex", alignItems:"center"}}>
+                                <PersonIcon></PersonIcon>
+                                by {props.scheduledWorkout.owner}
+                                </div>
                             </div>
                         }
                     />

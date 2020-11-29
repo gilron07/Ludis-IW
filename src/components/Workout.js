@@ -60,6 +60,11 @@ const useStyles = makeStyles((theme) => ({
     },
     logisticLabel: {
 
+    },
+    tagsContainer: {
+        textAlign: "center",
+        width: "100%",
+        margin: "30px 0",
     }
 }));
 
@@ -154,6 +159,43 @@ export default function Workout(props) {
         }
     }
 
+    function formatDayDate(n) {
+        let lastDigit = n % 10;
+        let ordinal = "th";
+        if (lastDigit === 1) ordinal = "st";
+        else if (lastDigit === 2) ordinal = "nd";
+        else if (lastDigit === 3) ordinal = "rd";
+
+        // check if it's a "teen" number
+        if ((n % 100) < 14 && (n % 100) > 10) ordinal = "th";
+
+        return n + ordinal;
+    }
+
+    function formatDate(fullDate) {
+        const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const trueDate = new Date(fullDate);
+        const date = fullDate.split(" ")[0].split("-");
+        let hour = fullDate.split(" ")[1].split(":")[0];
+        const minute =fullDate.split(" ")[1].split(":")[1];
+        const month = months[date[1]];
+        const dayDate = formatDayDate(parseInt(date[2]));
+        const dayString = weekdays[trueDate.getDay()];
+
+        let period = "am";
+
+        if (hour >= 12) {
+            period = "pm";
+            hour -= 12;
+        }
+        if (hour == 0) hour = 12;
+        return <div>
+            {dayString}, {hour}:{minute} {period}<br></br>
+            {month} {dayDate}
+        </div>;
+    }
+
     function generateScheduleData() {
         if (scheduledWorkout) {
             return (
@@ -170,12 +212,19 @@ export default function Workout(props) {
                         </div>
                         <div class="logistic-container">
                             <ScheduleIcon className={classes.logisticsIcon}></ScheduleIcon>
-                            Wed, 11am <br></br> Sep 18th
+                            {formatDate(importedWorkout.date)}
+                            {/* Wed, 11am <br></br> Sep 18th */}
                         </div>
                     </div>
 
-                    <div id="tags-container">
-                        <Chip label="Technical" /> <Chip label="Conditioning" />
+                    <div className={classes.tagsContainer}>
+                        
+                        {(typeof axiosData.tags !== "undefined")
+                            ? axiosData.tags.map((tag) => (
+                                <Chip label={tag.name} style={{margin: "0 2px"}}/>
+                            ))
+                            : null
+                        }
                     </div>
                 </div>
             );
@@ -196,11 +245,10 @@ export default function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
-            {console.log(JSON.stringify(axiosData.sections))}
             {/* {JSON.stringify(importedWorkout)} */}
-            {`workout id: ${baseWorkoutId}, `}
+            {/* {`workout id: ${baseWorkoutId}, `}
             {`user role: ${user.role}, `}
-            {`scheduled workout: ${scheduledWorkout}`}
+            {`scheduled workout: ${scheduledWorkout}`} */}
             {
                 // later, we can add functions to sort data by order
                 <div>
@@ -229,12 +277,12 @@ export default function Workout(props) {
                                             <TimelineContent>{
                                                 <div>
                                                     {drill["drill_name"]}
-                                                    <div style={{paddingLeft: 20}}>
+                                                    <div>
                                                         {drill["modifiers"].map((modifier, index) => (
                                                             <span
                                                                 style = {{
                                                                     color: "#777",
-                                                                    paddingLeft: 5
+                                                                    paddingRight: 3
                                                                 }}
                                                             >
                                                                 {styleModifier(modifier)}

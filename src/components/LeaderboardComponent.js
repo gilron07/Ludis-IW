@@ -89,7 +89,10 @@ function generateAvatarColor(name) {
     ]
 
     const firstInit = name[0].charCodeAt(0);
-    const secondInit = name[1].charCodeAt(0);
+    let secondInit = 0;
+    if (name.length > 1) {
+        secondInit = name[1].charCodeAt(0);
+    }
     const simpleHash = (firstInit + secondInit) % colors.length
     return colors[simpleHash];
 }

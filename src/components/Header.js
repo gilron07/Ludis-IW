@@ -11,8 +11,8 @@ function Header() {
         <tbody>
         <tr>
           <td id="hamburger-column"><Navigation /></td>
-          <td id="logo-column"><img src="/static/ludis-logo.png" id="header-logo" alt="Ludis Logo"/></td>
-          <td id="title-column"><div className="title"> Ludis </div></td>
+          <td id="logo-column"><img src="/static/logoOnly.png" id="header-logo" alt="Ludis Logo"/></td>
+          <td id="title-column"><div className="title">LUDIS</div></td>
           <td id="user-column">
             <div id="user-dropdown-select">
               <div id="header-username">

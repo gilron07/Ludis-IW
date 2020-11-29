@@ -14,23 +14,20 @@ const useStyles = makeStyles((theme) => ({
         width: "70%",
         margin: "auto",
         textAlign: "center",
-        padding: "30px 20px 10px 20px",
+        padding: "10px 20px 10px 20px",
         boxShadow: "0 0 2px #00000088",
     },
     ludisLogo : {
-        width: "60px",
-        display: "inline-block",
-    },
-    ludisTitle : {
-        fontSize: "40px",
+        height: "100%",
         display: "inline-block",
     },
     titleLogoContainer : {
-        height: "50px",
+        height: "80px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         marginBottom: "5px",
+        // backgroundColor: "red",
     },
     loginLink : {
         fontSize: "12px",
@@ -84,8 +81,7 @@ function LoginBox(props) {
     return (
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
-                <div className={classes.ludisTitle}>Ludis</div>
-                <img src="/static/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                <img src="/static/ludisLogoFinal.png" alt="logo" className={classes.ludisLogo}/>
             </div>
             {/* <div className={classes.actionTitle}>Log In</div> */}
             <TextField

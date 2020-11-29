@@ -16,33 +16,26 @@ const useStyles = makeStyles((theme) => ({
         width: "70%",
         margin: "auto",
         textAlign: "center",
-        padding: "30px 20px 10px 20px",
+        padding: "10px 20px 10px 20px",
         boxShadow: "0 0 2px #00000088",
     },
     ludisLogo : {
-        width: "60px",
         display: "inline-block",
-    },
-    ludisTitle : {
-        fontSize: "40px",
-        display: "inline-block",
+        height: "100%"
     },
     titleLogoContainer : {
-        height: "50px",
+        height: "80px",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: "5px",
+        // backgroundColor: "red",
     },
     loginLink : {
         fontSize: "12px",
         width: "100%",
         color: "#00000066",
     },
-    actionTitle : {
-        fontSize: "15px",
-        color: "#00000066",
-    },
+
     DOBparenthesis : {
         color: "#00000066",
         fontSize: "25px",
@@ -57,8 +50,7 @@ const useStyles = makeStyles((theme) => ({
     },
     pageContainer : {
         height: "175px",
-        // backgroundColor: "red",
-        paddingTop: "20px",
+        paddingTop: "5px",
     },
 }));  
   
@@ -198,10 +190,8 @@ function SignupBox(props) {
     return (
         <div className={classes.loginContainer} style={{ maxWidth: 300 }}>
             <div className={classes.titleLogoContainer}>
-                <div className={classes.ludisTitle}>Ludis</div>
-                <img src="/static/ludis-logo.png" alt="logo" className={classes.ludisLogo}/>
+                <img src="/static/ludisLogoFinal.png" alt="logo" className={classes.ludisLogo}/>
             </div>
-            {/* <div className={classes.actionTitle}>Sign Up</div> */}
             <div className={classes.pageContainer}>
             {generateSignupPage()}
             </div>

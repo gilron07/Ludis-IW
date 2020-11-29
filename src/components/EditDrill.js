@@ -107,7 +107,7 @@ function EditDrill(props) {
 
     const addModifier = (event) => {
         let modifierName = event.target.dataset.mod;
-        props.addModifier(modifierName, props.drillId, props.sectionId)
+        props.addModifier(modifierName, props.drillId, props.sectionId);
         handleButtonClose();
     }
 
@@ -198,7 +198,7 @@ function EditDrill(props) {
                 
 
                 <ListItem>
-                    {(props.modifiers.length < 4)
+                    {(props.modifiers.length < 6)
                     ? <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick} className={classes.button}>
                         Add Modifier
                     </Button>
