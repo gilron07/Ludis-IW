@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import Header from './Header.js';
 import ReportModal from './ReportModal.js';
 import {UserContext} from "../services/UserContext";
+import AllReportsModal from './AllReportsModal';
 
 import axiosAPI from '../services/authAxios'
 
@@ -88,20 +89,22 @@ export default function Workout(props) {
 
 
     function loadCompletedReport() {
-      let duration, effort, satisfaction, average;
+      let duration, effort, satisfaction, average, allReports;
       
       // athlete view else coach view
       if (user.role.toLowerCase() === "athlete") {
         duration = importedWorkout["reports"][0]["duration"];
         effort = importedWorkout["reports"][0]["effort"];
         satisfaction = importedWorkout["reports"][0]["satisfaction"];
-        average="";
+        average=null;
+        allReports=null;
       }
       else {
         duration = importedWorkout["average_duration"];
         effort = importedWorkout["average_effort"];
         satisfaction = importedWorkout["average_satisfaction"];
         average="Averages";
+        allReports=<AllReportsModal reports={importedWorkout.reports}></AllReportsModal>
       } 
       
       return(
@@ -126,6 +129,7 @@ export default function Workout(props) {
               </div>
             </div>
           </div>
+          {allReports}
         </div>
       );
     }
@@ -179,7 +183,7 @@ export default function Workout(props) {
         const date = fullDate.split(" ")[0].split("-");
         let hour = fullDate.split(" ")[1].split(":")[0];
         const minute =fullDate.split(" ")[1].split(":")[1];
-        const month = months[date[1]];
+        const month = months[date[1] - 1];
         const dayDate = formatDayDate(parseInt(date[2]));
         const dayString = weekdays[trueDate.getDay()];
 
@@ -245,7 +249,6 @@ export default function Workout(props) {
     return(
         <div id="calendar-workouts">
             <Header></Header>
-            {/* {JSON.stringify(importedWorkout)} */}
             {/* {`workout id: ${baseWorkoutId}, `}
             {`user role: ${user.role}, `}
             {`scheduled workout: ${scheduledWorkout}`} */}
@@ -305,175 +308,3 @@ export default function Workout(props) {
         </div>
     )
 }
-
-// need to fetch this workout plan based on id in the specific workout JSON (coachWorkout or athleteJSON)
-const data = {
-    "id": 1,
-    "title": "Technical Practice",
-    "description": "Please come with appropriate spikes",
-    "sections": [
-        {
-            "id": 1,
-            "name": "Warm Up",
-            "order": 1,
-            "drills": [
-                {
-                    "id": 1,
-                    "drill_name": "B-skips",
-                    "created_at": "2020-10-31T15:59:20.246136Z",
-                    "order": 1,
-                    "modifiers": [
-                        {
-                            "id": 1,
-                            "modifier": "Sets",
-                            "quantity": 15,
-                            "unit": null
-                        },
-                        {
-                            "id": 1,
-                            "modifier": "Intensity",
-                            "quantity": 15,
-                            "unit": null
-                        },
-                        {
-                            "id": 1,
-                            "modifier": "Time",
-                            "quantity": 5,
-                            "unit": "hours"
-                        },
-                        {
-                            "id": 2,
-                            "modifier": "Distance",
-                            "quantity": 50,
-                            "unit": "miles"
-                        }
-                    ]
-                }
-            ]
-        }, 
-        {
-            "id": 2,
-            "name": "Cool Down",
-            "order": 2,
-            "drills": [
-                {
-                    "id": 1,
-                    "drill_name": "Slow Running",
-                    "created_at": "2020-10-31T15:59:20.246136Z",
-                    "order": 1,
-                    "modifiers": [
-                        {
-                            "id": 1,
-                            "modifier": "Reps",
-                            "quantity": 5,
-                            "unit": null
-                        },
-                        {
-                            "id": 2,
-                            "modifier": "Time",
-                            "quantity": 7,
-                            "unit": "minutes"
-                        }
-                    ]
-                },
-                {
-                    "id": 2,
-                    "drill_name": "Yoga",
-                    "created_at": "2020-10-31T15:59:20.246136Z",
-                    "order": 1,
-                    "modifiers": [
-                        {
-                            "id": 1,
-                            "modifier": "Reps",
-                            "quantity": 4,
-                            "unit": null
-                        },
-                        {
-                            "id": 2,
-                            "modifier": "Time",
-                            "quantity": 70,
-                            "unit": "minutes"
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    "owner": "Henry Herrington"
-}
-
-
-// const coachWorkout = {
-//     "id": 17,
-//     "notes": null,
-//     "workout": {
-//         "id": 18,
-//         "title": "Sprints Tuesday Wokrout",
-//         "owner": "Gilron Tsabkevich",
-//         "tags": [
-//             {
-//                 "name": "sprints"
-//             },
-//             {
-//                 "name": "technical"
-//             }
-//         ]
-//     },
-//     "owner": "Gilron Tsabkevich",
-//     "location": "Jadwin",
-//     "athletes": [
-//         {
-//             "athlete": "Avner Volpert",
-//             "athlete_id": 3
-//         }
-//     ],
-//     "reports": [
-//         {
-//             "id": 1,
-//             "duration": "2.50",
-//             "effort": 8,
-//             "satisfaction": 10,
-//             "athlete": 1,
-//             "athlete_name": "Gilron Tsabkevich"
-//         }
-//     ],
-//     "average_effort": "8.00",
-//     "average_duration": "2.50",
-//     "average_satisfaction": "10.00"
-// }
-
-// const athleteWorkout = {
-//     "id": 16,
-//     "notes": null,
-//     "workout": {
-//         "id": 18,
-//         "title": "Sprints Tuesday Wokrout",
-//         "owner": "Gilron Tsabkevich",
-//         "tags": [
-//             {
-//                 "name": "sprints"
-//             },
-//             {
-//                 "name": "technical"
-//             }
-//         ]
-//     },
-//     "owner": "Gilron Tsabkevich",
-//     "location": "Jadwin",
-//     "athletes": [
-//         {
-//             "athlete": "Avner Volpert",
-//             "athlete_id": 3
-//         }
-//     ],
-//     "reports": [
-//         // {
-//         //     "id": 2,
-//         //     "duration": "1.50",
-//         //     "effort": 2,
-//         //     "satisfaction": 3,
-//         //     "athlete": 3,
-//         //     "athlete_name": "Avner Volpert"
-//         // }
-//     ]
-// }
