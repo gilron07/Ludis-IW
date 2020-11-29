@@ -64,6 +64,7 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'ludis.urls'
 
 CORS_ALLOWED_ORIGINS = [
+    "http://goludis.herokuapp.com",
     "https://goludis.herokuapp.com",
     "http://localhost:8000",
 ]
