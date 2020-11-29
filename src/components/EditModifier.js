@@ -57,7 +57,7 @@ function EditModifier(props) {
         props.updateModifierUnit(modifierName, drillId, sectionId, newUnit);
     }
 
-    if (type != "intensity") {
+    if ((type === "weight") || (type === "distance") || (type === "time")) {
         return (
             <ListItem>
                     <TextField
@@ -73,6 +73,7 @@ function EditModifier(props) {
                             defaultValue = {props.modifier["unit".toLowerCase()]}
                             onChange = {handleUnitChange}
                         >
+                            {console.log(type)}
                             {units[type].map((unit) => (
                                 <option value={unit.toLowerCase()}>{unit}</option>
                             ))}
@@ -81,8 +82,7 @@ function EditModifier(props) {
             </ListItem>
         )
     }
-
-    else if (type == "intensity") {
+    else {
         return (
             <ListItem>
                 <TextField
@@ -92,12 +92,10 @@ function EditModifier(props) {
                     onChange = {handleInputChange}
                     className={classes.modifierInput}
                 />
-                %
+                {type === "intensity" ? "%" : null}
             </ListItem>
         );
     }
-
-    else return null;
 }
  
 export default EditModifier;

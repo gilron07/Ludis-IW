@@ -247,7 +247,9 @@ function renameSection(sectionId, newName) {
         "weight": ["lb", "kg"],
         "time": ["hours", "minutes", "seconds"],
         "distance": ["miles", "kilometers", "meters", "laps"],
-        "intensity": [null]
+        "intensity": [null],
+        "sets": [null],
+        "reps": [null]
     }
 
       let newModifier = {

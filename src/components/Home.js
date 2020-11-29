@@ -385,7 +385,7 @@ export default function Home() {
   return (
     <div className={classes.root}>
       <Header />
-          <h1 >Calendars ({user.role} view)</h1>
+          <h1 >Calendar</h1>
       <AppBar
         position="static"
         id="month-bar"

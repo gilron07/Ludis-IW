@@ -1,5 +1,5 @@
 .title {
-  font-size: 180%;
+  font-size: 150%;
 }
 
 table tr{
@@ -43,6 +43,14 @@ td {
 
 #title-column {
   width: 100px;
+  font-family: 'Hind', sans-serif;
+  color: #444;
+}
+
+@media only screen and (max-width: 500px) {
+  #user-column {
+    display: none;
+  }
 }
 
 #user-column {
