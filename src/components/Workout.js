@@ -153,10 +153,16 @@ export default function Workout(props) {
     function styleModifier(modifier) {
         const mod = modifier["modifier"].toLowerCase();
         if (mod === "sets" || mod === "reps") {
-            return modifier["quantity"] + " " + mod
+            return modifier["quantity"] + " " + module;
         }
         else if (mod === "intensity") {
-            return modifier["quantity"] + "% intensity"
+            return modifier["quantity"] + "% intensity";
+        }
+        else if (mod === "rest_between_reps") {
+            return modifier["quantity"] + " " + modifier["unit"] + " between reps";
+        }
+        else if (mod === "rest_between_sets") {
+            return modifier["quantity"] + " " + modifier["unit"] + " between sets";
         }
         else {
             return modifier["quantity"] + " " + modifier["unit"]
