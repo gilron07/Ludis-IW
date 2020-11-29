@@ -3,14 +3,18 @@ import Header from './Header.js';
 import LeaderboardComponent from './LeaderboardComponent.js';
 import LeaderboardModal from './LeaderboardModal.js';
 import axiosAPI from '../services/authAxios'
+import {UserContext} from "../services/UserContext";
 
 const Leaderboards = () => {
     const [leaderboardData, setLeaderboardData] = useState([]);
+    const {setLoading} = useContext(UserContext);
 
     useEffect(() =>{
+        setLoading(true);
         const fetchLeaderboardData = async () =>{
           const result = await axiosAPI.get('/challenge/')
             setLeaderboardData(result.data);
+          setLoading(false);
         };
         fetchLeaderboardData();
     }, []);
