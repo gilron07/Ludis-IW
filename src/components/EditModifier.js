@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function toCapitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    if (string === "rest_between_reps") return "Reps rest";
+    else if (string === "rest_between_sets") return "Sets rest";
+    else return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 const units = {
@@ -30,7 +32,9 @@ const units = {
     "distance": ["miles", "kilometers", "meters", "laps"],
     "intensity": null,
     "reps": null,
-    "sets": null
+    "sets": null,
+    "rest_between_reps": ["minutes", "seconds"],
+    "rest_between_sets": ["minutes", "seconds"]
 }
 
 function EditModifier(props) {
@@ -57,7 +61,7 @@ function EditModifier(props) {
         props.updateModifierUnit(modifierName, drillId, sectionId, newUnit);
     }
 
-    if ((type === "weight") || (type === "distance") || (type === "time")) {
+    if ((type === "weight") || (type === "distance") || (type === "time") || (type === "rest_between_reps") || (type === "rest_between_sets")) {
         return (
             <ListItem>
                     <TextField

@@ -249,7 +249,9 @@ function renameSection(sectionId, newName) {
         "distance": ["miles", "kilometers", "meters", "laps"],
         "intensity": [null],
         "sets": [null],
-        "reps": [null]
+        "reps": [null],
+        "rest_between_reps": ["minutes", "seconds"],
+        "rest_between_sets": ["minutes", "seconds"],
     }
 
       let newModifier = {

@@ -55,9 +55,8 @@ export default function LeaderboardModal(props) {
     "weight": ["lb", "kg"],
     "time": ["hours", "minutes", "seconds"],
     "distance": ["miles", "kilometers", "meters", "laps"],
-    "intensity": null,
     "sets": null,
-    "reps": null
+    "reps": null,
   }
 
   const handleOpen = () => {
