@@ -74,14 +74,16 @@ export default function Home() {
   const [workoutsData, setWorkoutsData] = useState([]);
   const [athleteListData, setAthleteListData] = useState([]);
 
-  const {user} = useContext(UserContext);
+  const {user,setLoading} = useContext(UserContext);
   // const user = {"role":"coach"};
 
   useEffect(() => {
       const fetchScheduleData = async () => {
           const result = await axiosAPI.get('/schedule/');
           setScheduleData(result.data);
+          setLoading(false);
       };
+      setLoading(true);
       fetchScheduleData();
   }, []);
 

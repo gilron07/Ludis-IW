@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import Header from './Header.js';
 import { useConfirm } from 'material-ui-confirm';
 import WorkoutComponent from './WorkoutComponent.js';
@@ -13,6 +13,7 @@ import axiosAPI from '../services/authAxios'
 
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import {UserContext} from "../services/UserContext";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -23,6 +24,7 @@ function Workouts() {
     const [openDelete, setOpenDelete] = React.useState(false);
     const [openSuccess, setOpenSucess] = React.useState(false);
     const confirm = useConfirm();
+    const {setLoading} = useContext(UserContext);
 
     // if page was rendered after successful workout create
     const location = useLocation();
@@ -67,9 +69,11 @@ function Workouts() {
     };
 
     useEffect(() =>{
+        setLoading(true);
         const fetchData = async () =>{
           const result = await axiosAPI.get('/workouts/');
           setData(result.data)
+            setLoading(false);
         };
         fetchData();
         if (location.state && location.state.created){

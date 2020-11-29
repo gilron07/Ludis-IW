@@ -74,15 +74,17 @@ export default function Workout(props) {
     const scheduledWorkout = props.location.scheduledWorkout;
     const baseWorkoutId = props.location.baseWorkoutId;
     const classes = useStyles();
-    const {user} = useContext(UserContext);
+    const {user, setLoading} = useContext(UserContext);
 
     const [importedWorkout, setImportedWorkout] = useState(scheduledWorkout);
     const [axiosData, setAxiosData] = useState("");
 
     useEffect(() =>{
+        setLoading(true);
         const fetchData = async () =>{
           const result = await axiosAPI.get(`/workouts/${baseWorkoutId}/`);
-          setAxiosData(result.data)
+          setAxiosData(result.data);
+          setLoading(false);
         };
         fetchData();
     }, []);

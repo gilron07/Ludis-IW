@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory } from "react-router-dom";
@@ -52,6 +53,17 @@ const useStyles = makeStyles((theme) => ({
         height: "175px",
         paddingTop: "5px",
     },
+    buttonProgress: {
+        color: "primary",
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+    },
+    wrapper: {
+        position: 'relative',
+    },
 }));  
   
 
@@ -65,6 +77,7 @@ function SignupBox(props) {
     const [fullName, setFullName] = React.useState("");
     const [birthdate, setBirthdate] = React.useState("");
     const [athleteOrCoach, setAthleteOrCoach] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
 
     const history = useHistory();
 
@@ -97,12 +110,14 @@ function SignupBox(props) {
             organization_code: teamCode.toUpperCase(),
             role: role.toUpperCase()
         }
-        console.log(data);
+        setLoading(true);
         axiosAPI.post('/signup/', data)
             .then(res => {
+                setLoading(false);
                 history.push('/login')
             })
             .catch(err =>{
+                setLoading(false);
                 console.log(err);
             });
 
@@ -211,15 +226,19 @@ function SignupBox(props) {
                     <ArrowRightIcon></ArrowRightIcon>
                 </IconButton>
             </div>
-            <Button
-                color="primary"
-                variant="contained"
-                style ={{width:'100%', margin: '15px 0'}}
-                onClick={submitInfo}
-                disabled={formComplete()}
-            >
-                Sign Up
-            </Button>
+            <div className={classes.wrapper}>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    style ={{width:'100%', margin: '15px 0'}}
+                    onClick={submitInfo}
+                    disabled={loading || formComplete()}
+                >
+                    Sign Up
+                </Button>
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
+
             <div className={classes.loginLink} onClick={props.toggleFunction}>
                 <NavLink to={"login"}>
                     Already have an account? Log In

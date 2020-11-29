@@ -24,7 +24,8 @@ import {UserContext} from "./services/UserContext";
  
 export default function App() {
     const [user, setUser] = useState(null);
-    const value = useMemo(() => ({user, setUser}), [user, setUser])
+    const [loading, setLoading] = useState(false);
+    const value = useMemo(() => ({user, setUser, loading, setLoading}), [user, setUser, loading, setLoading])
 
     // useEffect(() =>{
     //     const loggedInUser = LocalStorageService.getAccessToken();

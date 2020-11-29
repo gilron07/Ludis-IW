@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import axiosAPI from '../services/authAxios';
 import { useHistory } from "react-router-dom";
 import {UserContext} from "../services/UserContext";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import LocalStorageService from "../services/LocalStorageService";
 
@@ -37,7 +37,18 @@ const useStyles = makeStyles((theme) => ({
     actionTitle : {
         fontSize: "15px",
         color: "#00000066",
-    }
+    },
+    buttonProgress: {
+        color: "primary",
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
+  },
+    wrapper: {
+        position: 'relative',
+  },
 }));  
   
 
@@ -48,6 +59,7 @@ function LoginBox(props) {
     const [email, setEmail] = useState(null);
     const [password, setPassword] = useState(null);
     const [error, setError] = useState(false);
+    const [loading, setLoading] = React.useState(false);
     const {user, setUser} = useContext(UserContext)
 
     const history = useHistory();
@@ -60,11 +72,9 @@ function LoginBox(props) {
         setPassword(e.target.value);
     }
 
-    function submitInfo() {
-        props.submitFunction(email, password);
-    }
 
     function loginUser() {
+        setLoading(true);
         axiosAPI.post('/signin/',{email, password})
             .then((user) =>{
                 const tokenobj = {
@@ -73,9 +83,11 @@ function LoginBox(props) {
                 }
                 LocalStorageService.setToken(tokenobj);
                 setUser(user.data);
+                setLoading(false);
                 history.push('/home');
             })
             .catch(err => {
+                setLoading(false);
                 setError(true);
                console.log(err)
             });
@@ -115,14 +127,18 @@ function LoginBox(props) {
                 Forgot Password
             </div>
             {error && <p style={{color:'red'}}>Invalid email or password</p>}
-            <Button
-                color="primary"
-                variant="contained"
-                style ={{width:'100%', margin: '15px 0'}}
-                onClick={loginUser}
-            >
-                Log in
-            </Button>
+            <div className={classes.wrapper}>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    style ={{width:'100%', margin: '15px 0'}}
+                    onClick={loginUser}
+                    disabled={loading}
+                >
+                    Log in
+                </Button>
+                {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            </div>
             <div className={classes.loginLink} onClick={props.toggleFunction}>
                 <NavLink to={"signup"}>
                     Create Account
