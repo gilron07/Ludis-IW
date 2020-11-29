@@ -158,7 +158,7 @@ export default function Workout(props) {
         else if (mod === "intensity") {
             return modifier["quantity"] + "% intensity"
         }
-        else if (mod === "distance" || mod === "time" || mod === "weight") {
+        else {
             return modifier["quantity"] + " " + modifier["unit"]
         }
     }

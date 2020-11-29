@@ -63,7 +63,9 @@ const useStyles = makeStyles((theme) => ({
 }));    
 
 function toCapitalize(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    let newString = string.charAt(0).toUpperCase() + string.slice(1);
+    newString = newString.replace(/_/g, " ");
+    return newString
 }
 
 function EditDrill(props) {
@@ -80,8 +82,11 @@ function EditDrill(props) {
         "time": false,
         "intensity": false,
         "reps": false,
-        "sets": false
+        "sets": false,
+        "rest_between_reps": false,
+        "rest_between_sets": false
     });
+    const falseMods = ["distance", "weight", "time", "intensity", "reps", "sets", "rest_between_reps", "rest_between_sets"];
 
     const handleClick = () => {
       setOpen(!open);
@@ -121,7 +126,6 @@ function EditDrill(props) {
     };
 
     function falseModifiers() {
-        let falseMods = ["distance", "weight", "time", "intensity", "reps", "sets"];
         for (let i = 0; i < props.modifiers.length; i++) {
             let existingMod = props.modifiers[i]["modifier"];
             if (falseMods.includes(existingMod)){
@@ -198,7 +202,7 @@ function EditDrill(props) {
                 
 
                 <ListItem>
-                    {(props.modifiers.length < 6)
+                    {(props.modifiers.length < falseMods.length)
                     ? <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleButtonClick} className={classes.button}>
                         Add Modifier
                     </Button>
