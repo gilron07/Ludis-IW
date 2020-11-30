@@ -111,6 +111,7 @@ const CreateWorkout = (props) => {
       let newJSON = {...workoutJSON};
       newJSON["tags"] = workoutJSON["tags"].concat(newHashtag);
       setWorkoutJSON(newJSON);
+      setHashtag("");
     } else {
       console.log("Too many hashtags")
     }

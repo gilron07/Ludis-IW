@@ -155,7 +155,7 @@ export default function Workout(props) {
     function styleModifier(modifier) {
         const mod = modifier["modifier"].toLowerCase();
         if (mod === "sets" || mod === "reps") {
-            return modifier["quantity"] + " " + module;
+            return modifier["quantity"] + " " + mod;
         }
         else if (mod === "intensity") {
             return modifier["quantity"] + "% intensity";
