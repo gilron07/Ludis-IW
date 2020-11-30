@@ -9,5 +9,9 @@ const theme = createMuiTheme({
         main: '#7ed9b1'
     },
   },
+  dialog: {
+    // fullWidth,
+    maxWidth: 100,
+  }
 })
 export default theme

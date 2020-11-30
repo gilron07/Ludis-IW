@@ -1,5 +1,4 @@
 import React from 'react';
-import '../css/CalendarComponent.css';
 import CalendarWorkout from './CalendarWorkout.js';
 import List from '@material-ui/core/List';
 
@@ -12,7 +11,7 @@ function CalendarComponent(props) {
         );
     }
     else return (
-        <div id="calendar-workouts">
+        <div style={{marginTop: 10}}>
             <List>
                 {props.weeklyScheduledWorkouts.map((scheduledWorkout) => (
                     <div>

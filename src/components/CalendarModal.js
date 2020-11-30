@@ -13,6 +13,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import {
     MuiPickersUtilsProvider,
     KeyboardTimePicker,
+    KeyboardDatePicker,
   } from '@material-ui/pickers';
 
 // radio buttons and data grid
@@ -92,6 +93,16 @@ const useStyles = makeStyles((theme) => ({
     color: "#00000088",
     margin: "20px 0 5px 0",
     textAlign:"center"
+  },
+  desktopDateSelect: {
+    [theme.breakpoints.down('xs')]: {
+      display: "none",
+    },
+  },
+  mobileDateSelect: {
+    [theme.breakpoints.up('sm')]: {
+      display: "none",
+    },
   }
 }));
 
@@ -140,6 +151,11 @@ export default function SimpleModal(props) {
   function submitDates(dates) {
     setDatePickerOpen(false);
     setSelectedDates(dates);
+  }
+
+  function submitSingleDate(date) {
+    console.log(date)
+    setSelectedDates([date]);
   }
 
   function ScheduleJSON() {
@@ -230,15 +246,13 @@ export default function SimpleModal(props) {
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let finalDates = [];
 
-    // console.log(selectedDates);
+    console.log(selectedDates);
 
     let selectedMiliseconds = [...selectedDates];
 
     for (let i = 0; i < selectedMiliseconds.length; i++) {
       selectedMiliseconds[i] = selectedMiliseconds[i].getTime();
     }
-
-    
 
     let sortedDates = [...selectedMiliseconds];
     sortedDates = sortedDates.sort();
@@ -269,9 +283,6 @@ const body = (
             label="Workout Time"
             value={selectedTime}
             onChange={handleDateChange}
-            KeyboardButtonProps={{
-                'aria-label': 'change time',
-            }}
             style={{
               width: "130px",
               marginRight: 30
@@ -281,27 +292,42 @@ const body = (
       <TextField label="Location" value={location} onChange={handleLocationChange}></TextField>
     </div>
     <div>
-      <div style={{display:"flex", justifyContent: "center", marginTop: 10}}>
-        <Button
-          variant="outlined"
-          onClick={() => setDatePickerOpen(!datePickerOpen)}
-          style={{ height: 30, marginTop: "20px", whiteSpace:"nowrap", overflow:"hidden"}}
-        >
-          Select Dates
-        </Button>
-      </div>
-      <div className={classes.formLabel}>Selected Dates</div>
-      <div className={classes.formControl} style={{textAlign: "center", paddingTop: 10}}>
-        {formatSelectedDates()}
-      </div>
+      <div className={classes.desktopDateSelect}>
+        <div style={{display:"flex", justifyContent: "center", marginTop: 10}}>
+          <Button
+            variant="outlined"
+            onClick={() => setDatePickerOpen(!datePickerOpen)}
+            style={{ height: 30, marginTop: "20px", whiteSpace:"nowrap", overflow:"hidden"}}
+          >
+            Select Dates
+          </Button>
+        </div>
+        <div className={classes.formLabel}>Selected Dates</div>
+        <div className={classes.formControl} style={{textAlign: "center", paddingTop: 10}}>
+          {formatSelectedDates()}
+        </div>
 
-      <MultipleDatesPicker
-        open={datePickerOpen}
-        selectedDates={[]}
-        onCancel={() => setDatePickerOpen(false)}
-        onSubmit={submitDates}
-
-      />
+        <MultipleDatesPicker
+          open={datePickerOpen}
+          selectedDates={[]}
+          onCancel={() => setDatePickerOpen(false)}
+          onSubmit={submitDates}
+          fullWidth
+        />
+      </div>
+      <div class={classes.mobileDateSelect} style={{textAlign: "center", marginTop: 10}}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+            disableToolbar
+            variant="inline"
+            format="MM/dd/yyyy"
+            margin="dense"
+            label="Select Date"
+            value={selectedDates[0]}
+            onChange={submitSingleDate}
+          />
+        </MuiPickersUtilsProvider>
+      </div>
     </div>
 
     {workoutSelect(props)}

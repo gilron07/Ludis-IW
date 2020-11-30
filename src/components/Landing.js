@@ -76,7 +76,7 @@ function Landing(props) {
                  : <SignupBox
                       toggleFunction={toggleLoginOrSignup}
                   ></SignupBox>}
-            </div> 
+            </div>
         </div>
     );
 }
