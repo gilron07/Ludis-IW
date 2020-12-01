@@ -3,8 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import LoginBox from './LoginBox';
 import SignupBox from './SignupBox';
 
-import CalendarModal from './CalendarModal';
-
 const useStyles = makeStyles((theme) => ({
     backgroundImage: {
         width: "60vw",
@@ -79,7 +77,6 @@ function Landing(props) {
                       toggleFunction={toggleLoginOrSignup}
                   ></SignupBox>}
             </div>
-            <CalendarModal></CalendarModal>
         </div>
     );
 }

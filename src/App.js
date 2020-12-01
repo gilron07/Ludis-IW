@@ -52,7 +52,7 @@ export default function App() {
                          <ProtectedRoute path="/home" component={Home} exact/>
                          <ProtectedRoute path="/workouts" component={Workouts} exact/>
                          <ProtectedRoute path="/workout" component={Workout} exact/>
-                         <Route path="/create-workout" component={CreateWorkout} exact/>
+                         <ProtectedRoute path="/create-workout" component={CreateWorkout} exact/>
                          <ProtectedRoute path="/leaderboards" component={Leaderboards} exact/>
                          <ProtectedRoute path="/settings" component={Settings} exact/>
                          <Route path="/signup" component={Signup} exact/>

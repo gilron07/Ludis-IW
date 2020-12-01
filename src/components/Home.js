@@ -346,7 +346,12 @@ export default function Home() {
 
     for (let i = 0; i < weeks.length; i++) {
       thisWeekWorkouts = thisMonthWorkouts.filter(function (workout) {
-        return Math.floor((workout.date.split(" ")[0].split("-")[2])/7) === currentWeek - 1;
+        const dayDate = parseInt(workout.date.split(" ")[0].split("-")[2]);
+        if (dayDate < 8 && currentWeek === 1) return true;
+        if (dayDate >= 8 && dayDate < 15 && currentWeek === 2) return true;
+        if (dayDate >= 15 && dayDate < 22 && currentWeek === 3) return true;
+        if (dayDate >= 22 && currentWeek === 4) return true;
+        return false;
       });
     }
   
