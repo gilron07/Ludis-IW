@@ -248,14 +248,17 @@ export default function SimpleModal(props) {
     let finalDates = [];
     console.log(selectedDates);
 
-    let selectedMiliseconds = [...selectedDates];
+    // let selectedMiliseconds = [...selectedDates];
 
-    for (let i = 0; i < selectedMiliseconds.length; i++) {
-      selectedMiliseconds[i] = selectedMiliseconds[i].getTime();
-    }
+    // for (let i = 0; i < selectedMiliseconds.length; i++) {
+    //   selectedMiliseconds[i] = selectedMiliseconds[i].getTime();
+    // }
 
-    let sortedDates = [...selectedMiliseconds];
-    sortedDates = sortedDates.sort();
+    // let sortedDates = [...selectedMiliseconds];
+    // sortedDates = sortedDates.sort();
+
+    let sortedDates = [...selectedDates];
+    sortedDates.sort(function(a,b){return a.getTime() - b.getTime()});
 
     for (let i = 0; i < sortedDates.length; i++) {
       let newDate = new Date(sortedDates[i])
