@@ -97,56 +97,13 @@ function generateAvatarColor(name) {
     return colors[simpleHash];
 }
 
-const fakeData =
-    {
-        "metric" : "seconds",
-        "records" : [
-        {
-            "name" : "Rob Fish",
-            "date" : "2019-01-09T20:13:00.205946Z",
-            "record" : 3.84
-        },
-        {
-            "name" : "Usain Bolt",
-            "date" : "2020-03-08T20:13:00.205946Z",
-            "record" : 3.85
-        },
-        {
-            "name" : "Henry Herrington",
-            "date" : "2020-11-09T20:13:00.205946Z",
-            "record" : 9.99
-        },
-        {
-            "name" : "Gilron Tsabkevich",
-            "date" : "2020-12-31T20:13:00.205946Z",
-            "record" : 10.34
-        }
-        ]
-    }
-
-    function getDate() {
-        const todayDate = new Date();
-        const dateParts = todayDate.toISOString().split("T")[0].split("-");
-        return `${dateParts[1]}/${dateParts[2]}/${dateParts[0]}`;
-    }
-
 function LeaderboardComponent(props) {
     const classes=useStyles();
     const [open, setOpen] = useState(true);
     const [newRecord, setNewRecord] = useState("");
 
-    const handleNewRecord = (event) => {
-        const val = event.target.value;
-        setNewRecord(val);
-    }
-
     function handleClick() {
        setOpen(!open);
-    }
-
-    function submitNewRecord() {
-        console.log(`new record: ${newRecord}`);
-        console.log(`leaderboard id: ${props.id}`)
     }
 
     const medalColors = ["#ffe3b5", "#eee", "#eddaad"];
@@ -164,11 +121,14 @@ function LeaderboardComponent(props) {
         return n + 1 + ordinal;
     }
 
+    function formatDate(date) {
+        const globalDate = new Date(date);
+        return (globalDate.toLocaleString().split(",")[0]);
+    }
+
     return(
         <List style={{marginBottom: 25}}>
             <ListItem button onClick={handleClick} className={classes.drillHeader}>
-                {/* spacer */}
-                {/* <div style={{width: "120px"}}></div> */}
                 <div className={classes.headerTitle}>{props.title}</div>
                 <div className={classes.recordColLabel}>{props.unit}</div>
                 <div className={classes.dateColLabel}>Date Set</div>
@@ -193,7 +153,7 @@ function LeaderboardComponent(props) {
                             <div className={classes.nameCol}>{record.user_name}</div>
                             <div className={classes.recordCol}>{parseFloat(record.result)}</div>
                             <div className={classes.dateCol}>
-                                {`${record.date.split("T")[0].split("-")[1]}/${record.date.split("T")[0].split("-")[2]}/${record.date.split("T")[0].split("-")[0]}`}
+                                {formatDate(record.date)}
                             </div>
                         </ListItem>
                     ))}
@@ -207,7 +167,5 @@ function LeaderboardComponent(props) {
         </List>
     )
 }
-
-// background: `linear-gradient(${medalColors[index]}, #00000000)`
 
 export default LeaderboardComponent;

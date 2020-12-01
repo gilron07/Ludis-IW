@@ -58,8 +58,14 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "right",
     },
     drillTitleInput: {
-        width: "calc(72vw - 92px)",
+        width: "calc(81vw - 92px)",
     },
+    drillSectionTitle: {
+        padding: 0,
+        marginTop: "20px",
+        fontWeight: 800,
+        height: 10,
+    }
 }));    
 
 function toCapitalize(string) {
@@ -158,7 +164,7 @@ function EditDrill(props) {
                     <TextField
                         InputProps={{className: classes.drillTitleInput}}
                         onChange={handleInputChange}
-                        placeholder={props.name}
+                        defaultValue={props.name}
                     >
                     </TextField>
                     <IconButton size="small" onClick={confirmInputChange} sectionId={props.sectionId} drillId={props.drillId}>

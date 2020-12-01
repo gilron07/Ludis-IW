@@ -5,15 +5,25 @@ import LeaderboardModal from './LeaderboardModal.js';
 import axiosAPI from '../services/authAxios'
 
 const Leaderboards = () => {
-    const [leaderboardData, setLeaderboardData] = useState([]);
+   const [leaderboardData, setLeaderboardData] = useState([]);
 
-    useEffect(() =>{
+   useEffect(() =>{
         const fetchLeaderboardData = async () =>{
           const result = await axiosAPI.get('/challenge/')
             setLeaderboardData(result.data);
         };
         fetchLeaderboardData();
-    }, []);
+   }, []);
+
+   function getUnit(unit, mod) {
+      if (unit.toLowerCase() !== "null") {
+         return unit.charAt(0).toUpperCase() + unit.slice(1);
+      }
+      else {
+         return mod.charAt(0).toUpperCase() + mod.slice(1);
+      }
+   }
+
    return (
       <div>
          <Header/>
@@ -21,11 +31,11 @@ const Leaderboards = () => {
          <p>Start a friendly competition with teammates!</p>
          {leaderboardData.map((leaderboard) => (
                <LeaderboardComponent
-                   responses={leaderboard.responses}
+                  responses={leaderboard.responses}
                   id={leaderboard.id}
                   title={leaderboard.title}
-                   setLeaderboardData={setLeaderboardData}
-                  unit={leaderboard.unit.charAt(0).toUpperCase() + leaderboard.unit.slice(1)}
+                  setLeaderboardData={setLeaderboardData}
+                  unit={getUnit(leaderboard.unit, leaderboard.modifier)}
                ></LeaderboardComponent>
          ))}
          <LeaderboardModal setLeaderboardData={setLeaderboardData}></LeaderboardModal>
@@ -34,22 +44,3 @@ const Leaderboards = () => {
 }
  
 export default Leaderboards;
-
-
-const data = [
-   {
-      "id" : "1",
-      "title" : "Backwards 50m",
-      "unit" : "seconds"
-   },
-   {
-      "id" : "2",
-      "title" : "Poker Pushups",
-      "unit" : "reps"
-   },
-   {
-      "id" : "3",
-      "title" : "Hurdle Challenge",
-      "unit" : "meters"
-   },
-]

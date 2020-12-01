@@ -67,11 +67,6 @@ export default function LeaderboardReportModal(props) {
       setNewRecord(cleanNum);
   }
 
-  function sendJSON() {
-    console.log(`leaderboard id: ${props.id}`);
-    console.log(`new record: ${newRecord}`)
-  }
-
   function sendChallengeResponse(){
       const data = {
           result: newRecord

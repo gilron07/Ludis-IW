@@ -120,13 +120,13 @@ export default function SimpleModal(props) {
   const [workoutValue, setWorkoutValue] = React.useState(null);
   const [athleteData, setAthleteData] = useState([]);
 
-  useEffect(() =>{
-    const fetchAthletesListData = async () =>{
-      const result = await axiosAPI.get('/users/');
-      setAthleteData(result.data);
-    };
-    fetchAthletesListData();
-  }, []);   
+  // useEffect(() =>{
+  //   const fetchAthletesListData = async () =>{
+  //     const result = await axiosAPI.get('/users/');
+  //     setAthleteData(result.data);
+  //   };
+  //   fetchAthletesListData();
+  // }, []);   
 
   const handleOpen = () => {
     setOpen(true);
@@ -229,7 +229,8 @@ export default function SimpleModal(props) {
                     <div className={classes.workoutDate}>{workout.created_at}</div>
                   </div>
                 }
-              />
+                key={index}
+                />
               ))}
             </RadioGroup>
           </FormControl>
@@ -245,7 +246,6 @@ export default function SimpleModal(props) {
   function formatSelectedDates() {
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let finalDates = [];
-
     console.log(selectedDates);
 
     let selectedMiliseconds = [...selectedDates];
@@ -266,8 +266,8 @@ export default function SimpleModal(props) {
     }
 
     return (<div>
-      {finalDates.map((date) => (
-        <div>{date}<hr style={{backgroundColor: "#CCC", height: 1, border: "none"}}></hr></div>
+      {finalDates.map((date, index) => (
+        <div key={`date${index}`}>{date}<hr style={{backgroundColor: "#CCC", height: 1, border: "none"}}></hr></div>
       ))}
     </div>);
   }
@@ -315,7 +315,7 @@ const body = (
           fullWidth
         />
       </div>
-      <div class={classes.mobileDateSelect} style={{textAlign: "center", marginTop: 10}}>
+      <div className={classes.mobileDateSelect} style={{textAlign: "center", marginTop: 10}}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
             disableToolbar
@@ -330,7 +330,7 @@ const body = (
       </div>
     </div>
 
-    {workoutSelect(props)}
+    {/* {workoutSelect(props)} */}
     {/* athlete select */}
     <div className={classes.formLabel}>Select Athletes</div>
     {/* {JSON.stringify(athleteData)} */}
