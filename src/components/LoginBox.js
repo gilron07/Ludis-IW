@@ -53,7 +53,7 @@ function LoginBox(props) {
     const history = useHistory();
 
     const updateEmail = (e) => {
-        setEmail(e.target.value);
+        setEmail(e.target.value.toLowerCase());
     }
 
     const updatePassword = (e) => {

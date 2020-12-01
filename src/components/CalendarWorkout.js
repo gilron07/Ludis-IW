@@ -53,7 +53,9 @@ const useStyles = makeStyles((theme) => ({
         borderLeft: "3px solid orange",
         marginBottom: "10px",
         boxShadow: "0 1px 2px 1px #00000011",
-        overflow: "scroll",
+        [theme.breakpoints.down('xs')]: {
+            overflow: "scroll",
+        },
     },
     tagsContainer:{
         width: "50%",
