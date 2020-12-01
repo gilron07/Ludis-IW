@@ -19,9 +19,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import IconButton from '@material-ui/core/IconButton';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 
-
-import '../css/CreateWorkout.css';
-
 const useStyles = makeStyles((theme) => ({
     sectionHeader: {
         fontSize: 10,
@@ -50,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionTitleInput: {
         color: "white",
-        width: "calc(80vw - 92px)",
+        width: "calc(90vw - 92px)",
     },
     secondaryAction: {
         width: "calc(100% - 30px)",
@@ -105,7 +102,7 @@ function EditSection(props) {
                     <TextField
                         InputProps={{className: classes.sectionTitleInput}}
                         onChange={handleInputChange}
-                        placeholder={props.name}
+                        defaultValue={props.name}
                     >
                     </TextField>
                     <IconButton size="small" onClick={confirmInputChange} data-id={props.sectionId}>

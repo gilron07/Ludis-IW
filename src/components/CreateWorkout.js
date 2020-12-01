@@ -13,16 +13,12 @@ import Button from "@material-ui/core/Button"
 import Input from '@material-ui/core/Input';
 import Chip from '@material-ui/core/Chip';
 
-
 import axiosAPI from '../services/authAxios'
-import '../css/CreateWorkout.css'; 
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     margin: theme.spacing(1),
     position: 'relative',
-  },
-  tagsInput: {
   },
   createTagButton: {
     border: "1px solid #BBB",
@@ -39,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "0 2px 4px #00000044",
     marginTop: "5px"
   },
-
   buttonProgress: {
     color: green[500],
     position: 'absolute',
@@ -48,6 +43,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: -12,
     marginLeft: -12,
   },
+  mainInputTitle: {
+    color: "#41C3A7",
+    fontWeight: 600,
+    fontSize: "20px",
+    marginBottom: 20
+  }
 }));      
 
 let sectionIdGenerator = 0;
@@ -118,7 +119,7 @@ const CreateWorkout = (props) => {
   }
 
   const Hashtags = workoutJSON["tags"].map((tag) => (
-    <Chip label={tag.name} onDelete={handleDelete(tag)}/>
+    <Chip label={tag.name} onDelete={handleDelete(tag)} style={{margin: "10px 5px 0 0"}}/>
   ))
 
   // general functions ---------------------------------------
@@ -321,24 +322,6 @@ function renameSection(sectionId, newName) {
       return(workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
     }
     
-    // in the works
-    function deleteEmptyModifiers(newJSON) {    
-      // for (let i = 0; i < newJSON["sections"].length; i++) {
-      //   for (let j = 0; j < newJSON["sections"][i]["drills"].length; j++) {
-      //     for (let k = newJSON["sections"][i]["drills"][j]["modifiers"].length - 1; k > -1 ; k++) {
-      //       let currentModifier = newJSON["sections"][i]["drills"][j]["modifiers"][k];
-            
-      //       // delete modifier if empty
-      //       if (currentModifier === null || currentModifier === "") {
-      //         newJSON["sections"][i]["drills"][j]["modifiers"].splice(k, 1);
-      //       }
-      //     }
-      //   }
-      // }
-      
-      // return newJSON;
-    }
-
     function createWorkout() {
       const data = formatJSON();
       setLoading(true);
@@ -395,7 +378,7 @@ function renameSection(sectionId, newName) {
     <div>
         <Header />
          <h1>New Workout</h1>
-            <div className="main-input-title">Workout Name<br></br>
+            <div className={classes.mainInputTitle}>Workout Name<br></br>
               <TextField
                 fullWidth
                 onChange={updateWorkoutTitle}
@@ -404,27 +387,27 @@ function renameSection(sectionId, newName) {
                 value = {workoutJSON["title"]}
               />
             </div>
-            <div className="main-input-title">Workout Description<br></br> 
+            <div className={classes.mainInputTitle}>Workout Description<br></br> 
               <TextField
                 fullWidth
                 onChange={updateWorkoutDescription}
                 inputProps={{maxLength: 1000}}
               />
             </div>
-            <div className="main-input-title">Tags<br></br> 
-            </div>
-            <TextField
-               className={classes.tagsInput}
-               size="small"
-               rows={1}
-               placeholder="for example: Technical"
-               variant="outlined"
-               value={hashtag}
-               onChange={handleHashtagChange}
-            />
-            <Button color="secondary" onClick={newHashtag} className={classes.createTagButton}> Add Tag </Button>
-            <div id="tags-container">
-               {workoutJSON["tags"].length > 0 ? Hashtags : ""}
+            <div className={classes.mainInputTitle} style={{marginBottom: 5}}>Tags</div>
+            <div style={{marginBottom: 20}}>
+              <TextField
+                size="small"
+                rows={1}
+                placeholder="for example: Technical"
+                variant="outlined"
+                value={hashtag}
+                onChange={handleHashtagChange}
+              />
+              <Button color="secondary" onClick={newHashtag} className={classes.createTagButton}> Add Tag </Button>
+              <div style={{display: "inline-block", marginLeft: "2vw"}}>
+                {workoutJSON["tags"].length > 0 ? Hashtags : ""}
+              </div>
             </div>
 
             {workoutJSON["sections"].map((section) => (
