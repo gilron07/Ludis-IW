@@ -86,7 +86,7 @@ function SignupBox(props) {
         else setSignupPage(0);
     }
 
-    const updateEmail = (e) => { setEmail(e.target.value); }
+    const updateEmail = (e) => { setEmail(e.target.value.toLowerCase()); }
     const updatePassword = (e) => { setPassword(e.target.value); }
     const updateTeamCode = (e) => { setTeamCode(e.target.value); }
     const updateFullName = (e) => { setFullName(e.target.value); }
@@ -127,7 +127,12 @@ function SignupBox(props) {
         if (signupPage === 0) {
             return(
                 <div>
-                    <TextField value={email} onChange={updateEmail} variant="outlined" label="Email" margin="dense" fullWidth size="small"/>
+                    <TextField
+                        value={email}
+                        onChange={updateEmail} 
+                        variant="outlined"
+                        label="Email" margin="dense"
+                        fullWidth size="small"/>
                     <TextField
                         value={password}
                         onChange={updatePassword}
