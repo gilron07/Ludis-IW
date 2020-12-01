@@ -332,6 +332,7 @@ function renameSection(sectionId, newName) {
             history.push('/workouts', {created:true})
           })
           .catch((err)=>{
+              setLoading(false);
               console.log(err)
           });
     }

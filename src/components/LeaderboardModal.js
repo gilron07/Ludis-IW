@@ -16,6 +16,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {green} from "@material-ui/core/colors";
 
 function getModalStyle() {
   const top = 50;
@@ -37,6 +39,18 @@ const useStyles = makeStyles((theme) => ({
     overflow: "scroll",
     backgroundColor: theme.palette.background.paper,
     padding: "16px 35px",
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
+  buttonProgress: {
+    color: "primary",
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   }
 }));
 
@@ -45,6 +59,7 @@ export default function LeaderboardModal(props) {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [leaderboardTitle, setLeaderboardTitle] = useState("");
   const [modifierType, setModifierType] = useState("weight");
@@ -100,15 +115,18 @@ export default function LeaderboardModal(props) {
 
   function createChallenge(){
     const data = leaderboardJSON();
+    setLoading(true);
     axiosAPI.post('/challenge/', data)
         .then((res)=>{
           axiosAPI.get('/challenge/')
               .then((res) =>{
                 props.setLeaderboardData(res.data);
+                setLoading(false);
                 handleClose();
               })
         })
         .catch((err)=>{
+          setLoading(false);
           console.log(err);
         });
   }
@@ -170,10 +188,11 @@ export default function LeaderboardModal(props) {
           </div>
         </div>
 
-        <div style={{textAlign:"center", margin:"30px 0 10px 0"}}>
-          <Button variant="contained" color="primary" onClick={createChallenge}>
+        <div className={classes.wrapper} style={{textAlign:"center", margin:"30px 0 10px 0"}}>
+          <Button disabled={loading} variant="contained" color="primary" onClick={createChallenge}>
             Create Leaderboard
           </Button>
+          {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
         </div>
       </div>
   );

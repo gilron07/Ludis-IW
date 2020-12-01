@@ -16,6 +16,7 @@ import FormLabel from '@material-ui/core/FormLabel';
 
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function getModalStyle() {
   const top = 50;
@@ -47,6 +48,7 @@ export default function LeaderboardReportModal(props) {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [newRecord, setNewRecord] = useState("");
 
@@ -71,15 +73,18 @@ export default function LeaderboardReportModal(props) {
       const data = {
           result: newRecord
       }
+      setLoading(true);
       axiosAPI.post(`/challenge/${props.id}/set_response/`, data)
           .then(() =>{
              axiosAPI.get('/challenge/')
                  .then((res) => {
                     props.setLeaderboardData(res.data);
+                    setLoading(false);
                     handleClose();
                  })
           })
           .catch((err) =>{
+              setLoading(false);
               console.log(err);
           });
   }
@@ -104,10 +109,11 @@ export default function LeaderboardReportModal(props) {
           </div>
         </div>
 
-        <div style={{textAlign:"center"}}>
-          <Button variant="contained" color="primary" onClick={sendChallengeResponse}>
+        <div className={classes.wrapper} style={{textAlign:"center"}}>
+          <Button disabled={loading} variant="contained" color="primary" onClick={sendChallengeResponse}>
             Submit Record
           </Button>
+            {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
         </div>
       </div>
   );
