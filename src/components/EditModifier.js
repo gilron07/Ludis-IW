@@ -16,7 +16,8 @@ const useStyles = makeStyles((theme) => ({
     modifierInput: {
         height: "100%",
         maxWidth: "100px",
-        marginRight: "20px"
+        marginRight: "20px",
+        backgroundColor: "green",
     },
 }));
 
