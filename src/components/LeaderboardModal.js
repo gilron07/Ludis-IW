@@ -63,7 +63,7 @@ export default function LeaderboardModal(props) {
 
   const [leaderboardTitle, setLeaderboardTitle] = useState("");
   const [modifierType, setModifierType] = useState("weight");
-  const [modifierUnit, setModifierUnit] = useState("null");
+  const [modifierUnit, setModifierUnit] = useState("lb");
   const [rankOrder, setRankOrder] = React.useState("high");
 
   const units = {
@@ -86,8 +86,13 @@ export default function LeaderboardModal(props) {
     setLeaderboardTitle(event.target.value)
   }
 
-  function handleModifierTypeChange(e) {    
-    setModifierType(e.target.value);
+  function handleModifierTypeChange(e) {
+    const modifier = e.target.value
+    setModifierType(modifier);
+    if (units[modifier] !== null) {
+      setModifierUnit(units[modifier][0]);
+    }
+    else if (units[modifier] === null) setModifierUnit("null");
   }
 
   function handleModifierUnitChange(e) {    
