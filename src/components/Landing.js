@@ -2,7 +2,6 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import LoginBox from './LoginBox';
 import SignupBox from './SignupBox';
-import LeaderboardModal from './LeaderboardModal';
 
 const useStyles = makeStyles((theme) => ({
     backgroundImage: {
@@ -78,7 +77,6 @@ function Landing(props) {
                       toggleFunction={toggleLoginOrSignup}
                   ></SignupBox>}
             </div>
-            <LeaderboardModal></LeaderboardModal>
         </div>
     );
 }
