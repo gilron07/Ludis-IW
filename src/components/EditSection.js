@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 import EditDrill from './EditDrill.js';
 
@@ -29,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
         height: "40px",
         '&:hover': {
             backgroundColor: "#7adec7",
-        }
+        },
+        display: "flex",
+        alignItems: "center",
     },
     button: {
         boxShadow: "0 2px 4px #00000044",
@@ -47,12 +48,11 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionTitleInput: {
         color: "white",
-        width: "calc(90vw - 92px)",
+        width: "calc(100% - 50px)",
     },
-    secondaryAction: {
-        width: "calc(100% - 30px)",
-        textAlign: "right",
-    }
+    buttonsContainer : {
+        width: 60,
+    },
 })); 
 
 function EditSection(props) {
@@ -98,19 +98,23 @@ function EditSection(props) {
         }
         else return (
             <ListItem button onClick={handleClick} className={classes.sectionHeader}>
-                <ListItemSecondaryAction className={classes.secondaryAction}>
+                <div className={classes.sectionTitleInput}>
                     <TextField
-                        InputProps={{className: classes.sectionTitleInput}}
                         onChange={handleInputChange}
                         defaultValue={props.name}
+                        fullWidth
                     >
                     </TextField>
-                    <IconButton size="small" onClick={confirmInputChange} data-id={props.sectionId}>
-                        <CheckCircleOutlineIcon className={classes.noPointerEvents} />
-                    </IconButton>
-                    <IconButton size="small" onClick={props.deleteSection} data-id={props.sectionId}>
-                        <CloseIcon className={classes.noPointerEvents}/>
-                    </IconButton>
+                </div>
+                <ListItemSecondaryAction >
+                    <div className={classes.buttonsContainer}>
+                        <IconButton size="small" onClick={confirmInputChange} data-id={props.sectionId}>
+                            <CheckCircleOutlineIcon className={classes.noPointerEvents} />
+                        </IconButton>
+                        <IconButton size="small" onClick={props.deleteSection} data-id={props.sectionId}>
+                            <CloseIcon className={classes.noPointerEvents}/>
+                        </IconButton>
+                    </div>
                 </ListItemSecondaryAction>
             </ListItem>
         );
