@@ -103,7 +103,7 @@ class Section(models.Model):
 
 
 class Drill(models.Model):
-    drill_name = models.CharField(max_length=64)
+    drill_name = models.CharField(max_length=300)
     created_at = models.DateTimeField(auto_now_add=True)
     order = models.IntegerField(default=1)
     section = models.ForeignKey(Section, related_name='drills', on_delete=models.CASCADE)

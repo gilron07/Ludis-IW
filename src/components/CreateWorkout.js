@@ -337,15 +337,6 @@ function renameSection(sectionId, newName) {
 
     function updateWorkout() {
       const data = formatJSON();
-      // here, send the updated JSON to the backend
-      // axiosAPI.post('/workouts/', data)
-      //     .then((res)=>{
-      //       console.log(res)
-      //       history.push('/workouts/', {created:true})
-      //     })
-      //     .catch((err)=>{
-      //         console.log(err)
-      //     });
     }
 
     function formatJSON() {
