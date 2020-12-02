@@ -29,8 +29,6 @@ const useStyles = makeStyles((theme) => ({
         '&:hover': {
             backgroundColor: "#7adec7",
         },
-        display: "flex",
-        alignItems: "center",
     },
     button: {
         boxShadow: "0 2px 4px #00000044",
@@ -48,11 +46,16 @@ const useStyles = makeStyles((theme) => ({
     },
     sectionTitleInput: {
         color: "white",
-        width: "calc(100% - 50px)",
+        width: "calc(100% - 60px)",
     },
     buttonsContainer : {
         width: 60,
     },
+    secondaryAction: {
+        width: "calc(100% - 30px)",
+        display: "flex",
+        alignItems: "center",
+    }
 })); 
 
 function EditSection(props) {
@@ -98,15 +101,15 @@ function EditSection(props) {
         }
         else return (
             <ListItem button onClick={handleClick} className={classes.sectionHeader}>
-                <div className={classes.sectionTitleInput}>
-                    <TextField
-                        onChange={handleInputChange}
-                        defaultValue={props.name}
-                        fullWidth
-                    >
-                    </TextField>
-                </div>
-                <ListItemSecondaryAction >
+                <ListItemSecondaryAction className={classes.secondaryAction}>
+                    <div className={classes.sectionTitleInput}>
+                        <TextField
+                            onChange={handleInputChange}
+                            defaultValue={props.name}
+                            fullWidth
+                        >
+                        </TextField>
+                    </div>
                     <div className={classes.buttonsContainer}>
                         <IconButton size="small" onClick={confirmInputChange} data-id={props.sectionId}>
                             <CheckCircleOutlineIcon className={classes.noPointerEvents} />

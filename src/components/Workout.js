@@ -226,16 +226,6 @@ export default function Workout(props) {
                             {/* Wed, 11am <br></br> Sep 18th */}
                         </div>
                     </div>
-
-                    <div className={classes.tagsContainer}>
-                        
-                        {(typeof axiosData.tags !== "undefined")
-                            ? axiosData.tags.map((tag) => (
-                                <Chip label={tag.name} style={{margin: "0 2px"}}/>
-                            ))
-                            : null
-                        }
-                    </div>
                 </div>
             );
         }
@@ -264,6 +254,16 @@ export default function Workout(props) {
                     <h1 class="workout-title">{axiosData.title}{addCheckCircle()}</h1>
 
                     {generateScheduleData()}
+                    
+                    <div className={classes.tagsContainer}>
+                        
+                        {(typeof axiosData.tags !== "undefined")
+                            ? axiosData.tags.map((tag) => (
+                                <Chip label={tag.name} style={{margin: "0 2px"}}/>
+                            ))
+                            : null
+                        }
+                    </div>
 
                     <hr></hr>
                     <div id="plan-container">

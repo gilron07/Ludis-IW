@@ -27,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 10,
         boxShadow: "0 2px 4px #00000044",
         borderRadius: "20px",
-        height: "30px"
+        height: "30px",
+        display: "flex",
+        alignItems: "center",
     },
     drill: {
         width: "90%",
@@ -53,18 +55,22 @@ const useStyles = makeStyles((theme) => ({
         boxShadow: "0 2px 4px #00000044",
         marginTop: "5px"
     },
-    secondaryAction: {
-        width: "calc(100% - 30px)",
-        textAlign: "right",
-    },
     drillTitleInput: {
-        width: "calc(81vw - 92px)",
+        width: "calc(100% - 60px)",
     },
     drillSectionTitle: {
         padding: 0,
         marginTop: "20px",
         fontWeight: 800,
         height: 10,
+    },
+    drillButtonsContainer : {
+        width: 60,
+    },
+    drillSecondaryAction: {
+        width: "calc(100% - 32px)",
+        display: "flex",
+        alignItems: "center",
     }
 }));    
 
@@ -160,19 +166,23 @@ function EditDrill(props) {
         }
         else return (
             <ListItem button onClick={handleClick} className={classes.drillHeader}>
-                <ListItemSecondaryAction className={classes.secondaryAction}>
+                <ListItemSecondaryAction className={classes.drillSecondaryAction}>
+                <div className={classes.drillTitleInput}>
                     <TextField
-                        InputProps={{className: classes.drillTitleInput}}
                         onChange={handleInputChange}
                         defaultValue={props.name}
+                        fullWidth
                     >
                     </TextField>
+                </div>
+                <div className={classes.drillButtonsContainer}>
                     <IconButton size="small" onClick={confirmInputChange} sectionId={props.sectionId} drillId={props.drillId}>
                         <CheckCircleOutlineIcon className={classes.noPointerEvents} />
                     </IconButton>
                     <IconButton size="small" onClick={props.deleteDrill} sectionId={props.sectionId} drillId={props.drillId}>
                         <CloseIcon className={classes.noPointerEvents}/>
                     </IconButton>
+                </div>
                 </ListItemSecondaryAction>
             </ListItem>
         );

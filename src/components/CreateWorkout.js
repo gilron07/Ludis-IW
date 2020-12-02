@@ -374,7 +374,7 @@ function renameSection(sectionId, newName) {
 
   return (
     <div>
-        {/* <Header /> */}
+        <Header />
          <h1>New Workout</h1>
             <div className={classes.mainInputTitle}>Workout Name<br></br>
               <TextField
