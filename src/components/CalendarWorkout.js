@@ -100,7 +100,7 @@ function CalendarWorkout(props) {
 
     var months = [ "January", "February", "March", "April",
     "May", "June", "July", "August", "September", "October",
-    "November", "December" ];
+    "November", "December"];
 
     const day = props.date.split("-")[2];
     const month = props.date.split("-")[1];
