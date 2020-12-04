@@ -333,7 +333,7 @@ const body = (
       </div>
     </div>
 
-    {/* {workoutSelect(props)} */}
+     {workoutSelect(props)}
     {/* athlete select */}
     <div className={classes.formLabel}>Select Athletes</div>
     {/* {JSON.stringify(athleteData)} */}
