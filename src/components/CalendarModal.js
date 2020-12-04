@@ -120,13 +120,13 @@ export default function SimpleModal(props) {
   const [workoutValue, setWorkoutValue] = React.useState(null);
   const [athleteData, setAthleteData] = useState([]);
 
-  // useEffect(() =>{
-  //   const fetchAthletesListData = async () =>{
-  //     const result = await axiosAPI.get('/users/');
-  //     setAthleteData(result.data);
-  //   };
-  //   fetchAthletesListData();
-  // }, []);   
+  useEffect(() =>{
+    const fetchAthletesListData = async () =>{
+      const result = await axiosAPI.get('/users/');
+      setAthleteData(result.data);
+    };
+    fetchAthletesListData();
+  }, []);
 
   const handleOpen = () => {
     setOpen(true);
