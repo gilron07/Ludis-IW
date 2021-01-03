@@ -91,10 +91,10 @@ export default function TemporaryDrawer() {
 
   let relevantPages;
   if (user.role.toLowerCase() === "coach") {
-    relevantPages = ['home', 'workouts', 'leaderboards', 'about', 'logout'];
+    relevantPages = ['home', 'workouts', 'leaderboards', 'logout'];
   }
   else {
-    relevantPages = ['home', 'leaderboards', 'about', 'logout'];
+    relevantPages = ['home', 'leaderboards', 'logout'];
   }
 
   
