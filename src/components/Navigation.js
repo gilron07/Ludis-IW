@@ -14,7 +14,7 @@ import {UserContext} from "../services/UserContext";
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
+import HelpIcon from '@material-ui/icons/Help';
 import MenuIcon from '@material-ui/icons/Menu';
 import HomeIcon from '@material-ui/icons/Home';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -38,6 +38,7 @@ export default function TemporaryDrawer() {
   });
 
   const {user, setUser} = useContext(UserContext)
+  // const [user, setUser] = React.useState({"role" : "coach"});
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -76,10 +77,10 @@ export default function TemporaryDrawer() {
       link: 'leaderboards',
       icon: <PeopleIcon/>
     },
-    settings: {
-      title: 'Settings',
-      link: 'settings',
-      icon: <SettingsIcon/>
+    about: {
+      title: 'About',
+      link: 'about',
+      icon: <HelpIcon/>
     },
     logout: {
       title: 'Logout',
@@ -90,10 +91,10 @@ export default function TemporaryDrawer() {
 
   let relevantPages;
   if (user.role.toLowerCase() === "coach") {
-    relevantPages = ['home', 'workouts', 'leaderboards', 'settings', 'logout'];
+    relevantPages = ['home', 'workouts', 'leaderboards', 'about', 'logout'];
   }
   else {
-    relevantPages = ['home', 'leaderboards', 'settings', 'logout'];
+    relevantPages = ['home', 'leaderboards', 'about', 'logout'];
   }
 
   
