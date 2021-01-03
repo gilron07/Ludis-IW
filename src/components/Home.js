@@ -16,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import {UserContext} from "../services/UserContext";
 
-
 TabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.any.isRequired,
@@ -59,7 +58,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
     </div>
@@ -69,7 +68,6 @@ function TabPanel(props) {
 export default function Home() {
 
   // replace with context
-  const [role, setRole] = useState("coach");
   const [schdeuleData, setScheduleData] = useState([]);
   const [workoutsData, setWorkoutsData] = useState([]);
   const [athleteListData, setAthleteListData] = useState([]);
@@ -121,9 +119,11 @@ export default function Home() {
     let calendarMonths = [];
 
     for (let i = todayMonth - 1; i < months.length + todayMonth - 1; i++) {
-      if (i >= 12) { calendarMonths.push(i - 12); }
+      if (i >= months.length) { calendarMonths.push(i - months.length); }
+      else if (i < 0) { calendarMonths.push(months.length + i); }
       else calendarMonths.push(i);
     }
+    console.log(calendarMonths);
     return calendarMonths;
   }
 
@@ -131,8 +131,15 @@ export default function Home() {
 
   function getRelevantWorkouts() {
 
+    // filter by year
+    let d = new Date();
+    let currentYear = d.getFullYear();
+    const thisYearWorkouts = schdeuleData.filter(function (workout) {
+      return parseInt(workout.date.split(" ")[0].split("-")[0]) === currentYear;
+    });
+
     // filter by month
-    const thisMonthWorkouts = schdeuleData.filter(function (workout) {
+    const thisMonthWorkouts = thisYearWorkouts.filter(function (workout) {
       return parseInt(workout.date.split(" ")[0].split("-")[1]) === currentMonth + 1;
     });
 
@@ -184,7 +191,14 @@ export default function Home() {
   function formatMonth(month, index) {
     const todayDate = new Date();
     let todayYear = todayDate.getFullYear();
-    if (index > 2) todayYear++;
+
+    if (index === 0 && month === 11) {
+      todayYear--;
+    }
+    
+    else if ((index > 1 + month)) {
+      todayYear++;
+    }
     return `${months[month]} ${todayYear}`;
   }
 
@@ -221,8 +235,8 @@ export default function Home() {
       </AppBar>
       {calendarMonths().map((month, index) => (
         <TabPanel value={value} index={index} style={{width: "105%", marginLeft:"-2.5%"}}>
-          <div class="week-selector-container">
-            <span class="week-button-label">
+          <div className="week-selector-container">
+            <span className="week-button-label">
               Week:
             </span>
             <div ref={wrapperRef} style={{display: "inline"}}>
@@ -234,8 +248,8 @@ export default function Home() {
                   classes = classes.concat(" week-button-select");
                 }
 
-                return (<div id={id} class={classes} onClick={() => setWeek(week)}>
-                  <div class="week-button-text">{week}</div>
+                return (<div id={id} className={classes} onClick={() => setWeek(week)}>
+                  <div className="week-button-text">{week}</div>
                 </div>)
               })}
             </div>

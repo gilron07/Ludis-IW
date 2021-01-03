@@ -154,7 +154,6 @@ export default function SimpleModal(props) {
   }
 
   function submitSingleDate(date) {
-    console.log(date)
     setSelectedDates([date]);
   }
 
@@ -246,16 +245,6 @@ export default function SimpleModal(props) {
   function formatSelectedDates() {
     const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     let finalDates = [];
-    console.log(selectedDates);
-
-    // let selectedMiliseconds = [...selectedDates];
-
-    // for (let i = 0; i < selectedMiliseconds.length; i++) {
-    //   selectedMiliseconds[i] = selectedMiliseconds[i].getTime();
-    // }
-
-    // let sortedDates = [...selectedMiliseconds];
-    // sortedDates = sortedDates.sort();
 
     let sortedDates = [...selectedDates];
     sortedDates.sort(function(a,b){return a.getTime() - b.getTime()});
