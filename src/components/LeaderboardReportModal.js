@@ -3,19 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import NativeSelect from '@material-ui/core/NativeSelect';
-import InputLabel from '@material-ui/core/InputLabel';
 import axiosAPI from '../services/authAxios'
 
-// radio buttons
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
-// icons
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 function getModalStyle() {

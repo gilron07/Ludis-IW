@@ -2,7 +2,7 @@ import React, { useState, useContext, useRef, useEffect } from "react";
 import Header from './Header.js';
 import CalendarComponent from './CalendarComponent.js';
 import CalendarModal from './CalendarModal.js';
-import axiosAPI from '../services/authAxios'
+import axiosAPI from '../services/authAxios';
 
 import '../css/Home.css';
 
@@ -12,7 +12,6 @@ import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/sty
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import {UserContext} from "../services/UserContext";
 
@@ -94,17 +93,28 @@ export default function Home() {
   }, []);
   
   const classes = useStyles();
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [currentWeek, setWeek] = useState(0);
   const [currentMonth, setMonth] = useState(getMonth);
+  const [currentYear, setYear] = useState(getYear);
 
   function getMonth() {
     const currentDate = new Date();
     return currentDate.getMonth();
   }
+
+  function getYear() {
+    let currentDate = new Date();
+    return currentDate.getFullYear();
+  }
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
     setMonth(calendarMonths()[newValue]);
+    if (newValue < calendarMonths()[newValue]) {
+      setYear(getYear() - 1);
+    }
+    else setYear(getYear());
   };
 
   const months = [
@@ -115,15 +125,13 @@ export default function Home() {
   const calendarMonths = () => {
     const currentDate = new Date();
     const todayMonth = currentDate.getMonth();
-    const todayYear = currentDate.getFullYear();
     let calendarMonths = [];
 
-    for (let i = todayMonth - 1; i < months.length + todayMonth - 1; i++) {
+    for (let i = todayMonth - 2; i < months.length + todayMonth - 2; i++) {
       if (i >= months.length) { calendarMonths.push(i - months.length); }
       else if (i < 0) { calendarMonths.push(months.length + i); }
       else calendarMonths.push(i);
     }
-    console.log(calendarMonths);
     return calendarMonths;
   }
 
@@ -132,8 +140,6 @@ export default function Home() {
   function getRelevantWorkouts() {
 
     // filter by year
-    let d = new Date();
-    let currentYear = d.getFullYear();
     const thisYearWorkouts = schdeuleData.filter(function (workout) {
       return parseInt(workout.date.split(" ")[0].split("-")[0]) === currentYear;
     });
@@ -192,13 +198,10 @@ export default function Home() {
     const todayDate = new Date();
     let todayYear = todayDate.getFullYear();
 
-    if (index === 0 && month === 11) {
+    if (index < month) {
       todayYear--;
     }
     
-    else if ((index > 1 + month)) {
-      todayYear++;
-    }
     return `${months[month]} ${todayYear}`;
   }
 
@@ -245,7 +248,7 @@ export default function Home() {
                 let classes = "week-button"
 
                 if (currentWeek === week) {
-                  classes = classes.concat(" week-button-select");
+                  classes = classes.concat("week-button-select");
                 }
 
                 return (<div id={id} className={classes} onClick={() => setWeek(week)}>

@@ -106,7 +106,7 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <div id="profile-wrapper">
-        <img id="nav-profile-avatar" src="/static/default-avatar.png"></img>
+        <img id="nav-profile-avatar" src="/static/default-avatar.png" alt="default-avatar"></img>
         <div id="user-name">
           {user.full_name}
         </div>

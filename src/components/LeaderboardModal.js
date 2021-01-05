@@ -17,7 +17,6 @@ import FormLabel from '@material-ui/core/FormLabel';
 // icons
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import CircularProgress from "@material-ui/core/CircularProgress";
-import {green} from "@material-ui/core/colors";
 
 function getModalStyle() {
   const top = 50;

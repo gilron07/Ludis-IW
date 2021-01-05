@@ -201,7 +201,7 @@ export default function Workout(props) {
             period = "pm";
             hour -= 12;
         }
-        if (hour == 0) hour = 12;
+        if (hour === 0) hour = 12;
         return <div>
             {dayString}, {hour}:{minute} {period}<br></br>
             {month} {dayDate}

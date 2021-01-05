@@ -304,19 +304,19 @@ function renameSection(sectionId, newName) {
 
     // find index of section within the workout
     function findSectionIndex(sectionId) {
-      const relevantSection = (section) => section["id"] == sectionId;
+      const relevantSection = (section) => section["id"] === sectionId;
       return(workoutJSON["sections"]).findIndex(relevantSection);
     }
 
     // find index of section within a section
     function findDrillIndex(drillId, sectionIndex) {
-      const relevantDrill = (drill) => drill["id"] == drillId;
+      const relevantDrill = (drill) => drill["id"] === drillId;
       return(workoutJSON["sections"][sectionIndex]["drills"]).findIndex(relevantDrill);
     }
 
     // find index of modifier within a drill
     function findModfierIndex(modifierName, drillIndex, sectionIndex) {
-      const relevantModifier = (mod) => mod["modifier"] == modifierName;
+      const relevantModifier = (mod) => mod["modifier"] === modifierName;
       return(workoutJSON["sections"][sectionIndex]["drills"][drillIndex]["modifiers"]).findIndex(relevantModifier);
     }
     
@@ -335,8 +335,9 @@ function renameSection(sectionId, newName) {
           });
     }
 
+    // for future versions of Ludis
     function updateWorkout() {
-      const data = formatJSON();
+      return null;
     }
 
     function formatJSON() {
@@ -446,7 +447,6 @@ function renameSection(sectionId, newName) {
           ? <p style={{color: "red"}}>Workout Name cannot be blank</p>
           : null
         }
-        {/* <br></br><pre>{JSON.stringify(workoutJSON, null, 4)}</pre> */}
       </div>
 
     </div>

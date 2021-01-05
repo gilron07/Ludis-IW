@@ -2,7 +2,6 @@ import React, {useContext} from 'react';
 import '../css/Header.css';
 import Navigation from '../components/Navigation';
 import LinearProgress from '@material-ui/core/LinearProgress';
-
 import {UserContext} from "../services/UserContext";
 
 function Header() {
