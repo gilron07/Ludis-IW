@@ -88,16 +88,6 @@ function EditDrill(props) {
     const [editTitle, setEditTitle] = React.useState(false);
     const [titleInput, setTitleInput] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-    const [openModifiers, setOpenModifiers] = React.useState({
-        "distance": true,
-        "weight": false,
-        "time": false,
-        "intensity": false,
-        "reps": false,
-        "sets": false,
-        "rest_between_reps": false,
-        "rest_between_sets": false
-    });
     const falseMods = ["distance", "weight", "time", "intensity", "reps", "sets", "rest_between_reps", "rest_between_sets"];
 
     const handleClick = () => {

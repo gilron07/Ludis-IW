@@ -12,12 +12,10 @@ import Slider from '@material-ui/core/Slider';
 // dropdown
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
 // icons
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import MoodIcon from '@material-ui/icons/Mood';
 import MoodBadIcon from '@material-ui/icons/MoodBad';
 

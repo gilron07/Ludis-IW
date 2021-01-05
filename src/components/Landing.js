@@ -65,7 +65,8 @@ function Landing(props) {
                 <img
                     src="/static/court.jpg"
                     className={classes.backgroundImage}
-                    style={{minWidth:"max(60vw, calc(64vh + 0px))"}}></img>
+                    style={{minWidth:"max(60vw, calc(64vh + 0px))"}}
+                    alt="ludis-landing-court"></img>
             </div>
             <div className={classes.loginBackground} style={{ minHeight: 350 }}>
                 {(loginOrSignup === "login")

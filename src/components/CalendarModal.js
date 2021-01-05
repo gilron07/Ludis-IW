@@ -21,7 +21,6 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import { DataGrid } from '@material-ui/data-grid';
 
 // icons
@@ -233,7 +232,7 @@ export default function SimpleModal(props) {
               ))}
             </RadioGroup>
           </FormControl>
-          {props.workoutsList.length == 0
+          {props.workoutsList.length === 0
             ? <div style={{textAlign: "center", fontSize: 14, marginLeft: -20}}>No Workouts Created</div>
             : null
           }

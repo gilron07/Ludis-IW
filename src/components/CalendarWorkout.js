@@ -10,7 +10,6 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 import PersonIcon from '@material-ui/icons/Person';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import { SignalCellularNullSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
     leftContainer: {

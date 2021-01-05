@@ -11,7 +11,6 @@ import { ThemeProvider } from '@material-ui/core/styles'
  
 import "./css/App.css";
 import Home from './components/Home';
-import About from './components/About';
 import Workouts from './components/Workouts';
 import Workout from './components/Workout';
 import CreateWorkout from './components/CreateWorkout';
@@ -55,7 +54,6 @@ export default function App() {
                          <ProtectedRoute path="/workout" component={Workout} exact/>
                          <ProtectedRoute path="/create-workout" component={CreateWorkout} exact/>
                          <ProtectedRoute path="/leaderboards" component={Leaderboards} exact/>
-                         <ProtectedRoute path="/about" component={About} exact/>
                          <Route path="/signup" component={Signup} exact/>
                          <Route path="/login" component={Login} exact/>
                          <Route path="/" component={Login} exact/>

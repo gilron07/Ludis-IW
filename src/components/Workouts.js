@@ -6,7 +6,6 @@ import List from '@material-ui/core/List';
 import { NavLink } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import Button from '@material-ui/core/Button';
 import {useLocation, useHistory} from 'react-router-dom';
 
 import axiosAPI from '../services/authAxios'
@@ -29,7 +28,6 @@ function Workouts() {
     // if page was rendered after successful workout create
     const location = useLocation();
     const history = useHistory();
-    const locationState = location.state;
 
     const openSuccessSnack = () =>{
         setOpenSucess(true);
@@ -49,7 +47,7 @@ function Workouts() {
     const workoutDelete = (id) => {
         axiosAPI.delete(`/workouts/${id}/`)
             .then(res =>{
-                setData(data.filter(item => item.id != id));
+                setData(data.filter(item => item.id !== id));
                 openDeleteSnack()
             })
             .catch(err =>{

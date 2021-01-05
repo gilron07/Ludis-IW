@@ -1,12 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { Link } from 'react-router-dom';
 
 // icons
-import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Chip from '@material-ui/core/Chip';
 import IconButton from '@material-ui/core/IconButton';
@@ -71,29 +68,11 @@ export default function WorkoutComponent(props){
                         ))
                     }
                 </div>
-                {/* <FileCopyIcon></FileCopyIcon> */}
-                {/*<ListItemSecondaryAction>*/}
-                {/*    <IconButton>*/}
-                {/*        <ChevronRightIcon/>*/}
-                {/*    </IconButton>*/}
-                {/*</ListItemSecondaryAction>*/}
-                 {/*<div class="workout-chevron"></ChevronRightIcon></div>*/}
             </ListItem>
             </Link>
 
             <div style={{position: "absolute", bottom: 0, right: 20, height: "100%"}}>
                 <div style={{position: "relative", top: "50%", transform:"translateY(-50%)"}}>
-                {/* <Link
-                    style={{textDecoration:"none", color: "inherit"}}
-                    to={{
-                        pathname: "/create-workout",
-                        workout: props.workout // object representing workout
-                    }}
-                >
-                    <IconButton size="small">
-                        <EditIcon/>
-                    </IconButton>
-                </Link> */}
                     <IconButton onClick={props.workoutDelete} workoutid={props.workout.id} size="small">
                         <DeleteIcon/>
                     </IconButton>
