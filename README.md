@@ -8,7 +8,7 @@ Visit https://goludis.herokuapp.com/ to view the deployed app.<br><br>
 
 ### Run Locally
 
-To run the project locally, first install all the NodeJS and Python dependencies:
+To run the project locally, first install all the NodeJS and Python dependencies using:
 
 ```
 npm install
@@ -21,12 +21,12 @@ To build the React app, execute:
 npm run build
 ```
 
-To run the app, the environment variable `DATABASE_URL` must be exported in order for the server to run. Once this environment variable is exported, start the server using:
+To run the app, the environment variable `DATABASE_URL` must be exported, and then the server can be started using:
 
 ```
 python manage.py runserver
 ```
 
-The webapp will then launch at http://localhost:8000/.
+The app will then launch at http://localhost:8000/.
 
 <hr>
