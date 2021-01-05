@@ -3,9 +3,9 @@
 Ludis is a sports communication app developed by [Gilron Tsabkevich](https://github.com/gilron07) and [Henry Herrington](https://github.com/henryherrington) for their Fall 2020 Independent Work Projects.<br>
 
 Visit https://goludis.herokuapp.com/ to view the deployed app.
-![Ludis Logo](https://github.com/henryherrington/ludis_images/blob/master/ludis_logo.png | width=100)
-![Ludis Calendar](https://github.com/henryherrington/ludis_images/blob/master/ludis_calendar.png | width=100)
-![Ludis Workout Creation](https://github.com/henryherrington/ludis_images/blob/master/ludis_workout_creation.png | width=100)
+![Ludis Logo](https://github.com/henryherrington/ludis_images/blob/master/ludis_logo.png){:height="50%" width="50%"}
+![Ludis Calendar](https://github.com/henryherrington/ludis_images/blob/master/ludis_calendar.png){:height="50%" width="50%"}
+![Ludis Workout Creation](https://github.com/henryherrington/ludis_images/blob/master/ludis_workout_creation.png){:height="50%" width="50%"}
 
 ### Run Locally
 
