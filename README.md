@@ -1,4 +1,4 @@
-<div style="width:100%, text-align:center"><img alt="Ludis Logo" src="https://github.com/henryherrington/ludis_images/blob/master/ludis_logo.png" width="20%"></div>
+<img alt="Ludis Logo" src="https://github.com/henryherrington/ludis_images/blob/master/ludis_logo.png" width="10%" align="center">
 
 Ludis is a sports communication app developed by [Gilron Tsabkevich](https://github.com/gilron07) and [Henry Herrington](https://github.com/henryherrington) for their Fall 2020 Independent Work Projects.<br>
 
